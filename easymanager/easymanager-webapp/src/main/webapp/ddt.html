@@ -1,0 +1,244 @@
+<html>
+<head>
+<title>EasyManager</title>
+<link rel="stylesheet" type="text/css"
+	href="assets/bootstrap-3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="assets/font-awesome-4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
+<link rel="stylesheet" type="text/css" 
+	href="assets/bootstrap-datepicker-1.5.1/css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet" type="text/css" 
+	href="assets/bootstrap-datepicker-1.5.1/css/bootstrap-datepicker3.min.css" />
+
+<script src="assets/jquery/jquery-1.12.1.min.js"></script>
+<script src="assets/underscorejs/underscore-min.js"></script>
+<script src="assets/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row header">
+			<div class="col-sm-12">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">File<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Gestione Azienda</a></li>
+							<li><a href="#">Seleziona Anno</a></li>
+						</ul></li>
+					<li><a href="#">Clienti</a></li>
+					<li><a href="#">DdT</a></li>
+					<li><a href="#">Fatture</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Statistiche<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Ricerca semplice</a></li>
+							<li><a href="#">Confronta periodi</a></li>
+						</ul></li>
+					<li><a href="#">Mail</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="row body">
+			<div class="main col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<ol class="breadcrumb">
+							<li><a href="#">Home</a></li>
+							<li class="active">Gestione DdT</li>
+						</ol>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label for="numero" class="col-sm-2 control-label">Numero</label>
+								<div class="col-sm-1">
+									<input type="text" class="form-control" id="numero" name="numero"
+										placeholder="Numero">
+								</div>
+								<label for="data" class="col-sm-1 control-label">Data</label>
+								<div class="col-sm-2">
+									<div class="input-group input-append data">
+						                <input type="text" class="form-control" id="data" name="data" placeholder="gg/mm/aaaa" />
+						                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+						            </div>
+								</div>
+								<label for="azienda" class="col-sm-2 control-label">Azienda</label>
+								<div class="col-sm-4">
+									<select class="form-control" id="azienda" name="azienda">
+										<option>Antica Sartoria s.r.l.</option>
+										<option>Marni Group S.R.L. Societa Unipersonale</option>
+										<option>Valentina Confezioni S.R.L.U.</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<table class="table table-hover table-bordered conteditable">
+										<thead>
+											<tr>
+												<th>Codice</th>
+												<th>Commessa</th>
+												<th>Descrizione</th>
+												<th>Q.ta</th>
+												<th>Proto</th>
+												<th>Camp</th>
+												<th>Pc</th>
+												<th>Piazz</th>
+												<th>IA</th>
+												<th>ID</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td contenteditable="true"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td class="text-center"><input type="checkbox"></td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="mezzo" class="col-sm-1 control-label">Mezzo</label>
+								<div class="col-sm-2">
+									<select class="form-control" id="mezzo" name="mezzo">
+										<option>Cessionario</option>
+										<option>Cedente</option>
+										<option>Vettore</option>
+									</select>
+								</div>
+								<label for="causale" class="col-sm-1 control-label">Causale</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="causale" name="causale"
+										placeholder="Causale">
+								</div>
+								<label for="colli" class="col-sm-1 control-label">Colli</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="colli" name="colli"
+										placeholder="Colli">
+								</div>
+								<label for="peso" class="col-sm-1 control-label">Peso(KG)</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="peso" name="peso"
+										placeholder="Peso">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="destinazione" class="col-sm-3 control-label">Destinazione</label>
+										<div class="col-sm-9">
+											<textarea class="form-control" rows="3" id="destinazione" name="destinazione"></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="aspetto" class="col-sm-4 control-label">Aspetto esteriore dei beni</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="aspetto" name="aspetto"
+												placeholder="Aspetto">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="porto" class="col-sm-2 control-label">Porto</label>
+										<div class="col-sm-4">
+											<select class="form-control" id="porto" name="porto">
+												<option></option>
+												<option>Destinazione</option>
+												<option>Franco</option>
+											</select>
+										</div>
+										<label for="ritiro" class="col-sm-2 control-label">Data ritiro</label>
+										<div class="col-sm-4">
+											<div class="input-group input-append data">
+								                <input type="text" class="form-control" id="ritiro" name="ritiro" placeholder="gg/mm/aaaa" />
+								                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+								            </div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="ordine" class="col-sm-1 control-label">Vs. Ordine</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="ordine" name="ordine"
+										placeholder="Vs. Ordine">
+								</div>
+								<label for="ordinedata" class="col-sm-1 control-label">Del</label>
+								<div class="col-sm-2">
+									<div class="input-group input-append data">
+						                <input type="text" class="form-control" id="ordinedata" name="ordinedata" placeholder="gg/mm/aaaa" />
+						                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+						            </div>
+								</div>
+								<label for="tipo" class="col-sm-1 control-label">Tipo</label>
+								<div class="col-sm-2">
+									<select class="form-control" id="tipo" name="tipo">
+										<option></option>
+										<option>In Conto</option>
+										<option>A Saldo</option>
+									</select>
+								</div>
+								<label for="progressivo" class="col-sm-1 control-label">N° prog.</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="progressivo" name="progressivo"
+										placeholder="N° progressivo">
+								</div>
+							</div>							
+							<div class="form-group">
+								<label for="annotazioni" class="col-sm-3 control-label">Annotazioni</label>
+								<div class="col-sm-9">
+									<textarea class="form-control" id="annotazioni" name="annotazioni"></textarea>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row footer"></div>
+	</div>
+	
+<script src="assets/bootstrap-datepicker-1.5.1/js/bootstrap-datepicker.min.js"></script>
+<script src="assets/bootstrap-datepicker-1.5.1/locales/bootstrap-datepicker.it.min.js"></script>
+<script src="js/ddtForm.js"></script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<html>
+    <head>
+        <title>DDT n ${ddt.id}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style type="text/css"> 
+            html{
+                margin: 0;
+                padding: 0;
+                font-family:monospace;
+            }
+            body {
+                padding-left: 0.5cm;
+                padding-right: 0.5cm;
+                padding-bottom: 0.5cm;
+                padding-top: 0.5cm;
+                width: 22cm;
+                height: 29.7cm;
+            }
+            table{
+                width: 100%;
+            }
+            .corpo{
+                width:99%;
+                border-style: solid;
+                border-bottom-width: 1px;
+                border-color: lightgray;
+                margin-left: 5px;
+                margin-top: 1px;
+                margin-bottom: 1px;
+                text-align: center;
+                font-size: 12px;
+            }
+            .dispari{
+                background-color: lightgray;
+            }
+            fieldset{
+                color:black;
+            }
+            .datiDdt{
+                height: 100%;
+                margin-top: 5px;
+            }
+            .datiDdT fieldset{
+                height: 100%;
+            }
+            .footTableInternal2 td{
+                width: 50%;
+            }
+            .footTableInternal1 td{
+                width: 25%;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <div class="intestazioneEmittente">
+                        <fieldset>
+                            <legend>Cedente:</legend>
+                            <span class="nomeEmittente">${azienda.nome}</span><br/><br/>
+                            <span class="viaEmittente">${azienda.via},${azienda.civico}
+                                ${azienda.cap!""} ${azienda.citta!""} (${azienda.provincia})</span><br/>
+                            <span class="pivaEmittente">PI: ${azienda.pIva}</span><br/>
+                            <span class="codfisEmittente">Cod Fis: ${azienda.codFis}</span><br/>
+                            <#if azienda.telefono??>
+                                <span class="telefonoEmittente">Telefono: ${azienda.telefono}</span><br/>
+                            </#if>
+                            <#if azienda.fax??>
+                            <span class="faxEmittente">Fax: 085/4322029</span><br/>
+                            </#if>
+                            <span class="emailEmittente">Email: ${azienda.mail}</span>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    <div class="datiDdt">
+                        <fieldset>
+                            <span class="ddtTitolo">DOCUMENTO DI TRASPORTO</span>
+                            <span class="ddtSottotitoloSigla">(D.d.T.)</span><br/><br/>
+                            <span class="ddtSottotitolo">D.P.R. 472 del 14/08/1996 - D.P.R. 696 del 21/12/1996</span><br/>
+                            <span class="ddtNumero">Numero ${ddt.id} del ${ddt.data.toString()}</span><br/>
+                            <span class="ddtMezzo">a mezzo: </span>
+                            <#if ddt.mezzo=="cedente">
+                            <span class="ddtInputMezzo"><input type="checkbox" checked="checked" disabled="disabled"/> cedente</span>
+                            <span class="ddtInputMezzo"><input type="checkbox" disabled="disabled"/> cessionario</span>
+                            <#else>
+                            <span class="ddtInputMezzo"><input type="checkbox" disabled="disabled"/> cedente</span>
+                            <span class="ddtInputMezzo"><input type="checkbox" checked="checked" disabled="disabled"/> cessionario</span>
+                            </#if>
+                            <br/>&nbsp;<br/>&nbsp;<br/>&nbsp;
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="intestazioneCliente">
+                        <fieldset>
+                            <legend>Cessionario</legend>
+                            <span class="nomeCliente">${ddt.cliente.nome}</span><br/>
+                            <span class="viaCliente">${ddt.cliente.via},${ddt.cliente.civico}
+                                ${ddt.cliente.cap!""} ${ddt.cliente.citta!""} (${ddt.cliente.provincia})</span>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    <div class="luogoDestinazione">
+                        <fieldset>
+                            <legend>Luogo di destinazione</legend>
+                            <#if (ddt.destinazione!"")=="">
+                                &nbsp;<br/>&nbsp;
+                            <#else> 
+                                ${ddt.destinazione}
+                            </#if>
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="causaleTrasporto">
+                        <fieldset>
+                            <legend>Causale del trasporto</legend>
+                            <span class="causale">${ddt.causale}</span>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    <table class="vostroOrdine">
+                        <tr>
+                            <td>
+                                <div class="vostroOrdinen">
+                                    <fieldset>
+                                        <legend>Vostro ordine n</legend>
+                                        <span>
+                                            <#if (ddt.vostroOrdine!"")=="">
+                                                &nbsp;
+                                            <#else> 
+                                                ${ddt.vostroOrdine}
+                                            </#if>
+                                        </span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="vostroOrdineDel">
+                                    <fieldset>
+                                        <legend>del</legend>
+                                        <span>
+                                            <#if (ddt.vostroOrdineDel!"")=="">
+                                                &nbsp;
+                                            <#else> 
+                                                ${ddt.vostroOrdineDel}
+                                            </#if>
+                                        </span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="vostroOrdineTipo">
+                                    <fieldset>
+                                        <legend>Tipo</legend>
+                                        <span>
+                                            <#if (ddt.tipo!"")=="">
+                                                &nbsp;
+                                            <#else> 
+                                                ${ddt.tipo}
+                                            </#if>
+                                        </span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="corpo">
+                <thead>
+                    <tr class="dispari">
+                        <th class="corpoCol1">Articolo</th>
+                        <th class="corpoCol2">Commessa</th>
+                        <th class="corpoCol3">Descrizione</th>
+                        <th class="corpoCol5">PR</th>
+                        <th class="corpoCol6">CP</th>
+                        <th class="corpoCol7">PC</th>
+                        <th class="corpoCol8">PZ</th>
+                        <th class="corpoCol9">IA</th>
+                        <th class="corpoCol10">Capi</th>
+                        <th class="corpoCol11">Importo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#assign limit=ddt.beni.size()>
+                    <#list 0..25 as i>
+                        <#if (i%2)==0>
+                            <tr class="pari">
+                        <#else>
+                            <tr class="dispari">
+                        </#if>
+                        <#if (i<limit) >
+                            <td class="corpoCol1">${ddt.beni.get(i).codice!"&nbsp;"}</td>
+                            <td class="corpoCol2">${ddt.beni.get(i).commessa!"&nbsp;"}</td>
+                            <td class="corpoCol3">${ddt.beni.get(i).descrizione!"&nbsp;"}</td>
+                            <#if ddt.beni.get(i).prototipo>
+                                <td class="corpoCol5"><input type="checkbox" checked="checked" disabled="disabled" /></td>
+                            <#else>
+                                <td class="corpoCol5"><input type="checkbox" disabled="disabled" /></td>
+                            </#if>
+                            <#if ddt.beni.get(i).campionario>
+                                <td class="corpoCol6"><input type="checkbox" checked="checked" disabled="disabled" /></td>
+                            <#else>   
+                                <td class="corpoCol6"><input type="checkbox" disabled="disabled" /></td>
+                            </#if>
+                            <#if ddt.beni.get(i).primoCapo>
+                                <td class="corpoCol7"><input type="checkbox" checked="checked" disabled="disabled" /></td>
+                            <#else>
+                                <td class="corpoCol7"><input type="checkbox" disabled="disabled" /></td>
+                            </#if>
+                            <#if ddt.beni.get(i).piazzato>
+                                <td class="corpoCol8"><input type="checkbox" checked="checked" disabled="disabled" /></td>
+                            <#else>
+                                <td class="corpoCol8"><input type="checkbox" disabled="disabled" /></td>
+                            </#if>
+                            <#if ddt.beni.get(i).interamenteAdesivato>
+                                <td class="corpoCol9"><input type="checkbox" checked="checked" disabled="disabled" /></td>
+                            <#else>
+                                <td class="corpoCol9"><input type="checkbox" disabled="disabled" /></td>
+                            </#if>
+                            <td class="corpoCol10">${ddt.beni.get(i).qta}</td>
+                            <td class="corpoCol11">&nbsp;</td>
+                        <#else>
+                            <td class="corpoCol1">&nbsp;</td>
+                            <td class="corpoCol2">&nbsp</td>
+                            <td class="corpoCol3">&nbsp;</td>
+                            <td class="corpoCol5"><input type="checkbox" disabled="disabled" /></td>
+                            <td class="corpoCol6"><input type="checkbox" disabled="disabled" /></td>
+                            <td class="corpoCol7"><input type="checkbox" disabled="disabled" /></td>
+                            <td class="corpoCol8"><input type="checkbox" disabled="disabled" /></td>
+                            <td class="corpoCol9"><input type="checkbox" disabled="disabled" /></td>
+                            <td class="corpoCol10">&nbsp;</td>
+                            <td class="corpoCol11">&nbsp;</td>
+                        </#if>
+                        </tr>
+                    </#list>
+                </tbody>
+        </table>
+        <table class="foot">
+            <tr >
+                <td class="footCol1">
+                    <div>
+                        <fieldset>
+                            <legend>Aspetto esteriore dei beni</legend>
+                            <span>${ddt.aspettoEsteriore!"&nbsp;"}</span>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    <table class="footTableInternal1">
+                        <tr>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>Colli</legend>
+                                        <span>${ddt.colli!"&nbsp;"}</span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>Peso KG</legend>
+                                        <span>${ddt.peso!"&nbsp;"}</span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>Porto</legend>
+                                        <span>
+                                            <#if (ddt.porto!"")=="">
+                                                &nbsp;
+                                            <#else> 
+                                                ${ddt.porto}
+                                            </#if>
+                                        </span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>Totale</legend>
+                                        <span>&nbsp;</span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="footCol1">
+                    <div>
+                        <fieldset>
+                            <legend>Consegna o inizio trasporto a mezzo</legend>
+                            <span>${ddt.mezzo!"&nbsp;"}</span>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    <table class="footTableInternal2">
+                        <tr>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>Ora e data del ritiro</legend>
+                                        <span>${ddt.ritiro!"&nbsp;"}</span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>Firma del conducente</legend>
+                                        <span>&nbsp;</span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="footCol1">
+                    <div>
+                        <fieldset>
+                            <legend>Annotazioni e variazioni</legend>
+                            <span>
+                                <#if (ddt.annotazioni!"")=="">
+                                    &nbsp;
+                                <#else> 
+                                    ${ddt.annotazioni}
+                                </#if>
+                            </span>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    <table class="footTableInternal2">
+                        <tr>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>N Progressivo (1)</legend>
+                                        <span>${ddt.progressivo!"&nbsp;"}</span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <fieldset>
+                                        <legend>Firma del cessionario</legend>
+                                        <span>&nbsp;</span>
+                                    </fieldset>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div class="note">(1) Ai sensi dell'art 3, comma 2, del D.P.R. 441/97 e successive modificazioni</div>
+        <div class="note">
+            PR=Prototipo, CP=Campionario, PC=Primo Capo, PZ=Piazzato, IA=Interamente Adesivato
+        </div>
+    </body>
+</html>

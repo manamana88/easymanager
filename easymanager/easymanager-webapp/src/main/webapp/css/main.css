@@ -1,0 +1,31 @@
+body {
+	background-color: lightgrey
+}
+
+.header {
+	background-color: lightblue;
+}
+
+.body {
+	padding: 10px;
+}
+
+.main {
+	background-color: white;
+	min-height: 400px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+form input[type="checkbox"] {
+	margin-top: 11px;
+}
+
+#destinazione{
+    min-height: 80px;
+}
+
+.fattura-container {
+	max-height: 65%;
+	overflow-y: scroll;
+}

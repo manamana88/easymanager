@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>EasyManager</title>
+<link rel="stylesheet" type="text/css"
+	href="assets/bootstrap-3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="assets/font-awesome-4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
+<script src="assets/jquery/jquery-1.12.1.min.js"></script>
+<script src="assets/underscorejs/underscore-min.js"></script>
+<script src="assets/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row header">
+			<div class="col-sm-12">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">File<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Gestione Azienda</a></li>
+							<li><a href="#">Seleziona Anno</a></li>
+						</ul></li>
+					<li><a href="#">Clienti</a></li>
+					<li><a href="#">DdT</a></li>
+					<li><a href="#">Fatture</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Statistiche<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Ricerca semplice</a></li>
+							<li><a href="#">Confronta periodi</a></li>
+						</ul></li>
+					<li><a href="#">Mail</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="row body">
+			<div class="main col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<ol class="breadcrumb">
+							<li><a href="#">Home</a></li>
+							<li class="active">Lista Fatture</li>
+						</ol>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>Numero</th>
+									<th>Nome Azienda</th>
+									<th>Data Emissione</th>
+									<th>Data Scadenza</th>
+									<th>Operazioni</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>6</td>
+									<td>Antica Sartoria s.r.l.</td>
+									<td>29/01/2016</td>
+									<td>28/04/2016</td>
+									<td>
+										<i class="text-success fa fa-search" title="Visualizza"></i>
+										<i class="text-info fa fa-pencil" title="Modifica"></i>
+										<i class="text-danger fa fa-trash-o" title="Cancella"></i>
+										<i class="text-warning fa fa-envelope" title="Invia"></i>
+										<i class="text-primary fa fa-print" title="Stampa"></i>
+									</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td>Valentina Confezioni S.R.L.U.</td>
+									<td>29/01/2016</td>
+									<td>29/03/2016</td>
+									<td>
+										<i class="text-success fa fa-search" title="Visualizza"></i>
+										<i class="text-info fa fa-pencil" title="Modifica"></i>
+										<i class="text-danger fa fa-trash-o" title="Cancella"></i>
+										<i class="text-warning fa fa-envelope" title="Invia"></i>
+										<i class="text-primary fa fa-print" title="Stampa"></i>
+									</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Marni Group S.R.L. Societa Unipersonale</td>
+									<td>29/01/2016</td>
+									<td>29/03/2016</td>
+									<td>
+										<i class="text-success fa fa-search" title="Visualizza"></i>
+										<i class="text-info fa fa-pencil" title="Modifica"></i>
+										<i class="text-danger fa fa-trash-o" title="Cancella"></i>
+										<i class="text-warning fa fa-envelope" title="Invia"></i>
+										<i class="text-primary fa fa-print" title="Stampa"></i>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Aggiungi</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row footer"></div>
+	</div>
+</body>
+</html>

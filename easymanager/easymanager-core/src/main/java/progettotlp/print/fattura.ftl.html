@@ -1,0 +1,315 @@
+<html>
+    <head>
+        <title>Fattura n ${fattura.id}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style type="text/css"> 
+            html{
+                margin: 0;
+                padding: 0;
+                font-family:monospace;
+            }
+            body {
+                padding-left: 0.5cm;
+                padding-right: 0.5cm;
+                padding-bottom: 0.5cm;
+                padding-top: 0.5cm;
+                width: 22cm;
+                height: 29.7cm;
+            }
+            input[type="checkbox"]:disabled{
+                border: 1px solid black ;
+                color: black;
+            }
+            .nomeEmittente{
+                font-size: large;
+                font-weight: bolder;
+            }
+            table {
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+                width:100%;
+                text-align: center;
+            }
+            .corpoFattura table{
+                text-align: left;
+            }
+            .corpoFattura table td{
+                font-size: 12px;
+            }
+            .intestazioneEmittente{
+                float:left;
+                width:50%;
+                margin-bottom: 0.3cm;
+            }
+            .intestazioneCliente{
+                float:right;
+                width:40%;
+                margin-top: 1.5cm;
+            }
+            .intestazioneCliente label{
+                font-weight: bold;
+            }
+            .intestazioneFattura{
+                clear:both;
+            }intestazioneFattura td{
+                width: 16.5%;
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+            }
+            .intestazioneFattura th{
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+            }
+            .intestazioneFattura td{
+                width: 16.5%;
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+            }
+            .intestazioneFattura th{
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+            }
+            .corpoFattura tr{
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+            }
+            .corpoFattura th{
+                text-align: center;
+                border-color: black;
+                border-style: solid;
+                border-top-style: none;
+                border-width: 1px;
+                border-bottom-width: 2px;
+            }
+            .corpoFattura td{
+                text-align: center;
+                border-left-style: solid;
+                border-left-width: 1px;
+                border-right-style: solid;
+                border-right-width: 1px;
+                border-color: black;
+            }
+            .corpoCol5{
+                border-right-style: none !important;
+            } 
+            .corpoCol6,.corpoCol7,.corpoCol8{
+                border-left-style: none !important;
+                border-right-style: none !important;
+            }
+            .corpoCol9{
+                border-left-style: none !important;
+            } 
+            .pari{
+                background-color: lightgray;
+            }
+            .fineFattura td{
+                width: 20%;
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+            }
+            .fineFattura th{
+                border: black;
+                border-style: solid;
+                border-width: 1px;
+                border-spacing: 0;
+            }
+            .note{
+                margin-top: 5px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="intestazioneEmittente">
+            <span class="nomeEmittente">${azienda.nome}</span><br/><br/>
+            <span class="viaEmittente">${azienda.via},${azienda.civico}
+                ${azienda.cap} ${azienda.citta} (${azienda.provincia})</span><br/>
+            <span class="pivaEmittente">PI: ${azienda.pIva}</span><br/>
+            <span class="codfisEmittente">Cod Fis: ${azienda.codFis}</span><br/>
+            <span class="telefonoEmittente">Telefono: ${azienda.telefono}</span><br/>
+            <span class="faxEmittente">Fax: ${azienda.fax}</span><br/>
+            <span class="emailEmittente">Email: ${azienda.mail}</span>
+        </div>
+        <div class="intestazioneCliente">
+            <span class="label">Cliente</span><br/><br/>
+            <span class="nomeCliente">${fattura.cliente.nome}</span><br/>
+            <span class="viaCliente">${fattura.cliente.via},${fattura.cliente.civico} 
+                ${fattura.cliente.cap} ${fattura.cliente.citta} (${fattura.cliente.provincia})</span>
+        </div>
+        <div class="intestazioneFattura">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="intestazioneCol1">Partita Iva</th>
+                        <th>Codice Fiscale</th>
+                        <th>Fattura n</th>
+                        <th>Emissione</th>
+                        <th>Regolamento</th>
+                        <th>Pagina</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="intestazioneCol1">${fattura.cliente.pIva}</td>
+                        <td>${fattura.cliente.codFis}</td>
+                        <td>${fattura.id}</td>
+                        <td>${fattura.emissione}</td>
+                        <td>60 gg.</td>
+                        <td>${pagina}/${totPagine}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="corpoFattura">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="corpoCol1">Articolo</th>
+                        <th class="corpoCol2">Commessa</th>
+                        <th class="corpoCol3">Descrizione</th>
+                        <th class="corpoCol4">DDT</th>
+                        <th class="corpoCol5">PR</th>
+                        <th class="corpoCol6">CP</th>
+                        <th class="corpoCol7">PC</th>
+                        <th class="corpoCol8">PZ</th>
+                        <th class="corpoCol9">IA</th>
+                        <th class="corpoCol10">Capi</th>
+                        <th class="corpoCol11">Prezzo</th>
+                        <th class="corpoCol12">Netto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#assign limit=beni.size()>
+                    <#list 0..34 as i>
+                        <#if (i%2)=0>
+                            <tr class="pari">
+                        <#else>
+                            <tr class="dispari">
+                        </#if>
+                        <#if (i<limit) >
+                            <td class="corpoCol1">${beni.get(i).bene.codice!"&nbsp;"}</td>
+                            <td class="corpoCol2">${beni.get(i).bene.commessa!"&nbsp;"}</td>
+                            <td class="corpoCol3">${beni.get(i).bene.descrizione!"&nbsp;"}</td>
+                            <td class="corpoCol4">${beni.get(i).generateRif()!"&nbsp;"}</td>
+                            <#if beni.get(i).bene.prototipo>
+                                <td class="corpoCol5"><input type="checkbox" checked="checked" /></td>
+                            <#else>
+                                <td class="corpoCol5"><input type="checkbox" /></td>
+                            </#if>
+                            <#if beni.get(i).bene.campionario>
+                                <td class="corpoCol6"><input type="checkbox" checked="checked" disabled="disabled" /></td>
+                            <#else>   
+                                <td class="corpoCol6"><input type="checkbox" /></td>
+                            </#if>
+                            <#if beni.get(i).bene.primoCapo>
+                                <td class="corpoCol7"><input type="checkbox" checked="checked" /></td>
+                            <#else>
+                                <td class="corpoCol7"><input type="checkbox" /></td>
+                            </#if>
+                            <#if beni.get(i).bene.piazzato>
+                                <td class="corpoCol8"><input type="checkbox" checked="checked" /></td>
+                            <#else>
+                                <td class="corpoCol8"><input type="checkbox" /></td>
+                            </#if>
+                            <#if beni.get(i).bene.interamenteAdesivato>
+                                <td class="corpoCol9"><input type="checkbox" checked="checked" /></td>
+                            <#else>
+                                <td class="corpoCol9"><input type="checkbox" /></td>
+                            </#if>
+                            <td class="corpoCol10">${beni.get(i).bene.qta}</td>
+                            <#if beni.get(i).bene.prezzo=0>
+                                <td class="corpoCol11">&nbsp;</td>
+                            <#else>
+                                <td class="corpoCol11">&euro; ${beni.get(i).bene.prezzo?string("####.00")}</td>
+                            </#if>
+                            <td class="corpoCol12">&euro; ${beni.get(i).bene.tot?string("####.00")}</td>
+                        <#else>
+                            <td class="corpoCol1">&nbsp</td>
+                            <td class="corpoCol2">&nbsp;</td>
+                            <td class="corpoCol3">&nbsp;</td>
+                            <td class="corpoCol4">&nbsp;</td>
+                            <td class="corpoCol5"><input type="checkbox" /></td>
+                            <td class="corpoCol6"><input type="checkbox" /></td>
+                            <td class="corpoCol7"><input type="checkbox" /></td>
+                            <td class="corpoCol8"><input type="checkbox" /></td>
+                            <td class="corpoCol9"><input type="checkbox" /></td>
+                            <td class="corpoCol10">&nbsp;</td>
+                            <td class="corpoCol11">&nbsp;</td>
+                            <td class="corpoCol12">&nbsp;</td>
+                        </#if>
+                        </tr>
+                    </#list>
+                </tbody>
+            </table>
+        </div>
+        <div class="fineFattura">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Totale Capi</th>
+                        <th>Imponibile</th>
+                        <th>Importo IVA ${fattura.ivaPerc}%</th>
+                        <th>Totale Fattura</th>
+                        <th>Scadenza</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#if pagina=totPagine>
+                        <tr>
+                            <td>${totCapi}</td>
+                            <td>&euro; ${fattura.netto?string("####.00")}</td>
+                            <#if azienda.tassabile>
+                                <td>&euro; ${fattura.iva?string("####.00")}</td>
+                                <td>&euro; ${fattura.totale?string("####.00")}</td>
+                            <#else>
+                                <td>&nbsp;</td>
+                                <td>&euro; ${fattura.netto?string("####.00")}</td>
+                            </#if>
+                            <td>${fattura.scadenza.toString()}</td>
+                        </tr>
+                    <#else>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>SEGUE</td>
+                        </tr>
+                    </#if>
+                </tbody>
+            </table>
+        </div>
+        <div class="note">
+            PR=Prototipo, CP=Campionario, PC=Primo Capo, PZ=Piazzato, IA=Interamente Adesivato
+        </div>
+        <div class="note">
+            I Prezzi sono comprensivi di preadesivazione e rifilo
+        </div>
+        <#if azienda.tassabile>
+            <div class="note">
+                Imposta a esigibilit&agrave; differita ai sensi dell'art. 7, D.L. 185/2008 convertito dalla L. 2/2009
+            </div>
+        <#else>
+            <div class="note">
+                F.C.IVA Art. 7/ter comma 1 DPR 633/1972
+            </div>
+        </#if>
+        <div class="note">
+            <h3><b>BANCA BLS - IBAN: IT38N0555015400000000534628 - SWIFT: BPM0IT22</b></h3>
+        </div>    
+    </body>
+</html>
