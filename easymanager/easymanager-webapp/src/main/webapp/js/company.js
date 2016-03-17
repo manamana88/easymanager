@@ -1,7 +1,20 @@
 $( document ).ready(function() {
-	if (getParameterByName("action")!=="show"){
-		toggleReadOnly();
+	
+	var companyId = getParameterByName("company");
+	var currentCompany;
+	if (companyId){
+		var targetUrl=getWebappUrl() + "/resources/azienda?id="+encodeURIComponent(companyId);
+		doCall('GET', targetUrl, {}, "", function (responseData){
+			var currentCompany = responseData.items[0];
+			fillPage(currentCompany);
+		});
 	}
+	
+	var mode = getParameterByName("action");
+	if (mode==="insert"){
+		$("#button").bind("click", registraAzienda);
+	}
+	
 	$("#giuridica").change(toggleReadOnly);
 	$("#piva").change(function(){
 		if ($("#giuridica").prop("checked")){
@@ -10,9 +23,51 @@ $( document ).ready(function() {
 	});
 });
 
+function fillPage(currentCompany){
+	var mode = getParameterByName("action");
+	if (mode==="show"){
+		$(".breadcrumb li[class*='active']").text("Visualizza "+currentCompany.nome);
+		fillForm(currentCompany);
+		makeCheckboxReadOnly();
+		destroyDatepickers();
+		makeTextInputReadOnly();
+		$("#button").hide();
+	} else if (mode === "edit"){
+		$(".breadcrumb li[class*='active']").text("Modifica "+currentCompany.nome);
+		fillForm(currentCompany);
+		$("#button").text("Salva");
+		$("#button").bind("click", modificaAzienda);
+		toggleReadOnly();
+	}
+}
+
+function fillForm(currentCompany){
+	$("#id").val(currentCompany.id);
+	$("#principale").val(currentCompany.principale);
+	$("#nome").val(currentCompany.nome);
+	$('#giuridica').prop('checked', currentCompany.pIva === currentCompany.codFis);
+	$('#tassabile').prop('checked', currentCompany.tassabile);
+	$("#piva").val(currentCompany.pIva);
+	$("#codfis").val(currentCompany.codFis);
+	$("#via").val(currentCompany.via);
+	$("#numero").val(currentCompany.civico);
+	$("#cap").val(currentCompany.cap);
+	$("#citta").val(currentCompany.citta);
+	$("#provincia").val(currentCompany.provincia);
+	$("#nazione").val(currentCompany.nazione);
+	$("#telefono").val(currentCompany.telefono);
+	$("#fax").val(currentCompany.fax);
+	$("#email").val(currentCompany.mail);
+}
+
+function lockForm(){
+	$("input[type='text']").prop('readonly','readonly');
+}
+
 function toggleReadOnly(){
 	if ($("#giuridica").prop("checked")){
 		$("#codfis").prop("readonly", "readonly");
+		$("#codfis").val($("#piva").val());
 	} else {
 		$("#codfis").removeProp("readonly");
 	}
@@ -23,10 +78,8 @@ function registraAzienda(){
 	var urlString = formToUrlString();
 	var targetUrl=getWebappUrl() + "/resources/azienda";
 
-	doCall('POST', targetUrl, urlString, function (responseData){
-		$("#myModalLabel").text("Successo");
-		$("#modal-body").text("Azienda registrata con successo");
-		$("#myModal").modal("show");
+	doCall('POST', targetUrl, {}, urlString, function (responseData){
+		notifyModal("Successo", "Azienda registrata con successo");
 		_.delay(function(){
 			window.location.href=getWebappUrl()+"/companiesList.xhtml";
 		}, 2000);
@@ -38,10 +91,8 @@ function modificaAzienda(){
 	var urlString = formToUrlString();
 	var targetUrl=getWebappUrl() + "/resources/azienda";
 	
-	doCall('PUT', targetUrl, urlString, function (responseData){
-		$("#myModalLabel").text("Successo");
-		$("#modal-body").text("Azienda modificata con successo");
-		$("#myModal").modal("show");
+	doCall('PUT', targetUrl, {}, urlString, function (responseData){
+		notifyModal("Successo", "Azienda modificata con successo");
 		_.delay(function(){
 			window.location.href=getWebappUrl()+"/companiesList.xhtml";
 		}, 2000);

@@ -126,6 +126,8 @@ public abstract class AbstractTest extends AnnualTest{
                     sourceFile="";
                 }
             }
+        } catch (Throwable e){
+        	e.printStackTrace();
         } finally{
             closeSessionFactory();
             if (b!=null){

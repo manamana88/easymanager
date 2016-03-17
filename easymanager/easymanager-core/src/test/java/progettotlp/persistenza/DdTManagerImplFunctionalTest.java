@@ -134,7 +134,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         executeSQL(file);
         DdT toDelete = retrieveObject(DdT.class, 1L,ddTManager);
         assertNotNull(toDelete);
-        ddTManager.cancellaDdT(toDelete.getId());
+        ddTManager.cancellaDdT(toDelete.getRealId());
         DdT deleted = retrieveObject(DdT.class, 1L,ddTManager);
         assertNull(deleted);
 

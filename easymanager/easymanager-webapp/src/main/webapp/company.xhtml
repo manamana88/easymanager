@@ -10,10 +10,6 @@
 <ui:include src="include/headLibraries.xhtml" />
 <script src="js/company.js"></script>
 
-<c:set var="currentCompany" value="${companyFormController.getAzienda(param['company'])}" ></c:set>
-<c:set var="isShowMode" value="${param['action'] eq 'show'}" ></c:set>
-<c:set var="isEditMode" value="${param['action'] eq 'edit'}" ></c:set>
-<c:set var="isRegisterMode" value="${param['action'] eq 'insert'}" ></c:set>
 </head>
 <body>
 	<div class="container-fluid">
@@ -25,121 +21,102 @@
 						<ol class="breadcrumb">
 							<li><a href="#{request.getContextPath()}">Home</a></li>
 							<li><a href="#{request.getContextPath()}/companiesList.xhtml">Lista Clienti</a></li>
-							<c:choose>
-								<c:when test="${isShowMode}">
-									<li class="active">Visualizza ${currentCompany.nome}</li>
-								</c:when>
-								<c:when test="${isEditMode}">
-									<li class="active">Modifica ${currentCompany.nome}</li>
-								</c:when>
-								<c:when test="${isRegisterMode}">
-									<li class="active">Inserisci Nuova Azienda</li>
-								</c:when>
-							</c:choose>
+							<li class="active">Inserisci Nuova Azienda</li>
 						</ol>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
 						<form class="form-horizontal">
-							<h:inputHidden id="id" name="id" value="${currentCompany.id}"></h:inputHidden>
-							<h:inputHidden id="principale" name="principale" value="${currentCompany.isPrincipale()}"></h:inputHidden>
+							<input type="hidden" id="id" name="id" />
+							<input type="hidden" id="principale" name="principale" />
 							<div class="form-group">
 								<label for="nome" class="col-sm-2 control-label">Nome
 									Azienda</label>
 								<div class="col-sm-4">
-									<h:inputText class="form-control" id="nome" name="nome"
-										a:placeholder="Nome Azienda" value="${currentCompany.nome}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="nome" name="nome"
+										placeholder="Nome Azienda" />
 								</div>
 								<label for="giuridica" class="col-sm-2 control-label"> Persona Giuridica </label>
 								<div class="col-sm-1">
-									<h:selectBooleanCheckbox class="${utilsController.addPreventClass(isShowMode)}" id="giuridica" name="giuridica" value="${(currentCompany.pIva eq currentCompany.codFis) and !(empty currentCompany.pIva)}" />
+									<input type="checkbox" id="giuridica" name="giuridica" />
 								</div>
 								<label for="tassabile" class="col-sm-2 control-label"> Tassabile </label>
 								<div class="col-sm-1">
-									<h:selectBooleanCheckbox class="${utilsController.addPreventClass(isShowMode)}"  id="tassabile" name="tassabile" value="${currentCompany.tassabile}" />
+									<input type="checkbox" id="tassabile" name="tassabile" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="piva" class="col-sm-2 control-label">Partita
 									IVA</label>
 								<div class="col-sm-4">
-									<h:inputText class="form-control" id="piva" name="piva"
-										a:placeholder="Partita IVA" value="${currentCompany.pIva}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="piva" name="piva"
+										placeholder="Partita IVA" />
 								</div>
 								<label for="codfis" class="col-sm-2 control-label">Codice
 									Fiscale</label>
 								<div class="col-sm-4">
-									<h:inputText class="form-control" id="codfis" name="codfis"
-										a:placeholder="Codice Fiscale" value="${currentCompany.codFis}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="codfis" name="codfis"
+										placeholder="Codice Fiscale" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="via" class="col-sm-2 control-label">Via</label>
 								<div class="col-sm-4">
-									<h:inputText class="form-control" id="via" name="via"
-										a:placeholder="Via" value="${currentCompany.via}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="via" name="via"
+										placeholder="Via" />
 								</div>
 								<label for="numero" class="col-sm-1 control-label">Numero</label>
 								<div class="col-sm-2">
-									<h:inputText class="form-control" id="numero" name="numero"
-										a:placeholder="Numero" value="${currentCompany.civico}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="numero" name="numero"
+										placeholder="Numero" />
 								</div>
 								<label for="cap" class="col-sm-1 control-label">CAP</label>
 								<div class="col-sm-2">
-									<h:inputText class="form-control" id="cap" name="cap"
-										a:placeholder="CAP" value="${currentCompany.cap}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="cap" name="cap"
+										placeholder="CAP" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="citta" class="col-sm-2 control-label">Citt&#224;</label>
 								<div class="col-sm-4">
-									<h:inputText class="form-control" id="citta" name="citta"
-										a:placeholder="Citt&#224;" value="${currentCompany.citta}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="citta" name="citta"
+										placeholder="Citt&#224;" />
 								</div>
 								<label for="provincia" class="col-sm-1 control-label">Provincia</label>
 								<div class="col-sm-2">
-									<h:inputText class="form-control" id="provincia" name="provincia"
-										a:placeholder="Provincia" value="${currentCompany.provincia}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="provincia" name="provincia"
+										placeholder="Provincia" />
 								</div>
 								<label for="nazione" class="col-sm-1 control-label">Nazione</label>
 								<div class="col-sm-2">
-									<h:inputText class="form-control" id="nazione" name="nazione"
-										a:placeholder="Nazione" value="${currentCompany.nazione}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="nazione" name="nazione"
+										placeholder="Nazione" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="telefono" class="col-sm-2 control-label">Telefono</label>
 								<div class="col-sm-4">
-									<h:inputText class="form-control" id="telefono" name="telefono"
-										a:placeholder="Telefono" value="${currentCompany.telefono}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="telefono" name="telefono"
+										placeholder="Telefono" />
 								</div>
 								<label for="fax" class="col-sm-2 control-label">Fax</label>
 								<div class="col-sm-4">
-									<h:inputText class="form-control" id="fax" name="fax"
-										a:placeholder="Fax" value="${currentCompany.fax}" readonly="${isShowMode}" />
+									<input type="text" class="form-control" id="fax" name="fax"
+										placeholder="Fax" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="email" class="col-sm-2 control-label">Email</label>
 								<div class="col-sm-10">
-									<h:inputText a:type="email" class="form-control" id="email" name="email"
-										a:placeholder="Email" value="${currentCompany.mail}" readonly="${isShowMode}" />
+									<input type="email" class="form-control" id="email" name="email"
+										placeholder="Email" />
 								</div>
 							</div>
 							<div class="form-group">
-								<c:choose>
-									<c:when test="${isRegisterMode}">
-										<div class="col-sm-offset-2 col-sm-10">
-											<a class="btn btn-default" href="#" onClick="registraAzienda();" role="button">Registra</a>
-										</div>
-									</c:when>
-									<c:when test="${isEditMode}">
-										<div class="col-sm-offset-2 col-sm-10">
-											<a class="btn btn-default" href="#" onClick="modificaAzienda();" role="button">Salva</a>
-										</div>
-									</c:when>
-								</c:choose>
+								<div class="col-sm-offset-2 col-sm-10">
+									<a id="button" class="btn btn-default" href="#" role="button">Registra</a>
+								</div>
 							</div>
 						</form>
 					</div>

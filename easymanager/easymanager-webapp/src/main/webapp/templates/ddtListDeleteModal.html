@@ -1,0 +1,25 @@
+<div class="modal fade" id="cancellaDdtModal<%= realId %>" tabindex="-1"
+	role="dialog" aria-labelledby="cancellaDdtModalLabel<%= realId %>">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true"><i class="fa fa-times"></i></span>
+				</button>
+				<h4 class="modal-title" id="cancellaDdtModalLabel<%= realId %>">Cancella
+					Ddt</h4>
+			</div>
+			<div class="modal-body">
+				Sei sicuro di voler cancellare il Ddt numero <strong><%= id %></strong>
+				del <strong><%= data %></strong> emesso
+				per l'azienda <strong><%= cliente.nome %></strong>?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal"
+					onclick="deleteDdt(<%= realId %>)">Cancella Azienda</button>
+			</div>
+		</div>
+	</div>
+</div>

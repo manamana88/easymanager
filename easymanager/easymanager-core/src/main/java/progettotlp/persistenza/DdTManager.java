@@ -5,6 +5,7 @@
 package progettotlp.persistenza;
 
 import java.util.List;
+
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
@@ -14,9 +15,9 @@ import progettotlp.exceptions.PersistenzaException;
  *
  * @author vincenzo
  */
-public interface DdTManager {
+public interface DdTManager extends BaseManager {
 
-    public void cancellaDdT(int id) throws PersistenzaException;
+    public void cancellaDdT(Long id) throws PersistenzaException;
 
     public boolean existsDdT(Long realId);
 

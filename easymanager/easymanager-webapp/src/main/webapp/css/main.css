@@ -29,3 +29,7 @@ form input[type="checkbox"] {
 	max-height: 65%;
 	overflow-y: scroll;
 }
+
+textarea {
+	resize: vertical;
+}

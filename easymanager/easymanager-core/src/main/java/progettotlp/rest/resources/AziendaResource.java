@@ -1,29 +1,50 @@
 package progettotlp.rest.resources;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import progettotlp.classes.Azienda;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.exceptions.toprint.GenericExceptionToPrint;
 import progettotlp.exceptions.toprint.ValidationException;
+import progettotlp.facilities.BeanUtils;
 import progettotlp.facilities.Controlli;
 import progettotlp.persistenza.AziendaManager;
-import progettotlp.persistenza.AziendaManagerImpl;
+import progettotlp.persistenza.ManagerProvider;
 
 @Path("azienda")
 public class AziendaResource {
 	
-	private static AziendaManager aziendaManager = new AziendaManagerImpl();
+	private static AziendaManager aziendaManager = ManagerProvider.getAziendaManager();
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response get(@QueryParam("id") Long id){
+		Azienda azienda = aziendaManager.get(Azienda.class, id);
+		return Response.ok(BeanUtils.createResponseBean(azienda), MediaType.APPLICATION_JSON_TYPE).build();
+	}
+	
+	@GET
+	@Path("all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAll(){
+		List<Azienda> aziendeNonPrincipali = aziendaManager.getAziendeNonPrincipali();
+		return Response.ok(BeanUtils.createResponseBean(aziendeNonPrincipali.toArray()), MediaType.APPLICATION_JSON_TYPE).build();
+	}
 	
 	@POST
 	public Response saveAzienda(

@@ -1,7 +1,11 @@
 package progettotlp.rest.application;
 
+import java.text.SimpleDateFormat;
+
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
+
+import progettotlp.facilities.DateUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +33,7 @@ public class JacksonObjectMapperProvider implements ContextResolver<ObjectMapper
         JaxbAnnotationModule module = new JaxbAnnotationModule();
         result.registerModule(module);
         result.setSerializationInclusion(Include.NON_NULL);
+        result.setDateFormat(new SimpleDateFormat(DateUtils.STANDARD_FORMAT));
         return result;
     }
 
