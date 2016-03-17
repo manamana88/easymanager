@@ -72,7 +72,8 @@ public class FormSceltaDdTUtilities extends AbstractFormUtilities{
     public void cancellaSelectedDdT() throws NoSelectedRow, GenericExceptionToPrint{
         Integer selectedDdTId = getSelectedDdTId();
         try{
-            ddtManager.cancellaDdT(selectedDdTId);
+        	DdT ddTById = ddtManager.getDdTById(selectedDdTId, false, false);
+            ddtManager.cancellaDdT(ddTById.getRealId());
             removeSelectedRow();
         }catch (Exception e){
             throw new GenericExceptionToPrint("Errore","Siamo spiacenti, si è verificato un errore."+'\n'+"Impossibile cancellare il DdT",e);

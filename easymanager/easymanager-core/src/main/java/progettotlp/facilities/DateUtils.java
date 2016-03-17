@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
 import progettotlp.exceptions.toprint.ValidationException;
 
 /**
@@ -19,7 +20,8 @@ import progettotlp.exceptions.toprint.ValidationException;
  */
 public class DateUtils {
 
-    private static final Long SECONDS_IN_A_DAY=24L * 3600L * 1000L;
+    public static final String STANDARD_FORMAT = "dd/MM/yyyy";
+	private static final Long SECONDS_IN_A_DAY=24L * 3600L * 1000L;
 
     public static Date setMidnight(Date d){
         Calendar instance = GregorianCalendar.getInstance();
@@ -57,7 +59,7 @@ public class DateUtils {
 
     public static Date parseDate(String date) throws ParseException{
         try {
-            return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+            return new SimpleDateFormat(STANDARD_FORMAT).parse(date);
         } catch (ParseException ex) {}
         return new SimpleDateFormat("dd-MM-yyyy").parse(date);
     }
@@ -70,7 +72,7 @@ public class DateUtils {
     }
 
     public static String formatDate(Date d){
-        return new SimpleDateFormat("dd/MM/yyyy").format(d);
+        return new SimpleDateFormat(STANDARD_FORMAT).format(d);
     }
 
     public static Date getFatturaDay(Date d){

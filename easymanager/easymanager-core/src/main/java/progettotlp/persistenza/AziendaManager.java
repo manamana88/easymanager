@@ -4,7 +4,6 @@
  */
 package progettotlp.persistenza;
 
-import java.io.Serializable;
 import java.util.List;
 
 import progettotlp.classes.Azienda;

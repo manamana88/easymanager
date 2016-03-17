@@ -5,7 +5,10 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,11 +21,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.IndexColumn;
+
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.DateUtils;
+import progettotlp.rest.utils.DateSerializer;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * La classe DdT rappresenta un documento di trasporto, ovvero un documento che
@@ -37,6 +46,7 @@ public class DdT implements Serializable {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name="real_id")
     private Long realId;
     @Temporal(TemporalType.DATE)
+    @JsonSerialize(using=DateSerializer.class)
     private Date data;
     private Integer id;
     private String mezzo;       

@@ -8,8 +8,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
@@ -21,6 +26,8 @@ import progettotlp.facilities.Utility;
  *
  * @author vincenzo
  */
+@ManagedBean(name="ddtManager")
+@ApplicationScoped
 public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 
     public DdTManagerImpl(Properties properties) {
@@ -156,8 +163,8 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
         }
     }
     
-    public void cancellaDdT(int id) throws PersistenzaException{
-        delete(getDdTById(id,false,false));
+    public void cancellaDdT(Long id) throws PersistenzaException{
+        delete(getDdT(id,false,false));
     }
 
     public void modificaDdT(DdT toModify) throws PersistenzaException{

@@ -1,0 +1,14 @@
+<tr>
+	<td><%= nome %></td>
+	<td><%= pIva %></td>
+	<td>Via <%= via %>, <%= civico %> <%= cap %> <%= citta %> (<%=
+		provincia %>)</td>
+	<td><%= telefono %></td>
+	<td><%= mail %></td>
+	<td><a href="company.xhtml?company=<%= id %>&amp;action=show"><i
+			class="text-success fa fa-search" title="Visualizza"></i></a> <a
+		href="company.xhtml?company=<%= id %>&amp;action=edit"><i
+			class="text-info fa fa-pencil" title="Modifica"></i></a> <a href="#"
+		data-toggle="modal" data-target="#cancellaAziendaModal<%= id %>"><i
+			class="text-danger fa fa-trash-o" title="Cancella"></i></a></td>
+</tr>

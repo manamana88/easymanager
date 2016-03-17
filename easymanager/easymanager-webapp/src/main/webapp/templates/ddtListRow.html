@@ -1,0 +1,15 @@
+<tr>
+	<td><%= id %></td>
+	<td><%= data %></td>
+	<td><%= cliente.nome %></td>
+	<td><a href="ddt.xhtml?ddt=<%= realId %>&amp;action=show"> <i
+			class="text-success fa fa-search" title="Visualizza"></i>
+	</a> <a href="ddt.xhtml?ddt=<%= realId %>&amp;action=edit"> <i
+			class="text-info fa fa-pencil" title="Modifica"></i>
+	</a> <a href="#" data-toggle="modal"
+		data-target="#cancellaDdtModal<%= realId %>"> <i
+			class="text-danger fa fa-trash-o" title="Cancella"></i>
+	</a> <a href="#"> <i class="text-warning fa fa-envelope" title="Invia"></i>
+	</a> <a href="#"> <i class="text-primary fa fa-print" title="Stampa"></i>
+	</a></td>
+</tr>
