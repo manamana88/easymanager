@@ -6,34 +6,49 @@
 package progettotlp.ui;
 
 import java.util.Properties;
+
 import progettotlp.test.AnnualTest;
+
 import java.text.ParseException;
 import java.util.Date;
+
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.ui.FormPrezzoUtilities.CostoType;
 import progettotlp.ui.FormPrezzoUtilities.FormPrezzoType;
+
 import org.slf4j.LoggerFactory;
+
 import progettotlp.ui.FormFatturaUtilities.Result;
 import progettotlp.ui.FormFatturaUtilities.TableColumn;
+
 import java.util.Arrays;
+
 import progettotlp.classes.DdT;
 import progettotlp.classes.Bene;
+
 import javax.swing.JTable;
 import javax.swing.JComboBox;
+
 import org.slf4j.Logger;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 import progettotlp.persistenza.DdTManager;
 import progettotlp.persistenza.AziendaManager;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
+
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+
 import progettotlp.persistenza.FatturaManager;
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Fattura;
@@ -42,6 +57,7 @@ import progettotlp.exceptions.toprint.NoSelectedRow;
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.exceptions.toprint.YetExistException;
 import progettotlp.facilities.ConfigurationManager;
+import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.StringUtils;
 import progettotlp.models.FatturaTableModelUtils;
@@ -65,7 +81,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         form=new FormFatturaUtilities(new JDialog(), null, null, null, null);
 
         Properties properties = new Properties();
-        properties.put(ConfigurationManager.DEFAULT_IVA_PERC, "21");
+        properties.put(Property.IVA_DEFAULT.getValue(), "21");
         ConfigurationManager.setProperties(properties);
 
         List<Class<?extends Object>> ignore = new ArrayList<Class<? extends Object>>();

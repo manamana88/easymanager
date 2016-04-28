@@ -251,15 +251,12 @@ public class FormEmailUtilities extends AbstractFormUtilities
                 textBodyPart.setText(testoValue);
                 Multipart multipart = new MimeMultipart();
                 multipart.addBodyPart(textBodyPart);
-                List printPage = FatturaPrinter.printPage(f, this.aziendaManager.getAziendaPrincipale(), true);
-                for (int i = 0; i < printPage.size(); ++i) {
-                    File file = (File) printPage.get(i);
-                    MimeBodyPart attachmentBodyPart = new MimeBodyPart();
-                    DataSource source = new FileDataSource(file);
-                    attachmentBodyPart.setDataHandler(new DataHandler(source));
-                    attachmentBodyPart.setFileName(FatturaUtilities.getFileName(f) + " Pagina " + (i + 1) + ".pdf");
-                    multipart.addBodyPart(attachmentBodyPart);
-                }
+                File printPage = FatturaPrinter.printPage(f, this.aziendaManager.getAziendaPrincipale(), true);
+                MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+                DataSource source = new FileDataSource(printPage);
+                attachmentBodyPart.setDataHandler(new DataHandler(source));
+                attachmentBodyPart.setFileName(FatturaUtilities.getFileName(f) + ".pdf");
+                multipart.addBodyPart(attachmentBodyPart);
                 message.setContent(multipart);
             }
             return message;

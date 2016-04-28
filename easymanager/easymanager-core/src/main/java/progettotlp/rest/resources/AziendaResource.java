@@ -29,12 +29,17 @@ import progettotlp.persistenza.ManagerProvider;
 @Path("azienda")
 public class AziendaResource {
 	
-	private static AziendaManager aziendaManager = ManagerProvider.getAziendaManager();
+	private AziendaManager aziendaManager = ManagerProvider.getAziendaManager();
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response get(@QueryParam("id") Long id){
-		Azienda azienda = aziendaManager.get(Azienda.class, id);
+	public Response get(@QueryParam("id") String id){
+		Azienda azienda;
+		if ("PRINCIPALE".equalsIgnoreCase(id)){
+			azienda = aziendaManager.getAziendaPrincipale();
+		} else {
+			azienda = aziendaManager.get(Azienda.class, Long.parseLong(id));
+		}
 		return Response.ok(BeanUtils.createResponseBean(azienda), MediaType.APPLICATION_JSON_TYPE).build();
 	}
 	

@@ -237,9 +237,10 @@ public abstract class AbstractPersistenza implements BaseManager{
         }
     }
 
-    protected void initializeDdT(List<DdT> list,boolean initializeBeni, boolean initializeFattura){
-        for(DdT d:list){
-            initializeDdT(d, initializeBeni, initializeFattura);
+    protected void initializeDdT(List<?> list,boolean initializeBeni, boolean initializeFattura){
+        for(Object d:list){
+        	DdT ddt = (DdT) d;
+            initializeDdT(ddt, initializeBeni, initializeFattura);
         }
     }
 

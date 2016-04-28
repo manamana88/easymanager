@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import progettotlp.rest.beans.ErrorBean;
 import progettotlp.rest.beans.ResponseBean;
-import progettotlp.ui.AbstractFormUtilities;
 
 @Provider
 public class GenericJerseyExceptionMapper implements ExceptionMapper<Throwable> {

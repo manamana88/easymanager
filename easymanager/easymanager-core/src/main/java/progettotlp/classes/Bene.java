@@ -5,18 +5,20 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.Type;
 
 /**
- * Bene √® una classe che rappresenta un servizio fornito dall'Azienda, da inserire
- * in un Documento di Trasporto. √à caratterizzato da un codice, una commessa, una
- * descrizione, una quantit√†, un prezzo, un totale e degli attributi supplementari.
+ * Bene Ë una classe che rappresenta un servizio fornito dall'Azienda, da inserire
+ * in un Documento di Trasporto. Ë caratterizzato da un codice, una commessa, una
+ * descrizione, una quantit‡, un prezzo, un totale e degli attributi supplementari.
  * @author Vincenzo Barrea, Alessio Felicioni
  */
 @Entity
@@ -70,11 +72,6 @@ public class Bene implements Serializable{
         this.primoCapo = primoCapo;
         this.piazzato = piazzato;
         this.interamenteAdesivato = interamenteAdesivato;
-    }
-
-    @Override
-    public String toString() {
-        return "Bene{" + "id=" + id + "codice=" + codice + "commessa=" + commessa + "descrizione=" + descrizione + "qta=" + qta + "prezzo=" + prezzo + "tot=" + tot + "prototipo=" + prototipo + "campionario=" + campionario + "primoCapo=" + primoCapo + "piazzato=" + piazzato + "interamenteAdesivato=" + interamenteAdesivato + '}';
     }
 
     public Boolean getCampionario() {
@@ -238,6 +235,15 @@ public class Bene implements Serializable{
         hash = 37 * hash + (this.interamenteAdesivato != null ? this.interamenteAdesivato.hashCode() : 0);
         return hash;
     }
+	@Override
+	public String toString() {
+		return "Bene [id=" + id + ", codice=" + codice + ", commessa="
+				+ commessa + ", descrizione=" + descrizione + ", qta=" + qta
+				+ ", prezzo=" + prezzo + ", tot=" + tot + ", prototipo="
+				+ prototipo + ", campionario=" + campionario + ", primoCapo="
+				+ primoCapo + ", piazzato=" + piazzato
+				+ ", interamenteAdesivato=" + interamenteAdesivato + "]";
+	}
 
     
     

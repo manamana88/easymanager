@@ -62,6 +62,25 @@ public class DateUtilsTest extends AnnualTest{
         assertEquals(result1,DateUtils.calcolaScadenza(test1, scadenza1));
         assertEquals(result2,DateUtils.calcolaScadenza(test2, scadenza2));
     }
+    
+    @Test
+    public void testGetFirstDayOfMonth() throws ParseException{
+    	Date result = simpleDateFormat.parse("01/01/2012");
+    	Date test=simpleDateFormat.parse("31/01/2012");
+    	assertEquals(result,DateUtils.getFirstDayOfMonth(test));
+    	
+    	result = simpleDateFormat.parse("01/02/2012");
+    	test =simpleDateFormat.parse("29/02/2012");
+    	assertEquals(result,DateUtils.getFirstDayOfMonth(test));
+    	
+    	result = simpleDateFormat.parse("1/09/2012");
+    	test =simpleDateFormat.parse("28/09/2012");
+    	assertEquals(result,DateUtils.getFirstDayOfMonth(test));
+    	
+    	result = simpleDateFormat.parse("01/09/2012");
+    	test =simpleDateFormat.parse("01/09/2012");
+    	assertEquals(result,DateUtils.getFirstDayOfMonth(test));
+    }
 
     @Test
     public void testGetFatturaDay() throws ParseException{

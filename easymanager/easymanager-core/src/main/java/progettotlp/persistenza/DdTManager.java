@@ -4,6 +4,7 @@
  */
 package progettotlp.persistenza;
 
+import java.util.Date;
 import java.util.List;
 
 import progettotlp.classes.Azienda;
@@ -25,7 +26,13 @@ public interface DdTManager extends BaseManager {
 
     public List<DdT> getAllDdT(boolean initializeBeni, boolean initializeFattura);
 
+    public List<DdT> getAllDdT(Long aziendaId);
+
     public List<DdT> getAllDdT(Azienda a, int mese,boolean initializeBeni, boolean initializeFattura);
+
+    public List<DdT> getAllDdT(Azienda a, Date startDate, Date endDate);
+
+    public List<DdT> getAllDdTWithoutFattura(Azienda a, Date startDate, Date endDate);
 
     public List<DdT> getAllDdTWithoutFattura(boolean initializeBeni, boolean initializeFattura);
 

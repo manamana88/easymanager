@@ -2,18 +2,23 @@ package progettotlp.ui;
 
 import java.text.ParseException;
 import java.util.Date;
+
 import progettotlp.facilities.DateUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import progettotlp.persistenza.AziendaManager;
 import progettotlp.persistenza.DdTManager;
 import progettotlp.persistenza.FatturaManager;
@@ -30,6 +35,7 @@ import progettotlp.facilities.Dialogs;
 import progettotlp.facilities.NumberUtils;
 import progettotlp.facilities.StringUtils;
 import progettotlp.facilities.Utility;
+import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.persistenza.LastSameBeneFatturatoInfos;
 import progettotlp.ui.FormPrezzoUtilities.CostoType;
 import progettotlp.ui.FormPrezzoUtilities.FormPrezzoType;
@@ -185,7 +191,7 @@ public class FormFatturaUtilities extends AbstractFormUtilities{
             float nt = res.totFattura;
             numCapiTot.setText(Integer.toString(q));
             netto.setText(StringUtils.formatNumber(nt));
-            Float ivaDefault = ConfigurationManager.getIvaDefault();
+            Float ivaDefault = Float.parseFloat(ConfigurationManager.getProperty(Property.IVA_DEFAULT));
             float iii=convertNullToBoolean(aziendaCliente.isTassabile())?(float) (nt*ivaDefault/100):0F;
             ivaPerc.setText(ivaDefault.toString());
             totIva.setText(StringUtils.formatNumber(iii));

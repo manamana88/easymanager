@@ -1,0 +1,16 @@
+<tr>
+	<td><%= id %></td>
+	<td><%= cliente.nome %></td>
+	<td><%= emissione %></td>
+	<td><%= scadenza %></td>
+	<td><a href="fattura.xhtml?fattura=<%= realId %>&amp;action=show"> <i
+			class="text-success fa fa-search" title="Visualizza"></i>
+	</a> <a href="fattura.xhtml?fattura=<%= realId %>&amp;action=edit"> <i
+			class="text-info fa fa-pencil" title="Modifica"></i>
+	</a> <a href="#" data-toggle="modal"
+		data-target="#cancellaFatturaModal<%= realId %>"> <i
+			class="text-danger fa fa-trash-o" title="Cancella"></i>
+	</a> <a href="mail.xhtml?company=<%= cliente.id %>&fattura=<%= realId %>"> <i class="text-warning fa fa-envelope" title="Invia"></i>
+	</a> <a href="#" onclick="stampaFattura(<%= realId %>)"> <i class="text-primary fa fa-print" title="Stampa"></i>
+	</a></td>
+</tr>

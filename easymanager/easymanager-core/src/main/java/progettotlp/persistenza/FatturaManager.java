@@ -14,7 +14,7 @@ import progettotlp.exceptions.PersistenzaException;
  *
  * @author vincenzo
  */
-public interface FatturaManager {
+public interface FatturaManager extends BaseManager {
 
     public void cancellaFattura(int id) throws PersistenzaException;
 
@@ -23,6 +23,8 @@ public interface FatturaManager {
     public boolean existsFattura(int id);
 
     public List<Fattura> getAllFatture(boolean initializeDdT, boolean initializeBeni);
+
+    public List<Fattura> getFattureByAzienda(Long aziendaId, boolean initializeDdT, boolean initializeBeni);
 
     public List<Fattura> getFattureByAziendaName(String aziendaName);
 

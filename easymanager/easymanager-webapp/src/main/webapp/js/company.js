@@ -29,7 +29,6 @@ function fillPage(currentCompany){
 		$(".breadcrumb li[class*='active']").text("Visualizza "+currentCompany.nome);
 		fillForm(currentCompany);
 		makeCheckboxReadOnly();
-		destroyDatepickers();
 		makeTextInputReadOnly();
 		$("#button").hide();
 	} else if (mode === "edit"){

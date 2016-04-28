@@ -3,7 +3,7 @@ package progettotlp.facilities;
 
 import java.io.File;
 import java.util.List;
-import progettotlp.classes.Azienda;
+
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;

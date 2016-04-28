@@ -9,7 +9,7 @@
 	</a> <a href="#" data-toggle="modal"
 		data-target="#cancellaDdtModal<%= realId %>"> <i
 			class="text-danger fa fa-trash-o" title="Cancella"></i>
-	</a> <a href="#"> <i class="text-warning fa fa-envelope" title="Invia"></i>
-	</a> <a href="#"> <i class="text-primary fa fa-print" title="Stampa"></i>
+	</a> <a href="mail.xhtml?company=<%= cliente.id %>&ddt=<%= realId %>"> <i class="text-warning fa fa-envelope" title="Invia"></i>
+	</a> <a href="#" onclick="stampaDdt(<%= realId %>)"> <i class="text-primary fa fa-print" title="Stampa"></i>
 	</a></td>
 </tr>

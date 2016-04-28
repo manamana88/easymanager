@@ -4,22 +4,22 @@
  */
 package progettotlp.persistenza;
 
+import static progettotlp.facilities.Conversioni.boolToYN;
+
 import java.util.ArrayList;
-import org.hibernate.criterion.Order;
-import org.hibernate.Criteria;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
+
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.Fattura;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.Utility;
-import static progettotlp.facilities.Conversioni.*;
 
 /**
  *
@@ -137,6 +137,22 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         } finally{
             sessione.close();
         }
+    }
+    
+    public List<Fattura> getFattureByAzienda(Long aziendaId, boolean initializeDdT, boolean initializeBeni) {
+    	Session sessione=null;
+    	try{
+    		int selectedAnno = Utility.getSelectedAnno();
+    		sessione=sessionFactory.openSession();
+    		List<Fattura> list = sessione.createQuery("select f from Fattura as f join f.cliente as c where "
+    				+ "c.id='"+aziendaId+"' "
+    				+ " and year(f.emissione)=" + selectedAnno
+    				+ " order by f.emissione desc").list();
+    		initializeFattura(list, initializeDdT, initializeBeni);
+    		return list==null?new ArrayList<Fattura>():list;
+    	} finally {
+    		sessione.close();
+    	}
     }
 
     public List<Fattura> getFattureByAziendaName(String aziendaName) {

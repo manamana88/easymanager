@@ -2,7 +2,9 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,12 +17,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.IndexColumn;
+
 import progettotlp.exceptions.toprint.ValidationException;
-import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
+import progettotlp.rest.utils.DateDeserializer;
+import progettotlp.rest.utils.DateSerializer;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * La classe Fattura rappresenta un documento di fatturazione emesso da un'Azienda.
@@ -32,8 +40,12 @@ public class Fattura implements Serializable {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name="real_id")
     private Long realId;
     @Temporal(TemporalType.DATE)
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
     private Date emissione;
     @Temporal(TemporalType.DATE)
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
     private Date scadenza;
     private Integer id;
     private Float netto=0F;

@@ -13,7 +13,7 @@ import progettotlp.exceptions.PersistenzaException;
  *
  * @author vincenzo
  */
-public interface AccountManager {
+public interface AccountManager extends BaseManager {
 
     public void registraAccount(AccountEmail accountEmail) throws PersistenzaException;
     public void modificaAccount(AccountEmail accountEmail) throws PersistenzaException;

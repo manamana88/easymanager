@@ -39,12 +39,12 @@
 				data-toggle="dropdown" role="button" aria-haspopup="true"
 				aria-expanded="false">File<span class="caret"></span></a>
 				<ul class="dropdown-menu">
-					<li><a href="#">Gestione Azienda</a></li>
+					<li><a href="${request.getContextPath()}/company.xhtml?company=PRINCIPALE&amp;action=edit">Gestione Azienda</a></li>
 					<li><a href="#">Seleziona Anno</a></li>
 				</ul></li>
 			<li><a href="${request.getContextPath()}/companiesList.xhtml">Clienti</a></li>
 			<li><a href="${request.getContextPath()}/ddtList.xhtml">DdT</a></li>
-			<li><a href="#">Fatture</a></li>
+			<li><a href="${request.getContextPath()}/fatturaList.xhtml">Fatture</a></li>
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-haspopup="true"
 				aria-expanded="false">Statistiche<span class="caret"></span></a>
@@ -52,7 +52,7 @@
 					<li><a href="#">Ricerca semplice</a></li>
 					<li><a href="#">Confronta periodi</a></li>
 				</ul></li>
-			<li><a href="#">Mail</a></li>
+			<li><a href="${request.getContextPath()}/mail.xhtml">Mail</a></li>
 		</ul>
 	</div>
 </div>

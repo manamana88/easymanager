@@ -1,3 +1,5 @@
+commonMultiplier = 100;
+
 datepickerOptions = {
 	format : "dd/mm/yyyy",
 	language : "it",
@@ -6,8 +8,16 @@ datepickerOptions = {
 	forceParse: false
 }
 
-function addDatepickers(){
+function addDatepickers(updateDate){
 	$('.data input').datepicker(datepickerOptions);
+	if (updateDate){
+		$('.data input').each(function (){
+			var currentDateString = $(this).val();
+			if (currentDateString){
+				var currentDate = new Date(currentDateString.substring(6), currentDateString.substring(3,5), currentDateString.substring(0,2));
+			}
+		});
+	}
 }
 
 function makeTextInputReadOnly(){
@@ -24,6 +34,12 @@ function makeCheckboxReadOnly(){
 
 function makeSelectReadonly(){
 	$("select").prop("disabled", "true");
+}
+
+function makeAllReadonly(){
+	makeCheckboxReadOnly();
+	makeTextInputReadOnly();
+	makeSelectReadonly();
 }
 
 function addDisabledColorToTable(){
@@ -136,4 +152,15 @@ function iterateTable(toApply) {
 			toApply(this, index, index2);
 		});
 	});
+}
+
+function multiply(a, b){
+	var roundedA = round(a * commonMultiplier) ;
+	var roundedB = round(b * commonMultiplier);
+	return round((roundedA * roundedB) / (commonMultiplier * commonMultiplier));
+}
+
+function round(a){
+	return Math.round(a*commonMultiplier) / 100;
+	
 }

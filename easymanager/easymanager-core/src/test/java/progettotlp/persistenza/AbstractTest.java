@@ -20,13 +20,16 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
+
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.StringUtils;
+import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.test.AnnualTest;
 
 /**
@@ -58,7 +61,7 @@ public abstract class AbstractTest extends AnnualTest{
             assignManager(manager);
         }
         Properties props = new Properties();
-        properties.put(ConfigurationManager.DEFAULT_IVA_PERC, "21");
+        properties.put(Property.IVA_DEFAULT.getValue(), "21");
         ConfigurationManager.setProperties(properties);
     }
     @After

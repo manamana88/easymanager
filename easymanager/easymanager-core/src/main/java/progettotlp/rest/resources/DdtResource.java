@@ -1,5 +1,14 @@
 package progettotlp.rest.resources;
 
+import static progettotlp.rest.utils.JsonUtils.getBooleanValue;
+import static progettotlp.rest.utils.JsonUtils.getDateValue;
+import static progettotlp.rest.utils.JsonUtils.getDoubleValue;
+import static progettotlp.rest.utils.JsonUtils.getFloatValue;
+import static progettotlp.rest.utils.JsonUtils.getIntValue;
+import static progettotlp.rest.utils.JsonUtils.getLongValue;
+import static progettotlp.rest.utils.JsonUtils.getTextValue;
+
+import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +32,7 @@ import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.exceptions.toprint.CantRetrieveException;
 import progettotlp.exceptions.toprint.GenericExceptionToPrint;
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.BeanUtils;
@@ -30,6 +40,7 @@ import progettotlp.facilities.DateUtils;
 import progettotlp.persistenza.AziendaManager;
 import progettotlp.persistenza.DdTManager;
 import progettotlp.persistenza.ManagerProvider;
+import progettotlp.print.DdtPrinter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -37,9 +48,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Path("ddt")
 public class DdtResource {
-	
-	private static DdTManager ddtManager = ManagerProvider.getDdtManager();
-	private static AziendaManager aziendaManager = ManagerProvider.getAziendaManager();
+
+	private DdTManager ddtManager = ManagerProvider.getDdtManager();
+	private AziendaManager aziendaManager = ManagerProvider.getAziendaManager();
 	
 	@GET
 	@Path("next")
@@ -63,13 +74,35 @@ public class DdtResource {
 	}
 	
 	@GET
+	@Path("print")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response printDdt(@QueryParam("id") Long id) throws Exception {
+		DdT toPrint=ddtManager.getDdT(id, true, false);
+        if (toPrint!=null){
+            try {
+                File file = DdtPrinter.printPage(aziendaManager.getAziendaPrincipale(), toPrint, false);
+                return Response.ok(BeanUtils.createResponseBean(file.getAbsolutePath()), MediaType.APPLICATION_JSON_TYPE).build();
+            } catch (Exception ex) {
+                throw new GenericExceptionToPrint("Errore","Siamo spiacenti si è verificato un errore."+'\n'+"Impossibile stampare il DdT",ex);
+            }
+        } else{
+            throw new CantRetrieveException("Errore","Siamo spiacenti si è verificato un errore."+'\n'+"Impossibile recuperare il DdT");
+        }
+	}
+	
+	@GET
 	@Path("all")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAll() {
-		List<DdT> allDdT = ddtManager.getAllDdT(false, false);
+	public Response getAll(
+			@QueryParam("company") Long id) throws ParseException {
+		List<DdT> allDdT;
+		if (id!=null){
+			allDdT = ddtManager.getAllDdT(id);
+		} else {
+			allDdT = ddtManager.getAllDdT(false, false);
+		}
 		for (DdT ddt : allDdT) {
 			ddt.setBeni(null);
-			ddt.setFattura(null);
 		}
 		return Response.ok(BeanUtils.createResponseBean(allDdT.toArray()), MediaType.APPLICATION_JSON_TYPE).build();
 	}
@@ -154,53 +187,6 @@ public class DdtResource {
 			result.add(bene);
 		}
 		return result;
-	}
-
-	private Date getDateValue(ObjectNode ddt, String fieldName) throws ParseException {
-		String textValue = getTextValue(ddt, fieldName);
-		return textValue != null ? DateUtils.parseDate(textValue) : null; 
-	}
-	
-	private Float getFloatValue(ObjectNode ddt, String fieldName) {
-		Number numberValue = getNumberValue(ddt, fieldName);
-		return numberValue != null ? numberValue.floatValue() : null;
-	}
-	
-	private Double getDoubleValue(ObjectNode ddt, String fieldName) {
-		Number numberValue = getNumberValue(ddt, fieldName);
-		return numberValue != null ? numberValue.doubleValue() : null;
-	}
-	
-	private Long getLongValue(ObjectNode ddt, String fieldName) {
-		Number numberValue = getNumberValue(ddt, fieldName);
-		return numberValue != null ? numberValue.longValue() : null;
-	}
-
-	private Integer getIntValue(ObjectNode ddt, String fieldName) {
-		Number numberValue = getNumberValue(ddt, fieldName);
-		return numberValue != null ? numberValue.intValue() : null;
-	}
-
-	private Boolean getBooleanValue(ObjectNode ddt, String fieldName) {
-		JsonNode jsonNode = ddt.get(fieldName);
-		return jsonNode != null ? jsonNode.booleanValue() : null;
-	}
-	
-	private Number getNumberValue(ObjectNode ddt, String fieldName) {
-		JsonNode jsonNode = ddt.get(fieldName);
-		if (jsonNode != null){
-			return jsonNode.numberValue();
-		}
-		return null;
-	}
-	
-	private String getTextValue(ObjectNode ddt, String fieldName) {
-		JsonNode jsonNode = ddt.get(fieldName);
-		if (jsonNode != null){
-			return jsonNode.textValue();
-		} else {
-			return "";
-		}
 	}
 
     protected void validateBene(Bene bene) throws ValidationException {

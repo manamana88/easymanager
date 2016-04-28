@@ -6,8 +6,11 @@
 package progettotlp.persistenza;
 
 import java.util.List;
+
+import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.facilities.DateUtils;
 import progettotlp.classes.Bene;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +18,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+
 import org.junit.Test;
+
 import progettotlp.classes.Azienda;
 import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;

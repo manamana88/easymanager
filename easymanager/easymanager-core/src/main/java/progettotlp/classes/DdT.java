@@ -28,9 +28,12 @@ import org.hibernate.annotations.IndexColumn;
 
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.DateUtils;
+import progettotlp.rest.utils.DateDeserializer;
 import progettotlp.rest.utils.DateSerializer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -47,6 +50,7 @@ public class DdT implements Serializable {
     private Long realId;
     @Temporal(TemporalType.DATE)
     @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
     private Date data;
     private Integer id;
     private String mezzo;       
@@ -78,6 +82,7 @@ public class DdT implements Serializable {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fattura",insertable=false,updatable=false)
+    @JsonIgnore
     private Fattura fattura;
 
     public DdT(){}
@@ -360,9 +365,6 @@ public class DdT implements Serializable {
         if (this.progressivo != other.progressivo && (this.progressivo == null || !this.progressivo.equals(other.progressivo))) {
             return false;
         }
-        if (this.fattura != other.fattura && (this.fattura == null || !this.fattura.equals(other.fattura))) {
-            return false;
-        }
         return true;
     }
 
@@ -387,7 +389,6 @@ public class DdT implements Serializable {
         hash = 97 * hash + (this.ritiro != null ? this.ritiro.hashCode() : 0);
         hash = 97 * hash + (this.annotazioni != null ? this.annotazioni.hashCode() : 0);
         hash = 97 * hash + (this.progressivo != null ? this.progressivo.hashCode() : 0);
-        hash = 97 * hash + (this.fattura != null ? this.fattura.hashCode() : 0);
         return hash;
     }
 

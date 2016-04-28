@@ -5,6 +5,7 @@
 package progettotlp.persistenza;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -130,6 +131,21 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             sessione.close();
         }
     }
+    
+    public List<DdT> getAllDdT(Long aziendaId) {
+    	Session sessione=null;
+    	try{
+    		sessione=sessionFactory.openSession();
+    		int selectedAnno = Utility.getSelectedAnno();
+    		Query query = sessione.createQuery("from DdT d where "
+    				+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+aziendaId
+    				+" order by d.id desc");
+    		List<DdT> list = query.list();
+    		return list;
+    	} finally{
+    		sessione.close();
+    	}
+    }
 
     public List<DdT> getAllDdT(Azienda a, int mese,boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
@@ -146,6 +162,44 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             sessione.close();
         }
     }
+
+	@Override
+	public List<DdT> getAllDdT(Azienda a, Date startDate, Date endDate) {
+		Session sessione=null;
+		try{
+			sessione=sessionFactory.openSession();
+			int selectedAnno = Utility.getSelectedAnno();
+			Query query = sessione.createQuery("from DdT d where "
+					+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and d.data between :start and :end"
+					+" order by d.id asc");
+			query.setParameter("start", startDate);
+			query.setParameter("end", endDate);
+			List<DdT> list = query.list();
+			initializeDdT(list, true, false);
+			return list;
+		} finally{
+			sessione.close();
+		}
+	}
+	
+	@Override
+	public List<DdT> getAllDdTWithoutFattura(Azienda a, Date startDate, Date endDate) {
+		Session sessione=null;
+		try{
+			sessione=sessionFactory.openSession();
+			int selectedAnno = Utility.getSelectedAnno();
+			Query query = sessione.createQuery("from DdT d where "
+					+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and d.data between :start and :end and d.fattura=null"
+					+" order by d.id asc");
+			query.setParameter("start", startDate);
+			query.setParameter("end", endDate);
+			List<DdT> list = query.list();
+			initializeDdT(list, true, false);
+			return list;
+		} finally{
+			sessione.close();
+		}
+	}
 
     public List<DdT> getAllDdTWithoutFattura(boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
@@ -226,6 +280,5 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             sessione.close();
         }
     }
-
 
 }

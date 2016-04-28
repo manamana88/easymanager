@@ -5,15 +5,20 @@
 package progettotlp.ui;
 
 import java.text.ParseException;
+
 import javax.swing.table.DefaultTableModel;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
+
 import javax.swing.JInternalFrame;
 import javax.swing.JTable;
+
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+
 import progettotlp.persistenza.FatturaManager;
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Fattura;
@@ -24,6 +29,7 @@ import progettotlp.exceptions.toprint.CantRetrieveException;
 import progettotlp.exceptions.toprint.GenericExceptionToPrint;
 import progettotlp.exceptions.toprint.NoSelectedRow;
 import progettotlp.facilities.ConfigurationManager;
+import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.facilities.DateUtils;
 import progettotlp.models.SceltaFattureTableModelUtils;
 import progettotlp.test.AnnualTest;
@@ -44,7 +50,7 @@ public class FormSceltaFatturaUtilitiesTest extends AnnualTest{
         tabellaFatture.setColumnModel(SceltaFattureTableModelUtils.getDefaultTableColumnModel());
 
         Properties properties = new Properties();
-        properties.put(ConfigurationManager.DEFAULT_IVA_PERC, "21");
+        properties.put(Property.IVA_DEFAULT.getValue(), "21");
         ConfigurationManager.setProperties(properties);
         
         form=new FormSceltaFatturaUtilities(new JInternalFrame(), null, null);

@@ -6,39 +6,49 @@
 package progettotlp.ui;
 
 
-import progettotlp.facilities.DateUtils;
-import java.util.Date;
-import progettotlp.persistenza.AbstractPersistenza;
-import progettotlp.ui.FormFatturaUtilities.TableColumn;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.net.URL;
-import progettotlp.persistenza.AbstractTest;
-import progettotlp.ui.FormPrezzoUtilities.CostoType;
-import progettotlp.ui.FormPrezzoUtilities.FormPrezzoType;
-import java.util.Arrays;
-import progettotlp.classes.DdT;
-import progettotlp.classes.Bene;
-import org.slf4j.Logger;
-import progettotlp.persistenza.DdTManager;
-import progettotlp.persistenza.AziendaManager;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+
 import javax.swing.JDialog;
 import javax.swing.table.DefaultTableModel;
+
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+
+import progettotlp.classes.Azienda;
+import progettotlp.classes.Bene;
+import progettotlp.classes.DdT;
+import progettotlp.classes.Fattura;
+import progettotlp.facilities.ConfigurationManager;
+import progettotlp.facilities.ConfigurationManager.Property;
+import progettotlp.facilities.DateUtils;
+import progettotlp.facilities.StringUtils;
+import progettotlp.models.FatturaTableModelUtils;
+import progettotlp.persistenza.AbstractPersistenza;
+import progettotlp.persistenza.AbstractTest;
+import progettotlp.persistenza.AziendaManager;
 import progettotlp.persistenza.AziendaManagerImpl;
+import progettotlp.persistenza.DdTManager;
 import progettotlp.persistenza.DdTManagerImpl;
 import progettotlp.persistenza.FatturaManager;
 import progettotlp.persistenza.FatturaManagerImpl;
-import progettotlp.classes.Azienda;
-import progettotlp.classes.Fattura;
-import progettotlp.facilities.ConfigurationManager;
-import progettotlp.facilities.StringUtils;
-import progettotlp.models.FatturaTableModelUtils;
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
+import progettotlp.ui.FormFatturaUtilities.TableColumn;
+import progettotlp.ui.FormPrezzoUtilities.CostoType;
+import progettotlp.ui.FormPrezzoUtilities.FormPrezzoType;
 
 /**
  *

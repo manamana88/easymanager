@@ -1,0 +1,21 @@
+<tr>
+	<td id="td<%= row %>00"><%= idDdt %> del <%= data %></td>
+	<td id="td<%= row %>01"><%= codice %></td>
+	<td id="td<%= row %>02"><%= commessa %></td>
+	<td id="td<%= row %>03"><%= descrizione %></td>
+	<td id="td<%= row %>04" class="text-center"><input type="checkbox" <% if (prototipo) { %>checked<% } %>
+	 	tabindex="-1" /></td>
+	<td id="td<%= row %>05" class="text-center"><input type="checkbox" <% if (campionario) { %>checked<% } %>
+	 	tabindex="-1" /></td>
+	<td id="td<%= row %>06" class="text-center"><input type="checkbox" <% if (primoCapo) { %>checked<% } %>
+	 	tabindex="-1" /></td>
+	<td id="td<%= row %>07" class="text-center"><input type="checkbox" <% if (piazzato) { %>checked<% } %>
+	 	tabindex="-1" /></td>
+	<td id="td<%= row %>08" class="text-center"><input type="checkbox" <% if (interamenteAdesivato) { %>checked<% } %>
+	 	tabindex="-1" /></td>
+	<td id="td<%= row %>09"><%= qta %></td>
+	<td id="td<%= row %>10" class="money tdEditable" contenteditable="true"><% if (prezzo>0) { %><%= prezzo %><% } %></td>
+	<td id="td<%= row %>11" class="money tdEditable" contenteditable="true"><% if (prezzo==0 && tot>0) { %><%= tot %><% } %></td>
+	<td id="td<%= row %>12" class="money" ><%= tot %></td>
+	<td id="td<%= row %>13" class="hidden"><%= id %></td>
+</tr>
