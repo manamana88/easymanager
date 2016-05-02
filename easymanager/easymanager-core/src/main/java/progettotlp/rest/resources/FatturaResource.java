@@ -238,7 +238,7 @@ public class FatturaResource {
 			if (!fattura.getIva().equals(ivaTot)){
 				throw new Exception("Iva inconsistente: "+fattura.getIva()+" contro "+ivaTot);
 			}
-			Float totale = roundedNetto+ivaTot;
+			Float totale = NumberUtils.roundNumber(roundedNetto+ivaTot);
 			if (!fattura.getTotale().equals(totale)){
 				throw new Exception("Totale inconsistente: "+fattura.getTotale()+" contro "+totale);
 			}
@@ -246,8 +246,8 @@ public class FatturaResource {
 			if (!fattura.getIva().equals(0F)){
 				throw new Exception("Iva inconsistente: "+fattura.getIva()+" contro "+0);
 			}
-			if (!fattura.getTotale().equals(netto)){
-				throw new Exception("Totale inconsistente: "+fattura.getTotale()+" contro "+netto);
+			if (!fattura.getTotale().equals(roundedNetto)){
+				throw new Exception("Totale inconsistente: "+fattura.getTotale()+" contro "+roundedNetto);
 			}
 		}
 	}
