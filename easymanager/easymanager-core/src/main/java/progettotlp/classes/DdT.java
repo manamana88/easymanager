@@ -25,6 +25,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.Type;
 
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.DateUtils;
@@ -69,6 +70,8 @@ public class DdT implements Serializable {
     private String ritiro; 
     private String annotazioni;
     private Integer progressivo;
+    @Type(type="yes_no")
+    private Boolean fatturabile;
 
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn(name="cliente")
@@ -114,7 +117,7 @@ public class DdT implements Serializable {
 
     public DdT(List<Bene> beni, Date data, int id, Azienda cliente, String mezzo, String causale, String destinazione, 
             String vostroOrdine, String vostroOrdineDel, String tipo, String aspettoEsteriore, int colli, double peso, 
-            String porto, String ritiro, String annotazioni, int progressivo) {
+            String porto, String ritiro, String annotazioni, int progressivo, boolean fatturabile) {
         this.beni = beni;
         this.data = data;
         this.id = id;
@@ -143,7 +146,7 @@ public class DdT implements Serializable {
 
     @Override
     public String toString() {
-        return "DdT{" + "realId=" + realId + ", beni=" + beni + ", data=" + data + ", id=" + id + ", cliente=" + cliente + ", mezzo=" + mezzo + ", causale=" + causale + ", destinazione=" + destinazione + ", vostroOrdine=" + vostroOrdine + ", vostroOrdineDel=" + vostroOrdineDel + ", tipo=" + tipo + ", aspettoEsteriore=" + aspettoEsteriore + ", colli=" + colli + ", peso=" + peso + ", porto=" + porto + ", ritiro=" + ritiro + ", annotazioni=" + annotazioni + ", progressivo=" + progressivo + '}';
+        return "DdT{" + "realId=" + realId + ", beni=" + beni + ", data=" + data + ", id=" + id + ", cliente=" + cliente + ", mezzo=" + mezzo + ", causale=" + causale + ", destinazione=" + destinazione + ", vostroOrdine=" + vostroOrdine + ", vostroOrdineDel=" + vostroOrdineDel + ", tipo=" + tipo + ", aspettoEsteriore=" + aspettoEsteriore + ", colli=" + colli + ", peso=" + peso + ", porto=" + porto + ", ritiro=" + ritiro + ", annotazioni=" + annotazioni + ", progressivo=" + progressivo + ", fatturabile=" + fatturabile + '}';
     }
 
     public String getAnnotazioni() {
@@ -301,8 +304,20 @@ public class DdT implements Serializable {
     public void setVostroOrdineDel(String vostroOrdineDel) {
         this.vostroOrdineDel = vostroOrdineDel;
     }
+    
+    public Boolean isFatturabile() {
+    	return fatturabile;
+    }
 
-    @Override
+    public Boolean getFatturabile() {
+		return fatturabile;
+	}
+    
+	public void setFatturabile(Boolean fatturabile) {
+		this.fatturabile = fatturabile;
+	}
+	
+	@Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -365,6 +380,9 @@ public class DdT implements Serializable {
         if (this.progressivo != other.progressivo && (this.progressivo == null || !this.progressivo.equals(other.progressivo))) {
             return false;
         }
+        if (this.fatturabile != other.fatturabile && (this.fatturabile == null || !this.fatturabile.equals(other.fatturabile))) {
+            return false;
+        }
         return true;
     }
 
@@ -389,6 +407,7 @@ public class DdT implements Serializable {
         hash = 97 * hash + (this.ritiro != null ? this.ritiro.hashCode() : 0);
         hash = 97 * hash + (this.annotazioni != null ? this.annotazioni.hashCode() : 0);
         hash = 97 * hash + (this.progressivo != null ? this.progressivo.hashCode() : 0);
+        hash = 97 * hash + (this.fatturabile != null ? this.fatturabile.hashCode() : 0);
         return hash;
     }
 

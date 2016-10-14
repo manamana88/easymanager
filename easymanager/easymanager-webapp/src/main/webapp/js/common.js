@@ -162,5 +162,13 @@ function multiply(a, b){
 
 function round(a){
 	return Math.round(a*commonMultiplier) / 100;
-	
+}
+
+function isChecked(checkbox){
+	return $(checkbox).prop("checked");
+}
+
+function setChecked(checkbox, value){
+	var toSet = value ? "checked" : "";
+	return $(checkbox).prop("checked", toSet);
 }

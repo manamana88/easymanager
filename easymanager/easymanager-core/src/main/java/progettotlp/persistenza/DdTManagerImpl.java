@@ -189,7 +189,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 			sessione=sessionFactory.openSession();
 			int selectedAnno = Utility.getSelectedAnno();
 			Query query = sessione.createQuery("from DdT d where "
-					+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and d.data between :start and :end and d.fattura=null"
+					+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and d.data between :start and :end and d.fattura=null and d.fatturabile=true"
 					+" order by d.id asc");
 			query.setParameter("start", startDate);
 			query.setParameter("end", endDate);
@@ -207,7 +207,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             sessione=sessionFactory.openSession();
             int selectedAnno = Utility.getSelectedAnno();
             Query query = sessione.createQuery("from DdT d where "
-                    + "year(d.data)=" + selectedAnno+" and d.fattura=null"
+                    + "year(d.data)=" + selectedAnno+" and d.fattura=null and d.fatturabile=true"
                     +" order by d.id desc");
             List<DdT> list = query.list();
             initializeDdT(list, initializeBeni, initializeFattura);

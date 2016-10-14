@@ -7,6 +7,7 @@ $(document).ready(function() {
 	doCall('GET', targetUrl, {}, "", function (responseData){
 		$("#numero").val(responseData.items[0]);
 		$("#data").val(responseData.items[1]);
+		setChecked($("#fatturabile"), true);
 		loadCompanySelector(responseData.items[2]);
 		initTable();
 
@@ -82,6 +83,7 @@ function fillForm(currentDdt){
 	$("#realId").val(currentDdt.realId);
 	$("#numero").val(currentDdt.id);
 	$("#data").val(currentDdt.data);
+	setChecked($("#fatturabile"),currentDdt.fatturabile);
 	selectOption("azienda", currentDdt.cliente.id);
 	fillTable(currentDdt.beni);
 	selectOption("mezzo", currentDdt.mezzo);
@@ -168,6 +170,7 @@ function loadDdt() {
 	ddtJson.causale = $("#causale").val();
 	ddtJson.data = $("#data").val();
 	ddtJson.destinazione = $("#destinazione").val();
+	ddtJson.fatturabile = isChecked($("#fatturabile"));
 	ddtJson.mezzo = $("#mezzo").val();
 	ddtJson.porto = $("#porto").val();
 	ddtJson.ritiro = $("#ritiro").val();

@@ -153,6 +153,7 @@ public class DdtResource {
 		ddtObject.setColli(getIntValue(ddt, "colli"));
 		ddtObject.setData(getDateValue(ddt, "data"));
 		ddtObject.setDestinazione(getTextValue(ddt, "destinazione"));
+		ddtObject.setFatturabile(getBooleanValue(ddt, "fatturabile"));
 		ddtObject.setId(getIntValue(ddt, "id"));
 		ddtObject.setMezzo(getTextValue(ddt, "mezzo"));
 		ddtObject.setPeso(getDoubleValue(ddt, "peso"));
