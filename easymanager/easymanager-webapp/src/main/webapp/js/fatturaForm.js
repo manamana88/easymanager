@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	fatturaRowTemplate = loadTemplate("templates/fatturaFormRow.html");
+	cancellaDdtFatturaModalTemplate = loadTemplate("templates/cancellaDdtFatturaModal.html");
 
 	var fatturaId = getParameterByName("fattura");
 	var mode = getParameterByName("action");
@@ -62,11 +63,11 @@ function suggestPrices(){
 	$("tbody tr").each(function(index){
 		var tdList=$(this).find("td");
 		var bene={};
-		bene.codice=$(tdList[1]).text();
-	    bene.prototipo=$(tdList[4]).find("input").prop("checked");
-	    bene.campionario=$(tdList[5]).find("input").prop("checked");
-	    bene.primoCapo=$(tdList[6]).find("input").prop("checked");
-	    bene.piazzato=$(tdList[7]).find("input").prop("checked");
+		bene.codice=$(tdList[2]).text();
+	    bene.prototipo=$(tdList[5]).find("input").prop("checked");
+	    bene.campionario=$(tdList[6]).find("input").prop("checked");
+	    bene.primoCapo=$(tdList[7]).find("input").prop("checked");
+	    bene.piazzato=$(tdList[8]).find("input").prop("checked");
 	    $.ajax({
 			type : "POST",
 			async : true,
@@ -81,8 +82,6 @@ function suggestPrices(){
 						notifyModal(errors[i].errorUserTitle,
 								errors[i].errorUserMsg);
 					}
-				} else if (success) {
-					console.log("MIAO!");
 				}
 			}
 		});
@@ -245,12 +244,14 @@ function fillTable(ddtList, showPrices){
 			var bene = beni[i];
 			bene.idDdt=ddt.id;
 			bene.data=ddt.data;
+			bene.destinazione=ddt.destinazione.replace(/"/g,"'");
 			bene.row=row;
 			if (!bene.prezzo || !showPrices){bene.prezzo=""}
 			if (!bene.tot || !showPrices){bene.tot=""}
 			row++;
 			$(table).append(fatturaRowTemplate(bene));
 		}
+		$("body").append(cancellaDdtFatturaModalTemplate(ddt));
 	}
 }
 
@@ -322,7 +323,7 @@ function caricaTable(){
 	$(rows).each(function(index){
 		try {
 			var tdList=$(this).find("td");
-			var idRef = $(tdList[0]).text().trim();
+			var idRef = $(tdList[1]).text().trim();
 			var number = eval(idRef.substring(0, idRef.indexOf(" ")));
 			if (tempDdt.id && tempDdt.id!==number){
 				ddtList.push(tempDdt);
@@ -331,12 +332,12 @@ function caricaTable(){
 			tempDdt.id=number;
 			tempDdt.data=idRef.substring(idRef.indexOf("del ")+4);
 			var bene={};
-			bene.id=$(tdList[13]).text().trim();
-			var prezzoUnit = $(tdList[10]).text().trim();
-			var prezzoFlat = $(tdList[11]).text().trim();
+			bene.id=$(tdList[14]).text().trim();
+			var prezzoUnit = $(tdList[11]).text().trim();
+			var prezzoFlat = $(tdList[12]).text().trim();
 			var singleTot;
 			if (prezzoUnit && !prezzoFlat){
-				var qta = eval($(tdList[9]).text().trim());
+				var qta = eval($(tdList[10]).text().trim());
 				bene.prezzo = eval(prezzoUnit); 
 				singleTot = multiply(qta,bene.prezzo);
 			} else if (!prezzoUnit && prezzoFlat){
@@ -354,4 +355,8 @@ function caricaTable(){
 	});
 	ddtList.push(tempDdt);
 	return ddtList;
+}
+
+function deleteDdTFattura(ddtKey){
+	$(".tr"+ddtKey).detach();
 }

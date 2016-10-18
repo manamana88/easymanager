@@ -1,5 +1,8 @@
-<tr>
-	<td id="td<%= row %>00"><%= idDdt %> del <%= data %></td>
+<tr class="tr<%= idDdt %>">
+	<td id="td<%= row %>-01"><a href="#" data-toggle="modal"
+		data-target="#cancellaDdtFatturaModal<%= idDdt %>">
+		<i class="text-danger fa fa-times" title="Cancella"></i></a></td>
+	<td id="td<%= row %>00" title="<%= destinazione %>"><%= idDdt %> del <%= data %></td>
 	<td id="td<%= row %>01"><%= codice %></td>
 	<td id="td<%= row %>02"><%= commessa %></td>
 	<td id="td<%= row %>03"><%= descrizione %></td>

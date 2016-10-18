@@ -90,7 +90,7 @@ function fillForm(currentDdt){
 	$("#causale").val(currentDdt.causale);
 	$("#colli").val(currentDdt.colli);
 	$("#peso").val(currentDdt.peso);
-	$("#destinazione").text(currentDdt.destinazione);
+	$("#destinazione").text(currentDdt.destinazione.replace(/"/g,"'"));
 	$("#aspetto").val(currentDdt.aspettoEsteriore);
 	selectOption("porto", currentDdt.porto);
 	$("#ritiro").val(currentDdt.ritiro);
@@ -169,7 +169,7 @@ function loadDdt() {
 	ddtJson.beni = loadBeni();
 	ddtJson.causale = $("#causale").val();
 	ddtJson.data = $("#data").val();
-	ddtJson.destinazione = $("#destinazione").val();
+	ddtJson.destinazione = $("#destinazione").val().replace(/"/g,"'");
 	ddtJson.fatturabile = isChecked($("#fatturabile"));
 	ddtJson.mezzo = $("#mezzo").val();
 	ddtJson.porto = $("#porto").val();
