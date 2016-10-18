@@ -17,6 +17,7 @@ $(document).ready(function() {
 				makeAllReadonly();
 				$("#button").hide();
 				$(".breadcrumb li[class*='active']").text("Visualizza fattura numero "+currentFattura.id);
+				$("td[id*='-01'").detach(); $($("th")[0]).detach();
 			} else {
 				suggestPrices();
 				enableEditControls();
