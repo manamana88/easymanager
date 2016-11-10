@@ -27,15 +27,14 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.DateUtils;
 import progettotlp.rest.utils.DateDeserializer;
 import progettotlp.rest.utils.DateSerializer;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import progettotlp.rest.utils.FatturaSerializer;
 
 /**
  * La classe DdT rappresenta un documento di trasporto, ovvero un documento che
@@ -85,7 +84,7 @@ public class DdT implements Serializable {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fattura",insertable=false,updatable=false)
-    @JsonIgnore
+    @JsonSerialize(using=FatturaSerializer.class)
     private Fattura fattura;
 
     public DdT(){}

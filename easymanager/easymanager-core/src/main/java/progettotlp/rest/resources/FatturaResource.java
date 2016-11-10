@@ -3,6 +3,7 @@ package progettotlp.rest.resources;
 import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -100,16 +101,30 @@ public class FatturaResource {
 	@Path("next")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response next(
+			@QueryParam("ddt") Long ddtId,
 			@QueryParam("azienda") Long aziendaId,
 			@QueryParam("startDate") String startDate,
 			@QueryParam("endDate") String endDate) throws ParseException {
-		Azienda azienda = aziendaManager.get(Azienda.class, aziendaId);
-		Date startDateObject = DateUtils.parseDate(startDate);
-		Date endDateObject = DateUtils.parseDate(endDate);
-		List<DdT> allDdT = ddtManager.getAllDdTWithoutFattura(azienda, startDateObject, endDateObject);
+		List<DdT> allDdT;
+		Azienda azienda;
+		if (ddtId != null) {
+			DdT ddt = ddtManager.getDdT(ddtId, true, false);
+			allDdT = Arrays.asList(ddt);
+			azienda = ddt.getCliente();
+		} else {
+			azienda = aziendaManager.get(Azienda.class, aziendaId);
+			Date startDateObject = DateUtils.parseDate(startDate);
+			Date endDateObject = DateUtils.parseDate(endDate);
+			allDdT = ddtManager.getAllDdTWithoutFattura(azienda, startDateObject, endDateObject);
+		}
 		int lastFattura = fatturaManager.getLastFattura();
 		long totCapi = Utility.getTotCapi(allDdT);
-		Float ivaDefault = Float.parseFloat(ConfigurationManager.getProperty(Property.IVA_DEFAULT));
+		Float ivaDefault;
+		if (azienda.isTassabile()){
+			ivaDefault = Float.parseFloat(ConfigurationManager.getProperty(Property.IVA_DEFAULT));
+		} else {
+			ivaDefault = 0F;
+		}
 		return Response.ok(BeanUtils.createResponseBean(lastFattura+1, ivaDefault, totCapi, allDdT, azienda), MediaType.APPLICATION_JSON_TYPE).build();
 	}
 	
@@ -175,7 +190,7 @@ public class FatturaResource {
 	private Fattura caricaFattura(Fattura f) throws Exception {
 		Azienda clienteAzienda = aziendaManager.get(Azienda.class, f.getCliente().getId());
 		int month = DateUtils.getMonth(f.getEmissione());
-		List<DdT> listaDdT=ddtManager.getAllDdT(clienteAzienda, month,true,false);
+		List<DdT> listaDdT=ddtManager.getAllDdT(clienteAzienda, month,true,true);
         Map<Integer,Map<Long,Bene>> mapping=Utility.mapDdT(listaDdT);
         List<DdT> ddtToAdd = new ArrayList<DdT>();
         for (DdT d : f.getDdt()){
@@ -212,7 +227,7 @@ public class FatturaResource {
         	totale = netto;
         }
 		Fattura fattura = new Fattura(ddtToAdd, f.getEmissione(), f.getScadenza(), f.getId(), clienteAzienda,
-        		netto, ivaPerc, ivaTotale, totale);
+        		netto, ivaPerc, ivaTotale, totale, f.getBollo());
         checkConsistency(fattura, tassabile);
         Long realId = f.getRealId();
 		if (realId!=null){

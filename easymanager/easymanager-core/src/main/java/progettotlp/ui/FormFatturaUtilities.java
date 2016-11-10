@@ -452,7 +452,7 @@ public class FormFatturaUtilities extends AbstractFormUtilities{
                 riga.setTot(tot);
             }
             Fattura fattura = new Fattura(listaDdT,parseDateValue(dataEmissione, true),parseDateValue(dataScadenza, true),Integer.parseInt(numFatt.getText()),
-                                        clienteAzienda,Float.parseFloat(netto.getText()),Float.parseFloat(ivaPerc.getText()),Float.parseFloat(totIva.getText()),Float.parseFloat(totale.getText()));
+                                        clienteAzienda,Float.parseFloat(netto.getText()),Float.parseFloat(ivaPerc.getText()),Float.parseFloat(totIva.getText()),Float.parseFloat(totale.getText()), null);
             String realIdFatturaText = realIdFattura.getText();
             if (realIdFatturaText != null && !realIdFatturaText.trim().isEmpty()){
                 fattura.setRealId(Long.parseLong(realIdFatturaText));

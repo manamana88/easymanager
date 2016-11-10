@@ -80,7 +80,7 @@ public class FatturaPrinter extends PdfPrinter
                 printTableHeader(document, f, i + 1, tableBodies.size());
                 document.add(tableBodies.get(i));
                 printTableFooter(document, f, i == tableBodies.size() - 1);
-                printSubtitels(document, f.getCliente());
+                printSubtitels(document, f);
                 document.newPage();
             }
             document.close();
@@ -361,16 +361,15 @@ public class FatturaPrinter extends PdfPrinter
         d.add(table);
     }
 
-    private static void printSubtitels(Document document, Azienda azienda) throws Exception {
+    private static void printSubtitels(Document document, Fattura f) throws Exception {
         Paragraph p =
             new Paragraph("PR=Prototipo, CP=Campionario, PC=Primo Capo, PZ=Piazzato, IA=Interamente Adesivato",
                           createSmallFont());
         p.setAlignment(1);
         document.add(p);
-        p = new Paragraph("I Prezzi sono comprensivi di preadesivazione e rifilo", createSmallFont());
-        p.setAlignment(1);
-        document.add(p);
-        String law;
+        String rifBollo = "I Prezzi sono comprensivi di preadesivazione e rifilo";
+        String law = "Operazione con iva per cassa ai sensi dell'art. 32 bis del D.L. n.83/2012";
+        Azienda azienda = f.getCliente();
         logger.info(azienda.getNome());
         logger.info(azienda.isTassabile().toString());
         if (!azienda.isTassabile()){
@@ -381,13 +380,15 @@ public class FatturaPrinter extends PdfPrinter
             } else {
                 law = "F.C. IVA art. 7/ter comma 1 DPR 633/1972";
             }
-        } else {
-            law = "Operazione con iva per cassa ai sensi dell'art. 32 bis del D.L. n.83/2012";
+            String bollo = f.getBollo();
+			if (ConfigurationManager.getBolloLimit() < f.getTotale() && bollo != null && !bollo.trim().isEmpty()){
+            	rifBollo = "Imposta di bollo assolta sull'originale ID="+bollo;
+            }
         }
-        p =
-            new Paragraph(
-                          law,
-                          createSmallFont());
+        p = new Paragraph(rifBollo, createSmallFont());
+        p.setAlignment(1);
+        document.add(p);
+        p = new Paragraph(law, createSmallFont());
         p.setAlignment(1);
         document.add(p);
         p = new Paragraph("BANCA BLS - IBAN: IT93A0538715400000000534628 - SWIFT: BPM0IT22", createSmallBoldFont());

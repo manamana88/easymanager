@@ -7,7 +7,6 @@ package progettotlp.persistenza;
 
 import java.util.List;
 
-import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.facilities.DateUtils;
 import progettotlp.classes.Bene;
 
@@ -50,7 +49,8 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
                 10F,
                 ConfigurationManager.getIvaDefault(),
                 2.1F,
-                12.1F);
+                12.1F,
+                null);
         ddt2.setFattura(newFattura);
         try{
             fatturaManager.registraFattura(newFattura);

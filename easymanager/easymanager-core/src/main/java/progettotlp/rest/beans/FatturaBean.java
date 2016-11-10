@@ -20,6 +20,7 @@ public class FatturaBean extends Fattura {
 		setRealId(f.getRealId());
 		setScadenza(f.getScadenza());
 		setTotale(f.getTotale());
+		setBollo(f.getBollo());
 		scadenzaGiorni=DateUtils.getTimeFrame(getEmissione(), getScadenza());
 		capiTot=FatturaUtilities.getTotCapi(f);
 	}

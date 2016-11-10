@@ -45,6 +45,10 @@ public class ConfigurationManager {
     public static Float getIvaDefault(){
         return Float.parseFloat(properties.getProperty(Property.IVA_DEFAULT.value));
     }
+    
+    public static Float getBolloLimit(){
+    	return Float.parseFloat(properties.getProperty(Property.BOLLO_LIMIT.value));
+    }
 
     public static String getProperty(String propertyName){
         return properties.getProperty(propertyName);
@@ -62,6 +66,7 @@ public class ConfigurationManager {
     	IVA_DEFAULT("iva_default"), 
     	FATTURE_FOLDER_PATH("fatture_folder"),
     	DDT_FOLDER_PATH("ddt_folder"),
+    	BOLLO_LIMIT("bollo_limit"),
     	EXTERNAL_RESOURCES("external_resources");
     	
     	private String value;

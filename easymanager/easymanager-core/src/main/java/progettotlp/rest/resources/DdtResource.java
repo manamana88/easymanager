@@ -99,7 +99,7 @@ public class DdtResource {
 		if (id!=null){
 			allDdT = ddtManager.getAllDdT(id);
 		} else {
-			allDdT = ddtManager.getAllDdT(false, false);
+			allDdT = ddtManager.getAllDdT(false, true);
 		}
 		for (DdT ddt : allDdT) {
 			ddt.setBeni(null);

@@ -53,6 +53,7 @@ public class Fattura implements Serializable {
     private Float ivaPerc=0F;
     private Float iva=0F;
     private Float totale=0F;
+    private String bollo;
 
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn(name="cliente")
@@ -64,7 +65,7 @@ public class Fattura implements Serializable {
     private List<DdT> ddt;
 
     public Fattura(){}
-    public Fattura(List<DdT> ddt, Date emissione, Date scadenza, int id, Azienda cliente, float netto, float ivaPerc, float iva, float totale) {
+    public Fattura(List<DdT> ddt, Date emissione, Date scadenza, int id, Azienda cliente, float netto, float ivaPerc, float iva, float totale, String bollo) {
         this.ddt = ddt; //OK
         this.emissione = emissione;
         this.scadenza = scadenza;
@@ -74,6 +75,7 @@ public class Fattura implements Serializable {
         this.ivaPerc = ivaPerc;
         this.iva = iva;
         this.totale = totale;
+        this.bollo = bollo;
     }
 
     public Long getRealId() {
@@ -155,8 +157,15 @@ public class Fattura implements Serializable {
     public void setTotale(Float totale) {
         this.totale = totale;
     }
-    
    
+    public String getBollo() {
+		return bollo;
+	}
+
+    public void setBollo(String bollo) {
+		this.bollo = bollo;
+	}
+	
     /**
      * Imposta la data di emissione di una fattura.
      * @param giorno
@@ -170,7 +179,7 @@ public class Fattura implements Serializable {
 
     @Override
     public String toString() {
-        return "Fattura{" + "realId=" + realId + ", ddt=" + ddt + ", emissione=" + emissione + ", scadenza=" + scadenza + ", id=" + id + ", cliente=" + cliente + ", netto=" + netto + ", iva=" + iva + ", totale=" + totale + '}';
+        return "Fattura{" + "realId=" + realId + ", ddt=" + ddt + ", emissione=" + emissione + ", scadenza=" + scadenza + ", id=" + id + ", cliente=" + cliente + ", netto=" + netto + ", iva=" + iva + ", totale=" + totale + ", bollo=" + bollo + '}';
     }
 
     @Override
@@ -212,6 +221,9 @@ public class Fattura implements Serializable {
         if (this.totale != other.totale && (this.totale == null || !this.totale.equals(other.totale))) {
             return false;
         }
+        if (this.bollo != other.bollo && (this.bollo == null || !this.bollo.equals(other.bollo))) {
+        	return false;
+        }
         return true;
     }
 
@@ -228,6 +240,7 @@ public class Fattura implements Serializable {
         hash = 67 * hash + (this.ivaPerc != null ? this.ivaPerc.hashCode() : 0);
         hash = 67 * hash + (this.iva != null ? this.iva.hashCode() : 0);
         hash = 67 * hash + (this.totale != null ? this.totale.hashCode() : 0);
+        hash = 67 * hash + (this.bollo != null ? this.bollo.hashCode() : 0);
         return hash;
     }
 

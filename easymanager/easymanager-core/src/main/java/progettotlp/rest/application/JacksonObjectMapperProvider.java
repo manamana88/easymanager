@@ -32,7 +32,7 @@ public class JacksonObjectMapperProvider implements ContextResolver<ObjectMapper
         result.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         JaxbAnnotationModule module = new JaxbAnnotationModule();
         result.registerModule(module);
-        result.setSerializationInclusion(Include.NON_NULL);
+        result.setSerializationInclusion(Include.ALWAYS);
         result.setDateFormat(new SimpleDateFormat(DateUtils.STANDARD_FORMAT));
         return result;
     }
