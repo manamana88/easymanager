@@ -376,10 +376,13 @@ public class FatturaPrinter extends PdfPrinter
             String nazione = azienda.getNazione();
             String toLowerCase = nazione.toLowerCase();
             if(toLowerCase.startsWith("it")){
-                law = "Non imponibile art.8 comma 1 lettera C DPR 633-1972";
+            	law = "Operazione non imponibile IVA ai sensi dell'art. 8 comma 1 lett. C del D.P.R. 633/72";
+                //law = "Non imponibile art.8 comma 1 lettera C DPR 633-1972";
             } else {
-                law = "F.C. IVA art. 7/ter comma 1 DPR 633/1972";
+                law = "Operazione non imponibile IVA ai sensi dell'art. 7/ter comma 1 del DPR 633/1972";
             }
+            law+="\n Come da vs. autorizzazione n. "+azienda.getNumeroAutorizzazione()+" del "+DateUtils.formatDate(azienda.getDataAutorizzazione());
+            law+=" da noi registrata al n. "+azienda.getNumeroRegistrazione()+" del "+DateUtils.formatDate(azienda.getDataRegistrazione());
             String bollo = f.getBollo();
 			if (ConfigurationManager.getBolloLimit() < f.getTotale() && bollo != null && !bollo.trim().isEmpty()){
             	rifBollo = "Imposta di bollo assolta sull'originale ID="+bollo;

@@ -2,13 +2,24 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import progettotlp.rest.utils.DateDeserializer;
+import progettotlp.rest.utils.DateSerializer;
 
 /**
  * Azienda rappresenta sia l'ente che emette le fatture che i clienti di quest'ente, 
@@ -38,12 +49,28 @@ public class Azienda implements Serializable {
     @Type(type="yes_no")
     private Boolean tassabile;
     @Type(type="yes_no")
-    private Boolean principale;
+    private Boolean principale = false;
+    @Column(name="num_aut")
+    private String numeroAutorizzazione;
+    @Temporal(TemporalType.DATE)
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
+    @Column(name="data_aut")
+    private Date dataAutorizzazione;
+    @Column(name="num_reg")
+    private String numeroRegistrazione;
+    @Temporal(TemporalType.DATE)
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
+    @Column(name="data_reg")
+    private Date dataRegistrazione;
 
     public Azienda(){}
     
     public Azienda(String nome, String pIva, String codFis, String via, String civico, 
-            String cap, String citta, String provincia, String nazione, String mail, String telefono, String fax, Boolean principale) {
+            String cap, String citta, String provincia, String nazione, String mail, 
+            String telefono, String fax, Boolean principale, String numeroAutorizzazione, 
+            Date dataAutorizzazione, String numeroRegistrazione, Date dataRegistrazione) {
         this.nome = nome;
         this.pIva = pIva;
         this.codFis = codFis;
@@ -57,6 +84,10 @@ public class Azienda implements Serializable {
         this.telefono=telefono;
         this.fax=fax;
         this.principale=principale;
+        this.numeroAutorizzazione=numeroAutorizzazione;
+        this.dataAutorizzazione=dataAutorizzazione;
+        this.numeroRegistrazione=numeroRegistrazione;
+        this.dataRegistrazione=dataRegistrazione;
     }
 
     public Long getId() {
@@ -287,88 +318,181 @@ public class Azienda implements Serializable {
         this.tassabile = tassabile;
     }
 
-    @Override
-    public String toString() {
-        return "Azienda{" + "id=" + id + "nome=" + nome + "pIva=" + pIva + "codFis=" + codFis + "via=" + via + "civico=" + civico + "cap=" + cap + "citta=" + citta + "provincia=" + provincia + "nazione=" + nazione + "mail=" + mail + "telefono=" + telefono + "fax=" + fax + "tassabile=" + tassabile + "principale=" + principale + '}';
-    }
+    public String getNumeroAutorizzazione() {
+		return numeroAutorizzazione;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Azienda other = (Azienda) obj;
-        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
-            return false;
-        }
-        if ((this.nome == null) ? (other.nome != null) : !this.nome.equals(other.nome)) {
-            return false;
-        }
-        if ((this.pIva == null) ? (other.pIva != null) : !this.pIva.equals(other.pIva)) {
-            return false;
-        }
-        if ((this.codFis == null) ? (other.codFis != null) : !this.codFis.equals(other.codFis)) {
-            return false;
-        }
-        if ((this.via == null) ? (other.via != null) : !this.via.equals(other.via)) {
-            return false;
-        }
-        if ((this.civico == null) ? (other.civico != null) : !this.civico.equals(other.civico)) {
-            return false;
-        }
-        if ((this.cap == null) ? (other.cap != null) : !this.cap.equals(other.cap)) {
-            return false;
-        }
-        if ((this.citta == null) ? (other.citta != null) : !this.citta.equals(other.citta)) {
-            return false;
-        }
-        if ((this.provincia == null) ? (other.provincia != null) : !this.provincia.equals(other.provincia)) {
-            return false;
-        }
-        if ((this.nazione == null) ? (other.nazione != null) : !this.nazione.equals(other.nazione)) {
-            return false;
-        }
-        if ((this.mail == null) ? (other.mail != null) : !this.mail.equals(other.mail)) {
-            return false;
-        }
-        if ((this.telefono == null) ? (other.telefono != null) : !this.telefono.equals(other.telefono)) {
-            return false;
-        }
-        if ((this.fax == null) ? (other.fax != null) : !this.fax.equals(other.fax)) {
-            return false;
-        }
-        if (this.tassabile != other.tassabile && (this.tassabile == null || !this.tassabile.equals(other.tassabile))) {
-            return false;
-        }
-        if (this.principale != other.principale && (this.principale == null || !this.principale.equals(other.principale))) {
-            return false;
-        }
-        return true;
-    }
+	public void setNumeroAutorizzazione(String numeroAutorizzazione) {
+		this.numeroAutorizzazione = numeroAutorizzazione;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 23 * hash + (this.id != null ? this.id.hashCode() : 0);
-        hash = 23 * hash + (this.nome != null ? this.nome.hashCode() : 0);
-        hash = 23 * hash + (this.pIva != null ? this.pIva.hashCode() : 0);
-        hash = 23 * hash + (this.codFis != null ? this.codFis.hashCode() : 0);
-        hash = 23 * hash + (this.via != null ? this.via.hashCode() : 0);
-        hash = 23 * hash + (this.civico != null ? this.civico.hashCode() : 0);
-        hash = 23 * hash + (this.cap != null ? this.cap.hashCode() : 0);
-        hash = 23 * hash + (this.citta != null ? this.citta.hashCode() : 0);
-        hash = 23 * hash + (this.provincia != null ? this.provincia.hashCode() : 0);
-        hash = 23 * hash + (this.nazione != null ? this.nazione.hashCode() : 0);
-        hash = 23 * hash + (this.mail != null ? this.mail.hashCode() : 0);
-        hash = 23 * hash + (this.telefono != null ? this.telefono.hashCode() : 0);
-        hash = 23 * hash + (this.fax != null ? this.fax.hashCode() : 0);
-        hash = 23 * hash + (this.tassabile != null ? this.tassabile.hashCode() : 0);
-        hash = 23 * hash + (this.principale != null ? this.principale.hashCode() : 0);
-        return hash;
-    }
+	public Date getDataAutorizzazione() {
+		return dataAutorizzazione;
+	}
+
+	public void setDataAutorizzazione(Date dataAutorizzazione) {
+		this.dataAutorizzazione = dataAutorizzazione;
+	}
+
+	public String getNumeroRegistrazione() {
+		return numeroRegistrazione;
+	}
+
+	public void setNumeroRegistrazione(String numeroRegistrazione) {
+		this.numeroRegistrazione = numeroRegistrazione;
+	}
+
+	public Date getDataRegistrazione() {
+		return dataRegistrazione;
+	}
+
+	public void setDataRegistrazione(Date dataRegistrazione) {
+		this.dataRegistrazione = dataRegistrazione;
+	}
+
+	@Override
+	public String toString() {
+		return "Azienda [id=" + id + ", nome=" + nome + ", pIva=" + pIva + ", codFis=" + codFis + ", via=" + via
+				+ ", civico=" + civico + ", cap=" + cap + ", citta=" + citta + ", provincia=" + provincia + ", nazione="
+				+ nazione + ", mail=" + mail + ", telefono=" + telefono + ", fax=" + fax + ", tassabile=" + tassabile
+				+ ", principale=" + principale + ", numeroAutorizzazione=" + numeroAutorizzazione
+				+ ", dataAutorizzazione=" + dataAutorizzazione + ", numeroRegistrazione=" + numeroRegistrazione
+				+ ", dataRegistrazione=" + dataRegistrazione + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cap == null) ? 0 : cap.hashCode());
+		result = prime * result + ((citta == null) ? 0 : citta.hashCode());
+		result = prime * result + ((civico == null) ? 0 : civico.hashCode());
+		result = prime * result + ((codFis == null) ? 0 : codFis.hashCode());
+		result = prime * result + ((dataAutorizzazione == null) ? 0 : dataAutorizzazione.hashCode());
+		result = prime * result + ((dataRegistrazione == null) ? 0 : dataRegistrazione.hashCode());
+		result = prime * result + ((fax == null) ? 0 : fax.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
+		result = prime * result + ((nazione == null) ? 0 : nazione.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((numeroAutorizzazione == null) ? 0 : numeroAutorizzazione.hashCode());
+		result = prime * result + ((numeroRegistrazione == null) ? 0 : numeroRegistrazione.hashCode());
+		result = prime * result + ((pIva == null) ? 0 : pIva.hashCode());
+		result = prime * result + ((principale == null) ? 0 : principale.hashCode());
+		result = prime * result + ((provincia == null) ? 0 : provincia.hashCode());
+		result = prime * result + ((tassabile == null) ? 0 : tassabile.hashCode());
+		result = prime * result + ((telefono == null) ? 0 : telefono.hashCode());
+		result = prime * result + ((via == null) ? 0 : via.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Azienda other = (Azienda) obj;
+		if (cap == null) {
+			if (other.cap != null)
+				return false;
+		} else if (!cap.equals(other.cap))
+			return false;
+		if (citta == null) {
+			if (other.citta != null)
+				return false;
+		} else if (!citta.equals(other.citta))
+			return false;
+		if (civico == null) {
+			if (other.civico != null)
+				return false;
+		} else if (!civico.equals(other.civico))
+			return false;
+		if (codFis == null) {
+			if (other.codFis != null)
+				return false;
+		} else if (!codFis.equals(other.codFis))
+			return false;
+		if (dataAutorizzazione == null) {
+			if (other.dataAutorizzazione != null)
+				return false;
+		} else if (!dataAutorizzazione.equals(other.dataAutorizzazione))
+			return false;
+		if (dataRegistrazione == null) {
+			if (other.dataRegistrazione != null)
+				return false;
+		} else if (!dataRegistrazione.equals(other.dataRegistrazione))
+			return false;
+		if (fax == null) {
+			if (other.fax != null)
+				return false;
+		} else if (!fax.equals(other.fax))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (mail == null) {
+			if (other.mail != null)
+				return false;
+		} else if (!mail.equals(other.mail))
+			return false;
+		if (nazione == null) {
+			if (other.nazione != null)
+				return false;
+		} else if (!nazione.equals(other.nazione))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (numeroAutorizzazione == null) {
+			if (other.numeroAutorizzazione != null)
+				return false;
+		} else if (!numeroAutorizzazione.equals(other.numeroAutorizzazione))
+			return false;
+		if (numeroRegistrazione == null) {
+			if (other.numeroRegistrazione != null)
+				return false;
+		} else if (!numeroRegistrazione.equals(other.numeroRegistrazione))
+			return false;
+		if (pIva == null) {
+			if (other.pIva != null)
+				return false;
+		} else if (!pIva.equals(other.pIva))
+			return false;
+		if (principale == null) {
+			if (other.principale != null)
+				return false;
+		} else if (!principale.equals(other.principale))
+			return false;
+		if (provincia == null) {
+			if (other.provincia != null)
+				return false;
+		} else if (!provincia.equals(other.provincia))
+			return false;
+		if (tassabile == null) {
+			if (other.tassabile != null)
+				return false;
+		} else if (!tassabile.equals(other.tassabile))
+			return false;
+		if (telefono == null) {
+			if (other.telefono != null)
+				return false;
+		} else if (!telefono.equals(other.telefono))
+			return false;
+		if (via == null) {
+			if (other.via != null)
+				return false;
+		} else if (!via.equals(other.via))
+			return false;
+		return true;
+	}
+
 
     
 

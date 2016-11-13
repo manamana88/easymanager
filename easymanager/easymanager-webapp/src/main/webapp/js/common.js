@@ -20,6 +20,10 @@ function addDatepickers(updateDate){
 	}
 }
 
+function removeDatepickers(){
+	$('.data input').datepicker("remove");
+}
+
 function makeTextInputReadOnly(){
 	$("input").prop("readonly", "readonly");
 	$("textarea").prop("readonly", "readonly");

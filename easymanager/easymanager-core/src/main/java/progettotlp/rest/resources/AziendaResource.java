@@ -4,9 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -52,85 +51,26 @@ public class AziendaResource {
 	}
 	
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveAzienda(
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response,
-			@FormParam("id") Long id,
-			@FormParam("nome") String nome, 
-			@FormParam("piva") String piva, 
-			@FormParam("codFis") String codFis, 
-			@FormParam("via") String via, 
-			@FormParam("civico") String civico, 
-			@FormParam("cap") String cap, 
-			@FormParam("citta") String citta, 
-			@FormParam("provincia") String provincia, 
-			@FormParam("nazione") String nazione, 
-			@FormParam("mail") String mail, 
-			@FormParam("telefono") String telefono, 
-			@FormParam("fax") String fax, 
-			@FormParam("tassabile") boolean tassabile,
-			@FormParam("principale") @DefaultValue("false") boolean principale
+			Azienda res
 			) throws ValidationException, PersistenzaException{
-		Azienda res=new Azienda();
-        res.setId(id);
-        res.setPrincipale(principale);
-        res.setNome(nome);
-        res.setPIva(piva);
-        res.setCodFis(codFis);
-        res.setMail(mail);
-        res.setVia(via);
-        res.setCivico(civico);
-        res.setCap(cap);
-        res.setCitta(citta);
-        res.setProvincia(provincia);
-        res.setNazione(nazione);
-        res.setTelefono(telefono);
-        res.setFax(fax);
-        res.setTassabile(tassabile);
         checkAzienda(res);
         aziendaManager.registraAzienda(res);
         return Response.ok().build();
 	}
 
 	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editAzienda(
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response,
-			@FormParam("id") Long id,
-			@FormParam("nome") String nome, 
-			@FormParam("piva") String piva, 
-			@FormParam("codFis") String codFis, 
-			@FormParam("via") String via, 
-			@FormParam("civico") String civico, 
-			@FormParam("cap") String cap, 
-			@FormParam("citta") String citta, 
-			@FormParam("provincia") String provincia, 
-			@FormParam("nazione") String nazione, 
-			@FormParam("mail") String mail, 
-			@FormParam("telefono") String telefono, 
-			@FormParam("fax") String fax, 
-			@FormParam("tassabile") boolean tassabile,
-			@FormParam("principale") @DefaultValue("false") boolean principale
-			) throws ValidationException, PersistenzaException, GenericExceptionToPrint{
-		if (id==null){
+			Azienda res) throws ValidationException, PersistenzaException, GenericExceptionToPrint{
+		if (res.getId()==null){
 			throw new GenericExceptionToPrint("Dati errati", "Siamo spiacenti, questa azienda non è registrata.");
 		}
-		Azienda res=new Azienda();
-		res.setId(id);
-		res.setPrincipale(principale);
-		res.setNome(nome);
-		res.setPIva(piva);
-		res.setCodFis(codFis);
-		res.setMail(mail);
-		res.setVia(via);
-		res.setCivico(civico);
-		res.setCap(cap);
-		res.setCitta(citta);
-		res.setProvincia(provincia);
-		res.setNazione(nazione);
-		res.setTelefono(telefono);
-		res.setFax(fax);
-		res.setTassabile(tassabile);
 		checkAzienda(res);
         try{
             aziendaManager.modificaAzienda(res);
@@ -163,5 +103,26 @@ public class AziendaResource {
         if (!Controlli.checkCodFIS(a.getCodFis(), true)){
             throw new ValidationException("Dati errati", "Il campo Codice Fiscale contiene dei dati errati");
         }
+        boolean registrazioneEmpty = isRegistrazioneEmpty(a);
+		if (a.getTassabile() && !registrazioneEmpty){
+			throw new ValidationException("Dati errati", "I campi relativi ad autorizzazione e registrazione non sono vuoti");
+        }
+		if (!a.getTassabile() && registrazioneEmpty){
+			throw new ValidationException("Dati errati", "I campi relativi ad autorizzazione e registrazione sono vuoti");
+		}
     }
+
+	private boolean isRegistrazioneEmpty(Azienda a) {
+		String numeroAutorizzazione = a.getNumeroAutorizzazione();
+		if (numeroAutorizzazione!=null && !numeroAutorizzazione.trim().isEmpty()){
+			return false;
+		} else {
+			String numeroRegistrazione = a.getNumeroRegistrazione();
+			if (numeroRegistrazione !=null && !numeroRegistrazione.trim().isEmpty()){
+				return false;
+			} else {
+				return a.getDataAutorizzazione() == null && a.getDataRegistrazione()==null;
+			}
+		}
+	}
 }
