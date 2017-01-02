@@ -176,3 +176,35 @@ function setChecked(checkbox, value){
 	var toSet = value ? "checked" : "";
 	return $(checkbox).prop("checked", toSet);
 }
+
+function displaySelezionaAnnoModal(){
+	var baseUrl = getWebappUrl() + "/resources/anno";
+	var targetUrl=baseUrl + "/list";
+	doCall('GET', targetUrl, {}, "", function (responseData){
+		var anni = responseData.items;
+		var annoSelect = $("#annoGenerale");
+		$(annoSelect).empty();
+		for (var i in anni){
+			var anno = anni[i];
+			$(annoSelect).append("<option value=\""+anno+"\">"+anno+"</option>");
+		}
+		doCall('GET', baseUrl, {}, "", function (responseData){
+			$("#annoGenerale").val(responseData.items[0]);
+			$("#selectAnnoModal").modal("show");
+		});
+	});
+}
+
+function salvaAnno(){
+	var anno = $("#annoGenerale").val();
+	if (!anno){
+		notifyModal("Errore", "Anno non selezionato");
+	}
+	var targetUrl = getWebappUrl() + "/resources/anno?year="+anno;
+	doCall('POST', targetUrl, {}, "", function (responseData){
+		notifyModal("Successo", "Anno registrato con successo");
+		_.delay(function(){
+			window.location.reload(true);
+		}, 2000);
+	});
+}

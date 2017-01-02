@@ -1,17 +1,28 @@
 package progettotlp.persistenza;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.Type;
+
+import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;
+import progettotlp.facilities.DateUtils;
 import progettotlp.statistiche.StatisticheConfronto;
 import progettotlp.statistiche.StatisticheFattura;
 
@@ -27,6 +38,22 @@ public class StatisticheManagerImpl extends AbstractPersistenza implements Stati
 
     public StatisticheManagerImpl() {
         super();
+    }
+    
+    @Override
+    public Set<Integer> getAvailableYears() {
+    	Session sessione=null;
+    	try{
+    		sessione=sessionFactory.openSession();
+    		Criteria query= sessione.createCriteria(DdT.class);
+    		query.setProjection(Projections.distinct(Projections.sqlProjection("year(data) as year", new String[] {"year"}, new Type[] {new IntegerType()})));
+    		List<Integer> list = query.list();
+    		Set<Integer> result = new TreeSet<>(Collections.reverseOrder());
+    		result.addAll(list);
+    		return result;
+    	} finally {
+    		sessione.close();
+    	}
     }
 
     public Map<Date,List<StatisticheFattura>> simpleSearch(Date startDateValue, Date endDateValue, List<String> nomiAziendeSelezionate) {

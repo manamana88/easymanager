@@ -33,6 +33,35 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="selectAnnoModal" tabindex="-1" role="dialog"
+		aria-labelledby="selectAnnoLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true"><i class="fa fa-times"></i></span>
+					</button>
+					<h4 class="modal-title" id="selectAnnoLabel">Seleziona Anno</h4>
+				</div>
+				<div class="modal-body" id="selectAnnoModal-body">
+					<form class="form-horizontal">
+						<div class="form-group">
+								<label for="annoGenerale" class="col-sm-1 control-label">Anno</label>
+								<div class="col-sm-12">
+									<select class="form-control" id="annoGenerale" name="annoGenerale">
+									</select>
+								</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer text-center" id="selectAnnoModal-footer">
+					<a class="btn btn-default" href="#" role="button" data-dismiss="modal" onclick="salvaAnno()">Salva</a>
+					<a class="btn btn-default" href="#" role="button" data-dismiss="modal" >Annulla</a>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="col-sm-12">
 		<ul class="nav navbar-nav navbar-left">
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -40,7 +69,7 @@
 				aria-expanded="false">File<span class="caret"></span></a>
 				<ul class="dropdown-menu">
 					<li><a href="${request.getContextPath()}/company.xhtml?company=PRINCIPALE&amp;action=edit">Gestione Azienda</a></li>
-					<li><a href="#">Seleziona Anno</a></li>
+					<li><a onclick="displaySelezionaAnnoModal()" href="#">Seleziona Anno</a></li>
 				</ul></li>
 			<li><a href="${request.getContextPath()}/companiesList.xhtml">Clienti</a></li>
 			<li><a href="${request.getContextPath()}/ddtList.xhtml">DdT</a></li>

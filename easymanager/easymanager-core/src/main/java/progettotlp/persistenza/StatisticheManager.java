@@ -8,6 +8,8 @@ package progettotlp.persistenza;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import progettotlp.statistiche.StatisticheConfronto;
 import progettotlp.statistiche.StatisticheFattura;
 
@@ -17,7 +19,9 @@ import progettotlp.statistiche.StatisticheFattura;
  */
 public interface StatisticheManager {
 
-    public Map<Date,List<StatisticheFattura>> simpleSearch(Date startDateValue, Date endDateValue, List<String> nomiAziendeSelezionate);
+	public Set<Integer> getAvailableYears();
+
+	public Map<Date,List<StatisticheFattura>> simpleSearch(Date startDateValue, Date endDateValue, List<String> nomiAziendeSelezionate);
 
     public StatisticheConfronto advancedSearch(Date startDateValue, Date endDateValue, Date startDateConfrontoValue, Date endDateConfrontoValue, List<String> nomiAziendeSelezionate);
 }
