@@ -1,6 +1,10 @@
 package progettotlp.print;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -16,8 +20,11 @@ import progettotlp.facilities.DateUtils;
 public class DdtPrinterTest {
 
 	@Before
-	public void setup(){
-		System.setProperty(ConfigurationManager.PROPERTIES_PATH, "C:\\Users\\vincenzo.barrea\\git\\easymanager\\easymanager\\easymanager-core\\easymanager.properties");
+	public void setup() throws URISyntaxException{
+		URL resource = this.getClass().getClassLoader().getResource("easymanager.properties");
+		File file = new File(resource.toURI());
+		assertTrue(file.exists());
+		System.setProperty(ConfigurationManager.PROPERTIES_PATH, file.getAbsolutePath());
 		ConfigurationManager.init();
 	}
 	
