@@ -209,9 +209,9 @@ public class FormDdTUtilities extends AbstractFormUtilities{
         String descrizione = getValueAtColumn(i, DdTTableColumn.DESCRIZIONE);
         if (descrizione==null || descrizione.trim().isEmpty())
             throw new ValidationException("Dati errati", "Descrizione vuota");
-        Integer qta=getValueAtColumn(i, DdTTableColumn.QTA);
+        Float qta=getValueAtColumn(i, DdTTableColumn.QTA);
         if (qta==null || qta<=0)
-            throw new ValidationException("Dati errati", "QuantitÃ  vuota");
+            throw new ValidationException("Dati errati", "Quantit  vuota");
         return true;
     }
 
@@ -226,7 +226,7 @@ public class FormDdTUtilities extends AbstractFormUtilities{
                         convertNullToString(getValueAtColumn(i, DdTTableColumn.CODICE)),
                         convertNullToString(getValueAtColumn(i, DdTTableColumn.COMMESSA)),
                         convertNullToString(getValueAtColumn(i, DdTTableColumn.DESCRIZIONE)),
-                        (Integer)getValueAtColumn(i, DdTTableColumn.QTA),
+                        (Float)getValueAtColumn(i, DdTTableColumn.QTA),
                         convertNullToBoolean(getValueAtColumn(i, DdTTableColumn.PROT)),
                         convertNullToBoolean(getValueAtColumn(i, DdTTableColumn.CAMP)),
                         convertNullToBoolean(getValueAtColumn(i, DdTTableColumn.PRIMO_CAPO)),

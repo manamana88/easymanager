@@ -59,7 +59,7 @@ CREATE TABLE `bene` (
   `cod` varchar(255) DEFAULT NULL,
   `commessa` varchar(50) DEFAULT NULL,
   `descrizione` varchar(50) NOT NULL,
-  `quantita` int(11) NOT NULL,
+  `quantita` float NOT NULL,
   `prezzo` float DEFAULT NULL,
   `tot` float DEFAULT NULL,
   `prototipo` varchar(1) NOT NULL DEFAULT 'N',

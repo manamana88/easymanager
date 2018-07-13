@@ -108,16 +108,16 @@ public class UtilityTest {
     @Test
     public void getTotCapiTest(){
         Bene b1=new Bene();
-        b1.setQta(1);
+        b1.setQta(1F);
         Bene b2=new Bene();
-        b2.setQta(3);
+        b2.setQta(3F);
         Bene b3=new Bene();
-        b3.setQta(15);
+        b3.setQta(15F);
         DdT d1=new DdT();
         d1.setBeni(Arrays.asList(b1));
         DdT d2=new DdT();
         d2.setBeni(Arrays.asList(b2,b3));
-        Assert.assertEquals(19,Utility.getTotCapi(Arrays.asList(d1,d2)));
+        Assert.assertEquals(19F,Utility.getTotCapi(Arrays.asList(d1,d2)));
     }
     @Test
     public void mapDdTTest(){

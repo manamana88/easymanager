@@ -64,7 +64,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -74,7 +74,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -187,7 +187,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -197,7 +197,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -305,7 +305,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        int qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -317,7 +317,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        int qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -484,7 +484,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -494,7 +494,7 @@ public class FormDdTUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;

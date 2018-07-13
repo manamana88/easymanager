@@ -34,7 +34,6 @@ import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;
 import progettotlp.facilities.ConfigurationManager;
-import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.StringUtils;
 import progettotlp.models.FatturaTableModelUtils;
@@ -131,7 +130,7 @@ public class FormFatturaUtilitiesFunctionalTest extends AbstractTest{
         assertTrue(form.realIdFattura.getText().isEmpty());
         assertEquals(DateUtils.formatDate(dataScadenza), form.dataScadenza.getText());
         assertEquals(StringUtils.formatNumber(totale), form.totale.getText());
-        int totCapi = b1.getQta()+b2.getQta();
+        Float totCapi = b1.getQta()+b2.getQta();
         assertEquals(totCapi+"", form.numCapiTot.getText());
         assertEquals("60", form.validita.getSelectedItem());
 
@@ -196,7 +195,7 @@ public class FormFatturaUtilitiesFunctionalTest extends AbstractTest{
         form.dataScadenza.setText(DateUtils.formatDate(dataScadenza));
         form.realIdFattura.setText(null);
         form.totale.setText(totale.toString());
-        int totCapi = b1.getQta()+b2.getQta();
+        Float totCapi = b1.getQta()+b2.getQta();
         form.numCapiTot.setText(totCapi+"");
         form.validita.setSelectedItem("60");
 
@@ -322,7 +321,7 @@ public class FormFatturaUtilitiesFunctionalTest extends AbstractTest{
         String codiceB1 = "0003";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -335,7 +334,7 @@ public class FormFatturaUtilitiesFunctionalTest extends AbstractTest{
         String codiceB2 = "0004";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -555,7 +554,7 @@ public class FormFatturaUtilitiesFunctionalTest extends AbstractTest{
         String codiceB1 = "0003";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -568,7 +567,7 @@ public class FormFatturaUtilitiesFunctionalTest extends AbstractTest{
         String codiceB2 = "0004";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;

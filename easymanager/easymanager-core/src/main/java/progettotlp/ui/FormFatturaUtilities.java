@@ -149,7 +149,7 @@ public class FormFatturaUtilities extends AbstractFormUtilities{
         resetFormFattura();
         realIdFattura.setText(f.getRealId().toString());
         List<DdT> lst=f.getDdt();
-        int q=0;
+        float q=0;
         q = compilaTabellaFattura(lst, false).totCapi;
         if(!lst.isEmpty() && q>0){
             numCapiTot.setText(q+"");
@@ -187,9 +187,9 @@ public class FormFatturaUtilities extends AbstractFormUtilities{
         List<DdT> lst=ddtManager.getAllDdT(aziendaCliente, mese,true,false);
         Result res=compilaTabellaFattura(lst, true);
         if(!lst.isEmpty()){
-            int q = res.totCapi;
+            float q = res.totCapi;
             float nt = res.totFattura;
-            numCapiTot.setText(Integer.toString(q));
+            numCapiTot.setText(Float.toString(q));
             netto.setText(StringUtils.formatNumber(nt));
             Float ivaDefault = Float.parseFloat(ConfigurationManager.getProperty(Property.IVA_DEFAULT));
             float iii=convertNullToBoolean(aziendaCliente.isTassabile())?(float) (nt*ivaDefault/100):0F;
@@ -253,7 +253,7 @@ public class FormFatturaUtilities extends AbstractFormUtilities{
         Boolean pc=getSelectedValueAtColumn(TableColumn.PRIMO_CAPO);
         Boolean camp=getSelectedValueAtColumn(TableColumn.CAMP);
         Boolean intAde=getSelectedValueAtColumn(TableColumn.INT_ADE);
-        Integer qta=getSelectedValueAtColumn(TableColumn.QTA);
+        Float qta=getSelectedValueAtColumn(TableColumn.QTA);
         Float costoUni=getSelectedValueAtColumn(TableColumn.COSTO_UNI);
         CostoType costoType=null;
         TableColumn column=null;
@@ -375,7 +375,7 @@ public class FormFatturaUtilities extends AbstractFormUtilities{
     
     protected Result compilaTabellaFattura (List<DdT> lst, boolean nuovaFattura) throws ValidationException{
         removeRows();
-        int resQta=0;
+        float resQta=0;
         float resTot=0;
         for(int i=0; i<lst.size();i++){
             DdT d=lst.get(i);
@@ -485,10 +485,10 @@ public class FormFatturaUtilities extends AbstractFormUtilities{
     }
     
     protected class Result{
-        protected int totCapi;
+        protected float totCapi;
         protected float totFattura;
 
-        public Result(int totCapi, float totFattura) {
+        public Result(float totCapi, float totFattura) {
             this.totCapi = totCapi;
             this.totFattura = totFattura;
 

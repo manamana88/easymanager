@@ -37,13 +37,13 @@ public class DdtPrinterTest {
         b1.setCommessa("com");
         b1.setDescrizione("descr");
         b1.setPiazzato(true);
-        b1.setQta(1);
+        b1.setQta(1F);
         Bene b2 = new Bene();
         b2.setCodice("cod2");
         b2.setCommessa("com2");
         b2.setDescrizione("descr2");
         b2.setInteramenteAdesivato(true);
-        b2.setQta(2);
+        b2.setQta(2F);
         ddt.setBeni(Arrays.asList(b1, b2));
         Date data = DateUtils.parseDate("01/01/2012");
         ddt.setData(data);

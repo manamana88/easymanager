@@ -21,7 +21,7 @@ public interface FormPrezzoUtilitiesInterface {
     public static final String MAI_FATTURATO = "Mai fatturato";
     public static final String ND = "N/D";
 
-    void compilaForm(String ddt, String codice, String commessa, String descrizione, boolean proto, boolean piazz, boolean pc, boolean camp, boolean intAde, int capi, CostoType costoType, Float prezzoValue,LastSameBeneFatturatoInfos infos);
+    void compilaForm(String ddt, String codice, String commessa, String descrizione, boolean proto, boolean piazz, boolean pc, boolean camp, boolean intAde, Float qta, CostoType costoType, Float prezzoValue,LastSameBeneFatturatoInfos infos);
 
     void compilaForm(DdT d, Bene b,LastSameBeneFatturatoInfos infos);
 

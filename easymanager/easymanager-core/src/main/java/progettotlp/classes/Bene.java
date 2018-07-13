@@ -31,7 +31,7 @@ public class Bene implements Serializable{
     private String commessa;
     private String descrizione;
     @Column(name="quantita")
-    private Integer qta;
+    private Float qta;
     private Float prezzo;
     private Float tot;
     @Type(type="yes_no")
@@ -48,7 +48,7 @@ public class Bene implements Serializable{
     private Boolean interamenteAdesivato=false;
 
     public Bene(){}
-    public Bene(String codice, String commessa, String descrizione, int qta, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
+    public Bene(String codice, String commessa, String descrizione, Float qta, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
         this.codice = codice;
         this.commessa = commessa;
         this.descrizione = descrizione;
@@ -60,7 +60,7 @@ public class Bene implements Serializable{
         this.interamenteAdesivato = interamenteAdesivato;
     }
 
-    public Bene(String codice, String commessa, String descrizione, int qta, Float prezzo, Float tot, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
+    public Bene(String codice, String commessa, String descrizione, Float qta, Float prezzo, Float tot, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
         this.codice = codice;
         this.commessa = commessa;
         this.descrizione = descrizione;
@@ -154,11 +154,11 @@ public class Bene implements Serializable{
         this.prototipo = prototipo;
     }
 
-    public Integer getQta() {
+    public Float getQta() {
         return qta;
     }
 
-    public void setQta(Integer qta) {
+    public void setQta(Float qta) {
         this.qta = qta;
     }
 

@@ -59,7 +59,7 @@ public class FormStatisticheRisultatiUtilities extends AbstractFormUtilities{
     }
 
     protected String getCapiSum(TreeSet<Date> dates, Map<Date,List<StatisticheFattura>> list){
-        Long sum=0L;
+    	Float sum=0F;
         if (dates != null && list!=null){
             for (Date d : dates){
                 List<StatisticheFattura> retrieved = list.get(d);

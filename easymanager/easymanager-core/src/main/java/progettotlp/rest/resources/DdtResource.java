@@ -182,7 +182,7 @@ public class DdtResource {
 			bene.setPrezzo(getFloatValue(node, "prezzo"));
 			bene.setPrimoCapo(getBooleanValue(node, "primoCapo"));
 			bene.setPrototipo(getBooleanValue(node, "prototipo"));
-			bene.setQta(getIntValue(node, "qta"));
+			bene.setQta(getFloatValue(node, "qta"));
 			bene.setTot(getFloatValue(node, "totale"));
 			validateBene(bene);
 			result.add(bene);
@@ -197,7 +197,7 @@ public class DdtResource {
         String descrizione = bene.getDescrizione();
         if (descrizione==null || descrizione.trim().isEmpty())
             throw new ValidationException("Dati errati", "Descrizione vuota");
-        Integer qta = bene.getQta();
+        Float qta = bene.getQta();
         if (qta==null || qta<=0)
             throw new ValidationException("Dati errati", "Quantità vuota");
     }

@@ -20,9 +20,9 @@ public class StatisticheFattura {
     private Float netto;
     private Float iva;
     private Float totale;
-    private Long capiTagliati;
+    private Float capiTagliati;
 
-    public StatisticheFattura(Fattura fattura, Long capiTagliati) {
+    public StatisticheFattura(Fattura fattura, Float capiTagliati) {
         this.id = fattura.getId();
         this.cliente = fattura.getCliente();
         this.netto = fattura.getNetto();
@@ -34,11 +34,11 @@ public class StatisticheFattura {
     public StatisticheFattura() {
     }
 
-    public Long getCapiTagliati() {
+    public Float getCapiTagliati() {
         return capiTagliati;
     }
 
-    public void setCapiTagliati(Long capiTagliati) {
+    public void setCapiTagliati(Float capiTagliati) {
         this.capiTagliati = capiTagliati;
     }
 

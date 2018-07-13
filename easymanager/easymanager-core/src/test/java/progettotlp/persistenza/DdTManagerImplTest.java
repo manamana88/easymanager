@@ -38,7 +38,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.FALSE;
         Boolean piazzB1 = Boolean.FALSE;
         Boolean pcB1 = Boolean.FALSE;
@@ -48,7 +48,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -80,7 +80,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB3 = "0003";
         String commessaB3 = "C0003";
         String descrizioneB3 = "Abito";
-        Integer qtaB3 = 35;
+        Float qtaB3 = 35F;
         Boolean protB3 = Boolean.TRUE;
         Boolean piazzB3 = Boolean.TRUE;
         Boolean pcB3 = Boolean.TRUE;
@@ -90,7 +90,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB4 = "0004";
         String commessaB4 = "C0004";
         String descrizioneB4 = "Abito";
-        Integer qtaB4 = 45;
+        Float qtaB4 = 45F;
         Boolean protB4 = Boolean.TRUE;
         Boolean piazzB4 = Boolean.TRUE;
         Boolean pcB4 = Boolean.FALSE;
@@ -147,7 +147,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.FALSE;
         Boolean piazzB1 = Boolean.FALSE;
         Boolean pcB1 = Boolean.FALSE;
@@ -157,7 +157,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -189,7 +189,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB3 = "0003";
         String commessaB3 = "C0003";
         String descrizioneB3 = "Abito";
-        Integer qtaB3 = 35;
+        Float qtaB3 = 35F;
         Boolean protB3 = Boolean.TRUE;
         Boolean piazzB3 = Boolean.TRUE;
         Boolean pcB3 = Boolean.TRUE;
@@ -199,7 +199,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB4 = "0004";
         String commessaB4 = "C0004";
         String descrizioneB4 = "Abito";
-        Integer qtaB4 = 45;
+        Float qtaB4 = 45F;
         Boolean protB4 = Boolean.TRUE;
         Boolean piazzB4 = Boolean.TRUE;
         Boolean pcB4 = Boolean.FALSE;

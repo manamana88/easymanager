@@ -170,7 +170,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         assertEquals("0001",b1.getCodice());
         assertEquals("C0001",b1.getCommessa());
         assertEquals("Abito",b1.getDescrizione());
-        assertEquals(new Integer(15),b1.getQta());
+        assertEquals(new Float(15),b1.getQta());
         assertEquals(new Float(3),b1.getPrezzo());
         assertEquals(new Float(45),b1.getTot());
         assertEquals(new Float(3),b1.getPrezzo());

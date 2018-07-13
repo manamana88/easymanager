@@ -2,7 +2,6 @@ package progettotlp.persistenza;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,6 @@ import org.hibernate.type.Type;
 
 import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;
-import progettotlp.facilities.DateUtils;
 import progettotlp.statistiche.StatisticheConfronto;
 import progettotlp.statistiche.StatisticheFattura;
 
@@ -79,13 +77,13 @@ public class StatisticheManagerImpl extends AbstractPersistenza implements Stati
         Map<Date, List<StatisticheFattura>> result = new HashMap<Date, List<StatisticheFattura>>();
         if (list != null) {
             for (Fattura f : list) {
-                Long sumBeni = (Long) sessione.createQuery("select sum(b.qta) from Fattura as f join f.ddt as d join d.beni as b where f.realId=" + f.getRealId()).uniqueResult();
+                Double sumBeni = (Double) sessione.createQuery("select sum(b.qta) from Fattura as f join f.ddt as d join d.beni as b where f.realId=" + f.getRealId()).uniqueResult();
                 List<StatisticheFattura> get = result.get(f.getEmissione());
                 if (get == null) {
                     get = new ArrayList<StatisticheFattura>();
                     result.put(f.getEmissione(), get);
                 }
-                get.add(new StatisticheFattura(f, sumBeni == null ? 0 : sumBeni));
+                get.add(new StatisticheFattura(f, sumBeni == null ? 0F : sumBeni.floatValue()));
             }
         }
         return result;

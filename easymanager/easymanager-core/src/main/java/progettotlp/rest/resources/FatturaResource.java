@@ -118,7 +118,7 @@ public class FatturaResource {
 			allDdT = ddtManager.getAllDdTWithoutFattura(azienda, startDateObject, endDateObject);
 		}
 		int lastFattura = fatturaManager.getLastFattura();
-		long totCapi = Utility.getTotCapi(allDdT);
+		Float totCapi = Utility.getTotCapi(allDdT);
 		Float ivaDefault;
 		if (azienda.isTassabile()){
 			ivaDefault = Float.parseFloat(ConfigurationManager.getProperty(Property.IVA_DEFAULT));

@@ -94,8 +94,9 @@ public class FormPrezzoUtilities extends AbstractFormUtilities implements FormPr
         tempo.setSelected(false);
     }
 
+    @Override
     public void compilaForm(String ddt, String codice, String commessa, String descrizione,
-            boolean proto, boolean piazz, boolean pc, boolean camp, boolean intAde, int capi, CostoType costoType, Float prezzoValue,
+            boolean proto, boolean piazz, boolean pc, boolean camp, boolean intAde, Float capi, CostoType costoType, Float prezzoValue,
             LastSameBeneFatturatoInfos infos){
         labelDdT.setText(ddt);
         labelCodice.setText(codice);
@@ -118,10 +119,10 @@ public class FormPrezzoUtilities extends AbstractFormUtilities implements FormPr
             if (bene.getTot()!=null){
                 if (bene.getPrezzo()==null){
                     oldPrice=StringUtils.formatNumber(bene.getTot()/bene.getQta());
-                    oldPriceType=costoType.TEMPO.toString();
+                    oldPriceType=CostoType.TEMPO.toString();
                 } else {
                     oldPrice=StringUtils.formatNumber(bene.getPrezzo());
-                    oldPriceType=costoType.UNITARIO.toString();
+                    oldPriceType=CostoType.UNITARIO.toString();
                 }
             } else{
                 oldPrice="";

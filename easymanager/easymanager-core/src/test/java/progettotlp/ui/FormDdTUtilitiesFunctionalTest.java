@@ -71,7 +71,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -82,7 +82,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -182,7 +182,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -193,7 +193,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -298,7 +298,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
                 assertEquals("com",b.getCommessa());
                 assertEquals("descr",b.getDescrizione());
                 assertEquals(new Float(0),b.getPrezzo());
-                assertEquals(new Integer(10),b.getQta());
+                assertEquals(new Float(10),b.getQta());
                 assertEquals(new Float(0),b.getTot());
             } else if (b.getId().equals(2L)){
                 assertEquals("cod2",b.getCodice());
@@ -309,7 +309,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
                 assertEquals(new Float(0),b.getPrezzo());
                 assertEquals(false,b.getPrimoCapo());
                 assertEquals(true,b.getPrototipo());
-                assertEquals(new Integer(11),b.getQta());
+                assertEquals(new Float(11),b.getQta());
                 assertEquals(new Float(0),b.getTot());
                 assertEquals(true,b.getInteramenteAdesivato());
             } else {
@@ -416,7 +416,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -427,7 +427,7 @@ public class FormDdTUtilitiesFunctionalTest extends AbstractTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;

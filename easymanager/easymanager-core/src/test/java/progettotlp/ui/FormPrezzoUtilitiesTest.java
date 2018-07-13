@@ -152,7 +152,7 @@ public class FormPrezzoUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -211,7 +211,7 @@ public class FormPrezzoUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;

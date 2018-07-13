@@ -156,7 +156,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -170,7 +170,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -260,7 +260,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         assertEquals(fatturaRealId.toString(), form.realIdFattura.getText());
         assertEquals(DateUtils.formatDate(dataScadenza), form.dataScadenza.getText());
         assertEquals(StringUtils.formatNumber(totale), form.totale.getText());
-        int totCapi = qtaB1 + qtaB2;
+        Float totCapi = qtaB1 + qtaB2;
         assertEquals(totCapi+"", form.numCapiTot.getText());
         assertEquals("30", form.validita.getSelectedItem());
     }
@@ -271,7 +271,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -285,7 +285,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -400,7 +400,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         assertTrue(form.realIdFattura.getText().isEmpty());
         assertEquals(DateUtils.formatDate(dataScadenza), form.dataScadenza.getText());
         assertEquals(StringUtils.formatNumber(totale), form.totale.getText());
-        int totCapi = qtaB1 + qtaB2;
+        Float totCapi = qtaB1 + qtaB2;
         assertEquals(totCapi+"", form.numCapiTot.getText());
         assertEquals("60", form.validita.getSelectedItem());
         verify(ddTManager);
@@ -428,7 +428,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -542,7 +542,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -959,7 +959,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -1109,7 +1109,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -1123,7 +1123,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -1177,7 +1177,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         d2.setBeni(Arrays.asList(b2));
 
         Result compilaTabellaFattura = form.compilaTabellaFattura(Arrays.asList(d1, d2), false);
-        assertEquals(40,compilaTabellaFattura.totCapi);
+        assertEquals(new Float(40), new Float(compilaTabellaFattura.totCapi));
         assertEquals(new Float(45), new Float(compilaTabellaFattura.totFattura));
         assertEquals(2, form.tabellaFattura.getRowCount());
         assertEquals(idDdt1+" del "+DateUtils.formatDate(dataDdt1), form.tabellaFattura.getValueAt(0, TableColumn.RIF_DDT.toInt()));
@@ -1238,7 +1238,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         form.formPrezzoUtilitiesInterface=formPrezzoUtilitiesInterface;
 
         compilaTabellaFattura = form.compilaTabellaFattura(Arrays.asList(d1, d2), true);
-        assertEquals(40,compilaTabellaFattura.totCapi);
+        assertEquals(new Float(40), new Float(compilaTabellaFattura.totCapi));
         assertEquals(new Float(70), new Float(compilaTabellaFattura.totFattura));
         assertEquals(2, form.tabellaFattura.getRowCount());
         assertEquals(idDdt1+" del "+DateUtils.formatDate(dataDdt1), form.tabellaFattura.getValueAt(0, TableColumn.RIF_DDT.toInt()));
@@ -1281,7 +1281,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Integer qtaB1 = 15;
+        Float qtaB1 = 15F;
         Boolean protB1 = Boolean.TRUE;
         Boolean piazzB1 = Boolean.TRUE;
         Boolean pcB1 = Boolean.TRUE;
@@ -1295,7 +1295,7 @@ public class FormFatturaUtilitiesTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Integer qtaB2 = 25;
+        Float qtaB2 = 25F;
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;

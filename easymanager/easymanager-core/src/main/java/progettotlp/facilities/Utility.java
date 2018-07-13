@@ -131,8 +131,8 @@ public class Utility {
         return res;
     }
     
-    public static long getTotCapi(List<DdT> list){
-        long tot=0;
+    public static Float getTotCapi(List<DdT> list){
+        float tot=0;
         Iterator<DdT> itDdT=list.iterator();
         while(itDdT.hasNext()){
             DdT curr=itDdT.next();
