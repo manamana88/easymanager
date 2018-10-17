@@ -151,7 +151,7 @@ public class DdtPrinter extends PdfPrinter {
 			boolean enabled) throws Exception {
 		PdfPCell result;
 		if (enabled) {
-			Image instance = Image.getInstance(ConfigurationManager.getProperty(Property.EXTERNAL_RESOURCES)+"/img/ok2.png");
+			Image instance = Image.getInstance(DdtPrinter.class.getClassLoader().getResource("ok2.png"));
 			instance.scaleAbsolute(7.0F, 7.0F);
 			result = new PdfPCell(instance);
 		} else {
