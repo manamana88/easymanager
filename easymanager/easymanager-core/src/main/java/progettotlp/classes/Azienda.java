@@ -18,6 +18,7 @@ import org.hibernate.annotations.Type;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import progettotlp.interfaces.AziendaInterface;
 import progettotlp.rest.utils.DateDeserializer;
 import progettotlp.rest.utils.DateSerializer;
 
@@ -28,7 +29,7 @@ import progettotlp.rest.utils.DateSerializer;
  */
 @Entity
 @Table(name="azienda")
-public class Azienda implements Serializable {
+public class Azienda implements Serializable, AziendaInterface {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String nome;
@@ -90,11 +91,13 @@ public class Azienda implements Serializable {
         this.dataRegistrazione=dataRegistrazione;
     }
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+	public void setId(Long id) {
         this.id = id;
     }
 
@@ -102,7 +105,8 @@ public class Azienda implements Serializable {
      * Restituisce il numero di fax di un'{@link Azienda}.
      * @return String fax : numero di fax dell'Azienda.
      */
-    public String getFax() {
+    @Override
+	public String getFax() {
         return fax;
     }
 
@@ -110,7 +114,8 @@ public class Azienda implements Serializable {
      * Imposta il numero di fax di un'{@link Azienda}.
      * @param fax 
      */
-    public void setFax(String fax) {
+    @Override
+	public void setFax(String fax) {
         this.fax = fax;
     }
 
@@ -118,7 +123,8 @@ public class Azienda implements Serializable {
      * Restituisce la provincia in cui si trova la sede di un'Azienda.
      * @return String provincia : la provincia in cui si trova l'Azienda.
      */
-    public String getProvincia() {
+    @Override
+	public String getProvincia() {
         return provincia;
     }
 
@@ -126,7 +132,8 @@ public class Azienda implements Serializable {
      * Imposta la provincia in cui si trova la sede di un'Azienda.
      * @param provincia 
      */
-    public void setProvincia(String provincia) {
+    @Override
+	public void setProvincia(String provincia) {
         this.provincia = provincia;
     }
 
@@ -134,7 +141,8 @@ public class Azienda implements Serializable {
      * Restituisce il numero di telefono dell'Azienda.
      * @return String telefono : il numero di telefono dell'Azienda.
      */
-    public String getTelefono() {
+    @Override
+	public String getTelefono() {
         return telefono;
     }
 
@@ -142,7 +150,8 @@ public class Azienda implements Serializable {
      * Imposta il numero di telefono dell'Azienda.
      * @param telefono 
      */
-    public void setTelefono(String telefono) {
+    @Override
+	public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
     
@@ -150,7 +159,8 @@ public class Azienda implements Serializable {
      * Restituisce il CAP per un'Azienda. 
      * @return String CAP : il numero di CAP dell'Azienda.
      */
-    public String getCap() {
+    @Override
+	public String getCap() {
         return cap;
     }
 
@@ -158,7 +168,8 @@ public class Azienda implements Serializable {
      * Imposta il CAP dell'Azienda.
      * @param cap 
      */
-    public void setCap(String cap) {
+    @Override
+	public void setCap(String cap) {
         this.cap = cap;
     }
 
@@ -166,7 +177,8 @@ public class Azienda implements Serializable {
      * Restituisce la Città in cui si trova la sede di un'Azienda
      * @return String citta : la città in cui si trova l'azienda.
      */
-    public String getCitta() {
+    @Override
+	public String getCitta() {
         return citta;
     }
 
@@ -174,7 +186,8 @@ public class Azienda implements Serializable {
      * Imposta la Città in cui si trova la sede dell'Azienda.
      * @param citta 
      */
-    public void setCitta(String citta) {
+    @Override
+	public void setCitta(String citta) {
         this.citta = citta;
     }
 
@@ -182,7 +195,8 @@ public class Azienda implements Serializable {
      * Restituisce il numero civico della sede dell'Azienda
      * @return String civico : il numero civico dell'Azienda.
      */
-    public String getCivico() {
+    @Override
+	public String getCivico() {
         return civico;
     }
 
@@ -190,7 +204,8 @@ public class Azienda implements Serializable {
      * Imposta il numero civico di un'Azienda.
      * @param civico 
      */
-    public void setCivico(String civico) {
+    @Override
+	public void setCivico(String civico) {
         this.civico = civico;
     }
 
@@ -198,7 +213,8 @@ public class Azienda implements Serializable {
      * Restituisce il codice fiscale di un'Azienda.
      * @return String cod_fis : il codice fiscale dell'Azienda.
      */
-    public String getCodFis() {
+    @Override
+	public String getCodFis() {
         return codFis;
     }
 
@@ -206,7 +222,8 @@ public class Azienda implements Serializable {
      * Imposta il codice fiscale di un'Azienda.
      * @param cod_fis 
      */
-    public void setCodFis(String cod_fis) {
+    @Override
+	public void setCodFis(String cod_fis) {
         this.codFis = cod_fis;
     }
 
@@ -214,7 +231,8 @@ public class Azienda implements Serializable {
      * Restituisce l'indirizzo email di un'Azienda.
      * @return String mail : indirizzo email dell'Azienda.
      */
-    public String getMail() {
+    @Override
+	public String getMail() {
         return mail;
     }
    
@@ -222,7 +240,8 @@ public class Azienda implements Serializable {
      * Imposta l'indirizzo email di un'Azienda.
      * @param mail 
      */
-    public void setMail(String mail) {
+    @Override
+	public void setMail(String mail) {
         this.mail=mail;
     }
 
@@ -230,7 +249,8 @@ public class Azienda implements Serializable {
      * Restituisce la Nazione in cui si trova l'Azienda.
      * @return String nazione : la Nazione dell'Azienda. 
      */
-    public String getNazione() {
+    @Override
+	public String getNazione() {
         return nazione;
     }
 
@@ -238,7 +258,8 @@ public class Azienda implements Serializable {
      * Imposta la Nazione in cui si trova l'Azienda.
      * @param nazione 
      */
-    public void setNazione(String nazione) {
+    @Override
+	public void setNazione(String nazione) {
         this.nazione = nazione;
     }
 
@@ -246,7 +267,8 @@ public class Azienda implements Serializable {
      * Restituisce il nome dell'Azienda.
      * @return String nome : il nome dell'Azienda.
      */
-    public String getNome() {
+    @Override
+	public String getNome() {
         return nome;
     }
 
@@ -254,7 +276,8 @@ public class Azienda implements Serializable {
      * Imposta il nome dell'Azienda
      * @param nome 
      */
-    public void setNome(String nome) {
+    @Override
+	public void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -262,7 +285,8 @@ public class Azienda implements Serializable {
      * Restituisce la partita iva di un'Azienda.
      * @return String p_iva : la partita iva dell'Azienda.
      */
-    public String getPIva() {
+    @Override
+	public String getPIva() {
         return pIva;
     }
 
@@ -270,7 +294,8 @@ public class Azienda implements Serializable {
      * Imposta la partita iva di un'Azienda.
      * @param p_iva 
      */
-    public void setPIva(String p_iva) {
+    @Override
+	public void setPIva(String p_iva) {
         this.pIva = p_iva;
     }
 
@@ -278,7 +303,8 @@ public class Azienda implements Serializable {
      * Restituisce la via in cui si trova un'Azienda.
      * @return String via : la via in cui si trova l'Azienda.
      */
-    public String getVia() {
+    @Override
+	public String getVia() {
         return via;
     }
 
@@ -286,66 +312,72 @@ public class Azienda implements Serializable {
      * Imposta la via in cui si trova l'Azienda
      * @param via 
      */
-    public void setVia(String via) {
+    @Override
+	public void setVia(String via) {
         this.via = via;
     }
 
-    public String getpIva() {
-        return pIva;
-    }
-
-    public void setpIva(String pIva) {
-        this.pIva = pIva;
-    }
-
-    public Boolean isPrincipale() {
+    @Override
+	public Boolean isPrincipale() {
         return principale;
     }
 
-    public void setPrincipale(Boolean principale) {
+    @Override
+	public void setPrincipale(Boolean principale) {
         this.principale = principale;
     }
 
-    public Boolean isTassabile() {
+    @Override
+	public Boolean isTassabile() {
         return tassabile;
     }
 
-    public Boolean getTassabile() {
+    @Override
+	public Boolean getTassabile() {
         return tassabile;
     }
 
-    public void setTassabile(Boolean tassabile) {
+    @Override
+	public void setTassabile(Boolean tassabile) {
         this.tassabile = tassabile;
     }
 
-    public String getNumeroAutorizzazione() {
+    @Override
+	public String getNumeroAutorizzazione() {
 		return numeroAutorizzazione;
 	}
 
+	@Override
 	public void setNumeroAutorizzazione(String numeroAutorizzazione) {
 		this.numeroAutorizzazione = numeroAutorizzazione;
 	}
 
+	@Override
 	public Date getDataAutorizzazione() {
 		return dataAutorizzazione;
 	}
 
+	@Override
 	public void setDataAutorizzazione(Date dataAutorizzazione) {
 		this.dataAutorizzazione = dataAutorizzazione;
 	}
 
+	@Override
 	public String getNumeroRegistrazione() {
 		return numeroRegistrazione;
 	}
 
+	@Override
 	public void setNumeroRegistrazione(String numeroRegistrazione) {
 		this.numeroRegistrazione = numeroRegistrazione;
 	}
 
+	@Override
 	public Date getDataRegistrazione() {
 		return dataRegistrazione;
 	}
 
+	@Override
 	public void setDataRegistrazione(Date dataRegistrazione) {
 		this.dataRegistrazione = dataRegistrazione;
 	}

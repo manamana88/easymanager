@@ -20,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 
 import progettotlp.classes.Azienda;
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.interfaces.AziendaInterface;
 
 /**
  *
@@ -95,7 +96,7 @@ public class AziendaManagerImpl extends AbstractPersistenza implements AziendaMa
         }
     }
 
-    public Azienda getAziendaPrincipale() {
+    public AziendaInterface getAziendaPrincipale() {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -123,15 +124,15 @@ public class AziendaManagerImpl extends AbstractPersistenza implements AziendaMa
         }
     }
 
-    public void registraAzienda(Azienda a) throws PersistenzaException{
+    public void registraAzienda(AziendaInterface a) throws PersistenzaException{
         save(a);
     }
 
-    public void modificaAzienda(Azienda f) throws PersistenzaException{
+    public void modificaAzienda(AziendaInterface f) throws PersistenzaException{
         update(f);
     }
 
-    public void cancellaAzienda(Azienda a) throws PersistenzaException{
+    public void cancellaAzienda(AziendaInterface a) throws PersistenzaException{
         delete(a);
     }
 

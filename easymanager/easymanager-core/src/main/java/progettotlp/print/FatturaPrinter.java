@@ -8,16 +8,18 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
-import progettotlp.classes.Fattura;
 import progettotlp.exceptions.PrintException;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtilities;
 import progettotlp.facilities.StringUtils;
 import progettotlp.facilities.ConfigurationManager.Property;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -40,14 +42,14 @@ public class FatturaPrinter extends PdfPrinter
 
     private static Logger logger = LoggerFactory.getLogger(FatturaPrinter.class);
 
-    public static File printPage(Fattura f, Azienda principale, boolean deleteOnExit)
+    public static File printPage(FatturaInterface f, AziendaInterface principale, boolean deleteOnExit)
                                                                                            throws PrintException
     {
         return printPage(f, principale, null, null, deleteOnExit);
     }
 
-    public static File printPage(Fattura f,
-                                       Azienda principale,
+    public static File printPage(FatturaInterface f,
+                                       AziendaInterface principale,
                                        String folder,
                                        String filePrefix,
                                        boolean deleteOnExit) throws PrintException {
@@ -132,7 +134,7 @@ public class FatturaPrinter extends PdfPrinter
 		return result;
 	}
 
-    private static void printHeader(Document d, Azienda principale, Azienda cliente) throws DocumentException {
+    private static void printHeader(Document d, AziendaInterface principale, AziendaInterface cliente) throws DocumentException {
         Paragraph p = new Paragraph(principale.getNome(), createHeaderBoldFont());
         p.setSpacingAfter(8.0F);
         d.add(p);
@@ -195,7 +197,7 @@ public class FatturaPrinter extends PdfPrinter
         d.add(p2);
     }
 
-    private static void printTableHeader(Document d, Fattura f, int page, int totPage) throws Exception {
+    private static void printTableHeader(Document d, FatturaInterface f, int page, int totPage) throws Exception {
         PdfPTable table = new PdfPTable(6);
         table.setSpacingBefore(20.0F);
         table.setWidthPercentage(100.0F);
@@ -297,20 +299,20 @@ public class FatturaPrinter extends PdfPrinter
         table.addCell(createPdfPCell(StringUtils.formatNumber(b.getBene().getTot()), createSmallFont(), color, borders));
     }
 
-    private static void addDdT(DdT d, PdfPTable table, int startingRow) throws Exception {
-        List<Bene> beni = d.getBeni();
+    private static void addDdT(DdTInterface d, PdfPTable table, int startingRow) throws Exception {
+        List<BeneInterface> beni = d.getBeni();
         for (int i = 0; i < beni.size(); ++i)
             addRow(new BeneFattura(beni.get(i), d.getData(), d.getId()), table, startingRow++, false);
     }
 
-    private static List<PdfPTable> getTableBodies(List<DdT> list) throws Exception {
+    private static List<PdfPTable> getTableBodies(List<DdTInterface> list) throws Exception {
         List<PdfPTable> result = new ArrayList<PdfPTable>();
         PdfPTable t = retrieveTableBodyWithHeader();
         int currentRow = 0;
 //        boolean insertFattura = false;
         for (int i = 0; i < list.size(); ++i) {
         	System.out.println("StartFor"+System.currentTimeMillis());
-            DdT get = (DdT) list.get(i);
+            DdTInterface get = (DdTInterface) list.get(i);
             int beniSize = get.getBeni().size();
 			if (currentRow+beniSize<=MAX_ROWS){
                 addDdT(get, t, currentRow);
@@ -334,7 +336,7 @@ public class FatturaPrinter extends PdfPrinter
         }
 	}
 
-    private static void printTableFooter(Document d, Fattura f, boolean isLast) throws Exception {
+    private static void printTableFooter(Document d, FatturaInterface f, boolean isLast) throws Exception {
         PdfPTable table = new PdfPTable(5);
         table.setSpacingBefore(5.0F);
         table.setWidthPercentage(100.0F);
@@ -361,7 +363,7 @@ public class FatturaPrinter extends PdfPrinter
         d.add(table);
     }
 
-    private static void printSubtitels(Document document, Fattura f) throws Exception {
+    private static void printSubtitels(Document document, FatturaInterface f) throws Exception {
         Paragraph p =
             new Paragraph("PR=Prototipo, CP=Campionario, PC=Primo Capo, PZ=Piazzato, IA=Interamente Adesivato",
                           createSmallFont());
@@ -369,7 +371,7 @@ public class FatturaPrinter extends PdfPrinter
         document.add(p);
         String rifBollo = "I Prezzi sono comprensivi di preadesivazione e rifilo";
         String law = "Operazione con iva per cassa ai sensi dell'art. 32 bis del D.L. n.83/2012";
-        Azienda azienda = f.getCliente();
+        AziendaInterface azienda = f.getCliente();
         logger.info(azienda.getNome());
         logger.info(azienda.isTassabile().toString());
         if (!azienda.isTassabile()){

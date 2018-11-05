@@ -14,12 +14,13 @@ import java.util.Properties;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import progettotlp.classes.Azienda;
-import progettotlp.classes.Bene;
 import progettotlp.classes.Fattura;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.Utility;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.FatturaInterface;
 
 /**
  *
@@ -35,7 +36,7 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         super();
     }
 
-    public boolean existsFattura(int mese, Azienda a) {
+    public boolean existsFattura(int mese, AziendaInterface a) {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -68,11 +69,11 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
     }
 
     public boolean existsFattura(int id) {
-        Fattura fattura = getFattura(id,false,false);
+        FatturaInterface fattura = getFattura(id,false,false);
         return fattura!=null;
     }
 
-    public void modificaFattura(Fattura f) throws PersistenzaException {
+    public void modificaFattura(FatturaInterface f) throws PersistenzaException {
         update(f);
     }
 
@@ -106,9 +107,9 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         }
     }
 
-    public void registraFattura(Fattura f) throws PersistenzaException {
+    public void registraFattura(FatturaInterface f) throws PersistenzaException {
         try {
-            Fattura fatturaById = getFattura(f.getId(),false,false);
+            FatturaInterface fatturaById = getFattura(f.getId(),false,false);
             if (fatturaById!=null){
                 throw new PersistenzaException("Fattura with id: "+f.getId()+" yet exists in year: "+DateUtils.getYear(f.getEmissione()));
             }
@@ -118,7 +119,7 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         }
     }
 
-    public LastSameBeneFatturatoInfos getLastSameBeneFatturatoInfos(Bene b) {
+    public LastSameBeneFatturatoInfos getLastSameBeneFatturatoInfos(BeneInterface b) {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -133,7 +134,7 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
                 return null;
             }
             Object[] first = results.get(0);
-            return new LastSameBeneFatturatoInfos((Integer)first[0], (Date)first[1], (Bene)first[2]);
+            return new LastSameBeneFatturatoInfos((Integer)first[0], (Date)first[1], (BeneInterface)first[2]);
         } finally{
             sessione.close();
         }

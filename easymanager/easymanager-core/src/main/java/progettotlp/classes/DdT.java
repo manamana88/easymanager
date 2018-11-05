@@ -32,6 +32,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
 import progettotlp.rest.utils.DateDeserializer;
 import progettotlp.rest.utils.DateSerializer;
 import progettotlp.rest.utils.FatturaSerializer;
@@ -44,7 +48,7 @@ import progettotlp.rest.utils.FatturaSerializer;
  */
 @Entity
 @Table(name="ddt")
-public class DdT implements Serializable {
+public class DdT implements Serializable, DdTInterface {
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name="real_id")
     private Long realId;
@@ -72,20 +76,20 @@ public class DdT implements Serializable {
     @Type(type="yes_no")
     private Boolean fatturabile;
 
-    @ManyToOne(fetch=FetchType.EAGER,optional=false)
+    @ManyToOne(fetch=FetchType.EAGER,optional=false,targetEntity=Azienda.class)
     @JoinColumn(name="cliente")
-    private Azienda cliente;
+    private AziendaInterface cliente;
 
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY, targetEntity=Bene.class)
     @IndexColumn(name="idx",nullable=false)
     @JoinColumn(name="ddt",nullable=false)
     @Cascade(value={CascadeType.SAVE_UPDATE,CascadeType.DELETE_ORPHAN})
-    private List<Bene> beni;
+    private List<BeneInterface> beni;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, targetEntity=Fattura.class)
     @JoinColumn(name="fattura",insertable=false,updatable=false)
     @JsonSerialize(using=FatturaSerializer.class)
-    private Fattura fattura;
+    private FatturaInterface fattura;
 
     public DdT(){}
     /**
@@ -107,14 +111,14 @@ public class DdT implements Serializable {
      * @param id
      * @param cliente 
      */
-    public DdT(List<Bene> beni, Date data, int id, Azienda cliente) {
+    public DdT(List<BeneInterface> beni, Date data, int id, Azienda cliente) {
         this.beni = beni;
         this.data = data;
         this.id = id;
         this.cliente = cliente;
     }
 
-    public DdT(List<Bene> beni, Date data, int id, Azienda cliente, String mezzo, String causale, String destinazione, 
+    public DdT(List<BeneInterface> beni, Date data, int id, Azienda cliente, String mezzo, String causale, String destinazione, 
             String vostroOrdine, String vostroOrdineDel, String tipo, String aspettoEsteriore, int colli, double peso, 
             String porto, String ritiro, String annotazioni, int progressivo, boolean fatturabile) {
         this.beni = beni;
@@ -136,10 +140,12 @@ public class DdT implements Serializable {
         this.progressivo = progressivo;
     }
     
-    public void addBene(Bene b){
+    @Override
+	public void addBene(BeneInterface b){
         this.beni.add(b);
     }
-    public void removeBene(int i){
+    @Override
+	public void removeBene(int i){
         this.beni.remove(i);
     }
 
@@ -148,170 +154,212 @@ public class DdT implements Serializable {
         return "DdT{" + "realId=" + realId + ", beni=" + beni + ", data=" + data + ", id=" + id + ", cliente=" + cliente + ", mezzo=" + mezzo + ", causale=" + causale + ", destinazione=" + destinazione + ", vostroOrdine=" + vostroOrdine + ", vostroOrdineDel=" + vostroOrdineDel + ", tipo=" + tipo + ", aspettoEsteriore=" + aspettoEsteriore + ", colli=" + colli + ", peso=" + peso + ", porto=" + porto + ", ritiro=" + ritiro + ", annotazioni=" + annotazioni + ", progressivo=" + progressivo + ", fatturabile=" + fatturabile + '}';
     }
 
-    public String getAnnotazioni() {
+    @Override
+	public String getAnnotazioni() {
         return annotazioni;
     }
 
-    public void setAnnotazioni(String annotazioni) {
+    @Override
+	public void setAnnotazioni(String annotazioni) {
         this.annotazioni = annotazioni;
     }
 
-    public String getAspettoEsteriore() {
+    @Override
+	public String getAspettoEsteriore() {
         return aspettoEsteriore;
     }
 
-    public void setAspettoEsteriore(String aspettoEsteriore) {
+    @Override
+	public void setAspettoEsteriore(String aspettoEsteriore) {
         this.aspettoEsteriore = aspettoEsteriore;
     }
 
-    public List<Bene> getBeni() {
+    @Override
+	public List<BeneInterface> getBeni() {
         return beni;
     }
 
-    public void setBeni(List<Bene> beni) {
+    @Override
+	public void setBeni(List<BeneInterface> beni) {
         this.beni = beni;
     }
 
-    public String getCausale() {
+    @Override
+	public String getCausale() {
         return causale;
     }
 
-    public void setCausale(String causale) {
+    @Override
+	public void setCausale(String causale) {
         this.causale = causale;
     }
 
-    public Azienda getCliente() {
+    @Override
+	public AziendaInterface getCliente() {
         return cliente;
     }
 
-    public void setCliente(Azienda cliente) {
+    @Override
+	public void setCliente(AziendaInterface cliente) {
         this.cliente = cliente;
     }
 
-    public Integer getColli() {
+    @Override
+	public Integer getColli() {
         return colli;
     }
 
-    public void setColli(Integer colli) {
+    @Override
+	public void setColli(Integer colli) {
         this.colli = colli;
     }
 
-    public Date getData() {
+    @Override
+	public Date getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    @Override
+	public void setData(Date data) {
         this.data = data;
     }
     
-    public void setData(int giorno,int mese,int anno) throws ValidationException {
+    @Override
+	public void setData(int giorno,int mese,int anno) throws ValidationException {
         this.data=DateUtils.getDate(giorno, mese, anno);
     }
 
-    public String getDestinazione() {
+    @Override
+	public String getDestinazione() {
         return destinazione;
     }
 
-    public void setDestinazione(String destinazione) {
+    @Override
+	public void setDestinazione(String destinazione) {
         this.destinazione = destinazione;
     }
 
-    public Fattura getFattura() {
+    @Override
+	public FatturaInterface getFattura() {
         return fattura;
     }
 
-    public void setFattura(Fattura fattura) {
+    @Override
+	public void setFattura(FatturaInterface fattura) {
         this.fattura = fattura;
     }
 
-    public Integer getId() {
+    @Override
+	public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    @Override
+	public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getMezzo() {
+    @Override
+	public String getMezzo() {
         return mezzo;
     }
 
-    public void setMezzo(String mezzo) {
+    @Override
+	public void setMezzo(String mezzo) {
         this.mezzo = mezzo;
     }
 
-    public Double getPeso() {
+    @Override
+	public Double getPeso() {
         return peso;
     }
 
-    public void setPeso(Double peso) {
+    @Override
+	public void setPeso(Double peso) {
         this.peso = peso;
     }
 
-    public String getPorto() {
+    @Override
+	public String getPorto() {
         return porto;
     }
 
-    public void setPorto(String porto) {
+    @Override
+	public void setPorto(String porto) {
         this.porto = porto;
     }
 
-    public Integer getProgressivo() {
+    @Override
+	public Integer getProgressivo() {
         return progressivo;
     }
 
-    public void setProgressivo(Integer progressivo) {
+    @Override
+	public void setProgressivo(Integer progressivo) {
         this.progressivo = progressivo;
     }
 
-    public Long getRealId() {
+    @Override
+	public Long getRealId() {
         return realId;
     }
 
-    public void setRealId(Long realId) {
+    @Override
+	public void setRealId(Long realId) {
         this.realId = realId;
     }
 
-    public String getRitiro() {
+    @Override
+	public String getRitiro() {
         return ritiro;
     }
 
-    public void setRitiro(String ritiro) {
+    @Override
+	public void setRitiro(String ritiro) {
         this.ritiro = ritiro;
     }
 
-    public String getTipo() {
+    @Override
+	public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    @Override
+	public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
-    public String getVostroOrdine() {
+    @Override
+	public String getVostroOrdine() {
         return vostroOrdine;
     }
 
-    public void setVostroOrdine(String vostroOrdine) {
+    @Override
+	public void setVostroOrdine(String vostroOrdine) {
         this.vostroOrdine = vostroOrdine;
     }
 
-    public String getVostroOrdineDel() {
+    @Override
+	public String getVostroOrdineDel() {
         return vostroOrdineDel;
     }
 
-    public void setVostroOrdineDel(String vostroOrdineDel) {
+    @Override
+	public void setVostroOrdineDel(String vostroOrdineDel) {
         this.vostroOrdineDel = vostroOrdineDel;
     }
     
-    public Boolean isFatturabile() {
+    @Override
+	public Boolean isFatturabile() {
     	return fatturabile;
     }
 
-    public Boolean getFatturabile() {
+    @Override
+	public Boolean getFatturabile() {
 		return fatturabile;
 	}
     
+	@Override
 	public void setFatturabile(Boolean fatturabile) {
 		this.fatturabile = fatturabile;
 	}

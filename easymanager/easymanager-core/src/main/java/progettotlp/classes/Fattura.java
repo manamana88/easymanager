@@ -24,6 +24,9 @@ import org.hibernate.annotations.IndexColumn;
 
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
 import progettotlp.rest.utils.DateDeserializer;
 import progettotlp.rest.utils.DateSerializer;
 
@@ -36,7 +39,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @Entity
 @Table(name="fattura")
-public class Fattura implements Serializable {
+public class Fattura implements Serializable, FatturaInterface {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name="real_id")
     private Long realId;
     @Temporal(TemporalType.DATE)
@@ -55,17 +58,17 @@ public class Fattura implements Serializable {
     private Float totale=0F;
     private String bollo;
 
-    @ManyToOne(fetch=FetchType.EAGER,optional=false)
+    @ManyToOne(fetch=FetchType.EAGER,optional=false, targetEntity=Azienda.class)
     @JoinColumn(name="cliente")
-    private Azienda cliente;
-    @OneToMany(fetch=FetchType.LAZY)
+    private AziendaInterface cliente;
+    @OneToMany(fetch=FetchType.LAZY, targetEntity=DdT.class)
     @IndexColumn(name="idx",nullable=false)
     @JoinColumn(name="fattura")
     @Cascade(value={CascadeType.SAVE_UPDATE})
-    private List<DdT> ddt;
+    private List<DdTInterface> ddt;
 
     public Fattura(){}
-    public Fattura(List<DdT> ddt, Date emissione, Date scadenza, int id, Azienda cliente, float netto, float ivaPerc, float iva, float totale, String bollo) {
+    public Fattura(List<DdTInterface> ddt, Date emissione, Date scadenza, int id, AziendaInterface cliente, float netto, float ivaPerc, float iva, float totale, String bollo) {
         this.ddt = ddt; //OK
         this.emissione = emissione;
         this.scadenza = scadenza;
@@ -78,91 +81,113 @@ public class Fattura implements Serializable {
         this.bollo = bollo;
     }
 
-    public Long getRealId() {
+    @Override
+	public Long getRealId() {
         return realId;
     }
 
-    public void setRealId(Long realId) {
+    @Override
+	public void setRealId(Long realId) {
         this.realId = realId;
     }
 
-    public Azienda getCliente() {
+    @Override
+	public AziendaInterface getCliente() {
         return cliente;
     }
 
-    public void setCliente(Azienda cliente) {
+    @Override
+	public void setCliente(AziendaInterface cliente) {
         this.cliente = cliente;
     }
 
-    public List<DdT> getDdt() {
+    @Override
+	public List<DdTInterface> getDdt() {
         return ddt;
     }
 
-    public void setDdt(List<DdT> ddt) {
+    @Override
+	public void setDdt(List<DdTInterface> ddt) {
         this.ddt = ddt;
     }
 
-    public Date getEmissione() {
+    @Override
+	public Date getEmissione() {
         return emissione;
     }
 
-    public void setEmissione(Date emissione) {
+    @Override
+	public void setEmissione(Date emissione) {
         this.emissione = emissione;
     }
 
-    public Integer getId() {
+    @Override
+	public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    @Override
+	public void setId(Integer id) {
         this.id = id;
     }
 
-    public Float getIvaPerc() {
+    @Override
+	public Float getIvaPerc() {
         return ivaPerc;
     }
 
-    public void setIvaPerc(Float ivaPerc) {
+    @Override
+	public void setIvaPerc(Float ivaPerc) {
         this.ivaPerc = ivaPerc;
     }
 
-    public Float getIva() {
+    @Override
+	public Float getIva() {
         return iva;
     }
 
-    public void setIva(Float iva) {
+    @Override
+	public void setIva(Float iva) {
         this.iva = iva;
     }
 
-    public Float getNetto() {
+    @Override
+	public Float getNetto() {
         return netto;
     }
 
-    public void setNetto(Float netto) {
+    @Override
+	public void setNetto(Float netto) {
         this.netto = netto;
     }
 
-    public Date getScadenza() {
+    @Override
+	public Date getScadenza() {
         return scadenza;
     }
 
-    public void setScadenza(Date scadenza) {
+    @Override
+	public void setScadenza(Date scadenza) {
         this.scadenza = scadenza;
     }
 
-    public Float getTotale() {
+    @Override
+	public Float getTotale() {
         return totale;
     }
 
-    public void setTotale(Float totale) {
+    @Override
+	public void setTotale(Float totale) {
         this.totale = totale;
     }
    
-    public String getBollo() {
+    @Override
+	public String getBollo() {
 		return bollo;
 	}
 
-    public void setBollo(String bollo) {
+    @Override
+	public void setBollo(String bollo) {
 		this.bollo = bollo;
 	}
 	
@@ -172,7 +197,8 @@ public class Fattura implements Serializable {
      * @param mese
      * @param anno 
      */
-    public void setEmissione(int giorno, int mese, int anno, int scadenza) throws ValidationException {
+    @Override
+	public void setEmissione(int giorno, int mese, int anno, int scadenza) throws ValidationException {
         this.emissione=DateUtils.getDate(giorno, mese, anno);
         this.scadenza=DateUtils.calcolaScadenza(emissione, scadenza);
     }

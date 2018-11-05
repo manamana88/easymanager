@@ -31,11 +31,14 @@ import javax.ws.rs.core.Response;
 
 import progettotlp.classes.AccountEmail;
 import progettotlp.classes.Azienda;
-import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;
 import progettotlp.exceptions.toprint.MailException;
 import progettotlp.facilities.Controlli;
 import progettotlp.facilities.FatturaUtilities;
+import progettotlp.interfaces.AccountEmailInterface;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
 import progettotlp.persistenza.AccountManager;
 import progettotlp.persistenza.AziendaManager;
 import progettotlp.persistenza.DdTManager;
@@ -64,20 +67,20 @@ public class MailResource {
 			@FormParam("object") String object,
 			@FormParam("text") String text
 			) throws Exception{
-		AccountEmail accountEmail = accountManager.get(AccountEmail.class, accountId);
+		AccountEmailInterface accountEmail = accountManager.get(AccountEmail.class, accountId);
 		MimeBodyPart attachment = null;
 		if (attachmentIdString!=null && !attachmentIdString.trim().isEmpty()){
 			Matcher matcher = ATTACHMENT_MATCHER.matcher(attachmentIdString);
 			if (matcher.matches()){
 				long attachmentId = Long.parseLong(matcher.group(2));
-				Azienda aziendaPrincipale = aziendaManager.getAziendaPrincipale();
+				AziendaInterface aziendaPrincipale = aziendaManager.getAziendaPrincipale();
 				if ("F".equalsIgnoreCase(matcher.group(1))){
-					Fattura fattura = fatturaManager.get(Fattura.class, attachmentId);
+					FatturaInterface fattura = fatturaManager.get(Fattura.class, attachmentId);
 					fattura = fatturaManager.getFattura(fattura.getId(), true, true);
 					File printPage = FatturaPrinter.printPage(fattura, aziendaPrincipale, true);
 					attachment = createAttachment(printPage, FatturaUtilities.getFileName(fattura) + ".pdf");
 				} else {
-					DdT ddt = ddtManager.getDdT(attachmentId, true, true);
+					DdTInterface ddt = ddtManager.getDdT(attachmentId, true, true);
 					File printPage = DdtPrinter.printPage(aziendaPrincipale, ddt, true);
 					attachment = createAttachment(printPage, ddt.getId()+" - "+ddt.getCliente().getNome()+".pdf");
 				}
@@ -85,7 +88,7 @@ public class MailResource {
 		}
 		List<String> recipientList = new ArrayList<String>();
 		if (companyId != null){
-			Azienda azienda = aziendaManager.get(Azienda.class, companyId);
+			AziendaInterface azienda = aziendaManager.get(Azienda.class, companyId);
 			if (azienda != null){
 				String mail = azienda.getMail();
 				if (mail!=null && !mail.trim().isEmpty()){
@@ -123,7 +126,7 @@ public class MailResource {
 		return attachmentBodyPart;
 	}
 
-	public MimeMessage compileMail(final AccountEmail account, List<String> allDestinatari, String oggetto, MimeBodyPart attachment, String text) throws MailException{
+	public MimeMessage compileMail(final AccountEmailInterface account, List<String> allDestinatari, String oggetto, MimeBodyPart attachment, String text) throws MailException{
 		try {
             Properties props = System.getProperties();
             props.put("mail.transport.protocol", "smtp");

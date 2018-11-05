@@ -5,29 +5,30 @@
 package progettotlp.print;
 
 import java.util.Date;
-import progettotlp.classes.Bene;
+
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.BeneInterface;
 
 /**
  *
  * @author Vincenzo
  */
 public class BeneFattura implements Comparable<BeneFattura>{
-    private Bene bene;
+    private BeneInterface bene;
     private Date data;
     private Integer id;
 
-    public BeneFattura(Bene bene, Date data, Integer id) {
+    public BeneFattura(BeneInterface bene, Date data, Integer id) {
         this.bene = bene;
         this.data = data;
         this.id = id;
     }
 
-    public Bene getBene() {
+    public BeneInterface getBene() {
         return bene;
     }
 
-    public void setBene(Bene bene) {
+    public void setBene(BeneInterface bene) {
         this.bene = bene;
     }
 

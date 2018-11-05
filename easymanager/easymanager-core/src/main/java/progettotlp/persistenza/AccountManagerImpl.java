@@ -13,6 +13,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import progettotlp.classes.AccountEmail;
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.interfaces.AccountEmailInterface;
 
 /**
  *
@@ -28,19 +29,19 @@ public class AccountManagerImpl extends AbstractPersistenza implements AccountMa
         super();
     }
 
-    public void registraAccount(AccountEmail accountEmail) throws PersistenzaException{
+    public void registraAccount(AccountEmailInterface accountEmail) throws PersistenzaException{
         save(accountEmail);
     }
 
-    public void modificaAccount(AccountEmail accountEmail)  throws PersistenzaException{
+    public void modificaAccount(AccountEmailInterface accountEmail)  throws PersistenzaException{
         update(accountEmail);
     }
 
-    public void cancellaAccount(AccountEmail accountEmail)  throws PersistenzaException{
+    public void cancellaAccount(AccountEmailInterface accountEmail)  throws PersistenzaException{
         delete(accountEmail);
     }
 
-    public AccountEmail getAccount(Long id) {
+    public AccountEmailInterface getAccount(Long id) {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -54,7 +55,7 @@ public class AccountManagerImpl extends AbstractPersistenza implements AccountMa
         }
     }
 
-    public AccountEmail getAccountByUsername(String username){
+    public AccountEmailInterface getAccountByUsername(String username){
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();

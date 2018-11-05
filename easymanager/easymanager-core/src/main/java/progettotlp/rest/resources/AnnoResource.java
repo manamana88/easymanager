@@ -11,7 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import progettotlp.ProgettoTLPView;
+import progettotlp.Constants;
 import progettotlp.facilities.BeanUtils;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.Utility;
@@ -37,7 +37,7 @@ public class AnnoResource {
 	
 	@POST
 	public Response post(@QueryParam("year") int year) throws ParseException{
-		System.setProperty(ProgettoTLPView.CURRENT_YEAR_PROPERTY, year+"");
+		System.setProperty(Constants.CURRENT_YEAR_PROPERTY, year+"");
 		return Response.ok().build();
 	}
 }

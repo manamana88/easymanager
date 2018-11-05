@@ -6,8 +6,9 @@
 package progettotlp.statistiche;
 
 import java.util.Date;
-import progettotlp.classes.Azienda;
-import progettotlp.classes.Fattura;
+
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.FatturaInterface;
 
 /**
  *
@@ -15,14 +16,14 @@ import progettotlp.classes.Fattura;
  */
 public class StatisticheFattura {
     private Integer id;
-    private Azienda cliente;
+    private AziendaInterface cliente;
     private Date emissione;
     private Float netto;
     private Float iva;
     private Float totale;
     private Float capiTagliati;
 
-    public StatisticheFattura(Fattura fattura, Float capiTagliati) {
+    public StatisticheFattura(FatturaInterface fattura, Float capiTagliati) {
         this.id = fattura.getId();
         this.cliente = fattura.getCliente();
         this.netto = fattura.getNetto();
@@ -42,11 +43,11 @@ public class StatisticheFattura {
         this.capiTagliati = capiTagliati;
     }
 
-    public Azienda getCliente() {
+    public AziendaInterface getCliente() {
         return cliente;
     }
 
-    public void setCliente(Azienda cliente) {
+    public void setCliente(AziendaInterface cliente) {
         this.cliente = cliente;
     }
 

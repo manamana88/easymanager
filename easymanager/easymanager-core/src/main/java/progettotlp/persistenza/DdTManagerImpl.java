@@ -16,12 +16,14 @@ import javax.faces.bean.ManagedBean;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.Utility;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
 
 /**
  *
@@ -62,22 +64,22 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
         }
     }
 
-    public boolean isEmptyDdTListMese(int mese, Azienda a) {
+    public boolean isEmptyDdTListMese(int mese, AziendaInterface a) {
         return getAllDdT(a, mese,false,false).isEmpty();
     }
 
     public boolean existsDdT(Long realId) {
-        DdT ddt = getDdT(realId,false,false);
+        DdTInterface ddt = getDdT(realId,false,false);
         return ddt!=null;
     }
 
     public boolean existsDdTById(int id) {
-        DdT ddt = getDdTById(id,false,false);
+        DdTInterface ddt = getDdTById(id,false,false);
         return ddt!=null;
     }
 
-    public void registraDdT(DdT d) throws PersistenzaException {
-        DdT ddTById = getDdTById(d.getId(),false,false);
+    public void registraDdT(DdTInterface d) throws PersistenzaException {
+        DdTInterface ddTById = getDdTById(d.getId(),false,false);
         if (ddTById!=null){
             throw new PersistenzaException("DdT with id: "+d.getId()+" yet exists in year: "+DateUtils.getYear(d.getData()));
         }
@@ -101,7 +103,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
         }
     }
 
-    public DdT getDdTById(int id,boolean initializeBeni, boolean initializeFattura) {
+    public DdTInterface getDdTById(int id,boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -110,7 +112,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             if (result==null){
                 return null;
             }
-            DdT toReturn = (DdT)result;
+            DdTInterface toReturn = (DdTInterface)result;
             initializeDdT(toReturn, initializeBeni, initializeFattura);
             return toReturn;
         } finally {
@@ -147,7 +149,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
     	}
     }
 
-    public List<DdT> getAllDdT(Azienda a, int mese,boolean initializeBeni, boolean initializeFattura) {
+    public List<DdTInterface> getAllDdT(AziendaInterface a, int mese,boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -155,7 +157,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             Query query = sessione.createQuery("from DdT d where "
                     + "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and month(d.data)="+mese
                     +" order by d.id asc");
-            List<DdT> list = query.list();
+            List<DdTInterface> list = query.list();
             initializeDdT(list, initializeBeni, initializeFattura);
             return list;
         } finally{
@@ -164,7 +166,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
     }
 
 	@Override
-	public List<DdT> getAllDdT(Azienda a, Date startDate, Date endDate) {
+	public List<DdT> getAllDdT(AziendaInterface a, Date startDate, Date endDate) {
 		Session sessione=null;
 		try{
 			sessione=sessionFactory.openSession();
@@ -183,7 +185,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 	}
 	
 	@Override
-	public List<DdT> getAllDdTWithoutFattura(Azienda a, Date startDate, Date endDate) {
+	public List<DdTInterface> getAllDdTWithoutFattura(AziendaInterface a, Date startDate, Date endDate) {
 		Session sessione=null;
 		try{
 			sessione=sessionFactory.openSession();
@@ -193,7 +195,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 					+" order by d.id asc");
 			query.setParameter("start", startDate);
 			query.setParameter("end", endDate);
-			List<DdT> list = query.list();
+			List<DdTInterface> list = query.list();
 			initializeDdT(list, true, false);
 			return list;
 		} finally{
@@ -221,12 +223,12 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
         delete(getDdT(id,false,false));
     }
 
-    public void modificaDdT(DdT toModify) throws PersistenzaException{
+    public void modificaDdT(DdTInterface toModify) throws PersistenzaException{
         try{
-            DdT retrieved = getDdT(toModify.getRealId(),true,false);
+            DdTInterface retrieved = getDdT(toModify.getRealId(),true,false);
             Utility.copyProperties(toModify, retrieved, Arrays.asList("beni"));
-            List<Bene> retrievedBeni = retrieved.getBeni();
-            List<Bene> beniModificati = toModify.getBeni();
+            List<BeneInterface> retrievedBeni = retrieved.getBeni();
+            List<BeneInterface> beniModificati = toModify.getBeni();
             mergeBeni(retrievedBeni, beniModificati);
             update(retrieved);
         } catch (Exception e){
@@ -234,25 +236,25 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
         }
     }
     
-    protected Bene getBeneById(Long id,List<Bene> lst){
+    protected BeneInterface getBeneById(Long id,List<BeneInterface> lst){
         if (id!=null){
-            for (Bene b: lst){
+            for (BeneInterface b: lst){
                 if (id.equals(b.getId()))
                     return b;
             }
         }
         return null;
     }
-    protected void mergeBeni(List<Bene> toModify, List<Bene> reference) throws PersistenzaException{
+    protected void mergeBeni(List<BeneInterface> toModify, List<BeneInterface> reference) throws PersistenzaException{
         try{
             if (reference==null || reference.isEmpty()){
                 toModify.clear();
             } else{
                 //delete or update
-                Iterator<Bene> iterator = toModify.iterator();
+                Iterator<BeneInterface> iterator = toModify.iterator();
                 while (iterator.hasNext()){
-                    Bene toModifyBene = iterator.next();
-                    Bene referenceBene = getBeneById(toModifyBene.getId(), reference);
+                    BeneInterface toModifyBene = iterator.next();
+                    BeneInterface referenceBene = getBeneById(toModifyBene.getId(), reference);
                     if (referenceBene == null){
                         iterator.remove();
                     } else {
@@ -260,7 +262,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
                     }
                 } 
                 //add
-                for (Bene b : reference){
+                for (BeneInterface b : reference){
                     if (getBeneById(b.getId(), toModify)==null)
                         toModify.add(b);
                 }

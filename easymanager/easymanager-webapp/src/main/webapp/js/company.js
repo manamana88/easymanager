@@ -68,9 +68,9 @@ function fillForm(currentCompany){
 	$("#id").val(currentCompany.id);
 	$("#principale").val(currentCompany.principale);
 	$("#nome").val(currentCompany.nome);
-	$('#giuridica').prop('checked', currentCompany.pIva === currentCompany.codFis);
+	$('#giuridica').prop('checked', currentCompany.piva === currentCompany.codFis);
 	$('#tassabile').prop('checked', currentCompany.tassabile);
-	$("#piva").val(currentCompany.pIva);
+	$("#piva").val(currentCompany.piva);
 	$("#numAut").val(currentCompany.numeroAutorizzazione); 
 	$("#dataAut").val(currentCompany.dataAutorizzazione); 
 	$("#codfis").val(currentCompany.codFis);
@@ -138,7 +138,7 @@ function loadAzienda(){
 	var azienda = {};
 	azienda.id = $("#id").val();
     azienda.nome = $("#nome").val();
-    azienda.pIva = $("#piva").val();
+    azienda.piva = $("#piva").val();
     azienda.codFis = $("#codfis").val();
     azienda.via = $("#via").val();
     azienda.civico = $("#numero").val();

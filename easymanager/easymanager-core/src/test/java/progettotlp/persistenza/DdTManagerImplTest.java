@@ -17,6 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import progettotlp.classes.Bene;
+import progettotlp.interfaces.BeneInterface;
 import progettotlp.test.AnnualTest;
 
 /**
@@ -127,13 +128,13 @@ public class DdTManagerImplTest extends AnnualTest{
 
     @Test
     public void testGetBeneById() {
-        Bene b1=new Bene();
+        BeneInterface b1=new Bene();
         b1.setId(1L);
-        Bene b2=new Bene();
+        BeneInterface b2=new Bene();
         b2.setId(2L);
-        Bene b3=new Bene();
+        BeneInterface b3=new Bene();
         b3.setId(3L);
-        List<Bene> asList = Arrays.asList(b1, b2, b3);
+        List<BeneInterface> asList = Arrays.asList(b1, b2, b3);
 
         assertEquals(b1, d.getBeneById(1L, asList));
         assertEquals(b2, d.getBeneById(2L, asList));
@@ -205,7 +206,7 @@ public class DdTManagerImplTest extends AnnualTest{
         Boolean pcB4 = Boolean.FALSE;
         Boolean campB4 = Boolean.TRUE;
 
-        Bene b1Modified=new Bene();
+        BeneInterface b1Modified=new Bene();
         b1Modified.setId(idB3);
         b1Modified.setCodice(codiceB3);
         b1Modified.setCommessa(commessaB3);
@@ -216,7 +217,7 @@ public class DdTManagerImplTest extends AnnualTest{
         b1Modified.setPrimoCapo(pcB3);
         b1Modified.setCampionario(campB3);
 
-        Bene b4=new Bene();
+        BeneInterface b4=new Bene();
         b4.setId(idB4);
         b4.setCodice(codiceB4);
         b4.setCommessa(commessaB4);
@@ -227,15 +228,15 @@ public class DdTManagerImplTest extends AnnualTest{
         b4.setPrimoCapo(pcB4);
         b4.setCampionario(campB4);
 
-        List<Bene> oldBeni = new ArrayList<Bene>();
+        List<BeneInterface> oldBeni = new ArrayList<>();
         oldBeni.add(b1);
         oldBeni.add(b2);
-        List<Bene> newBeni = new ArrayList<Bene>(Arrays.asList(b1Modified, b4));
+        List<BeneInterface> newBeni = new ArrayList<>(Arrays.asList(b1Modified, b4));
 
         d.mergeBeni(oldBeni, newBeni);
 
         assertEquals(2,oldBeni.size());
-        for (Bene b:oldBeni){
+        for (BeneInterface b:oldBeni){
             Long id = b.getId();
             if (id.equals(1L)){
                 assertEquals(b1Modified,b);
@@ -251,7 +252,7 @@ public class DdTManagerImplTest extends AnnualTest{
 
         assertEquals(3,oldBeni.size());
 
-        d.mergeBeni(oldBeni, new ArrayList<Bene>());
+        d.mergeBeni(oldBeni, new ArrayList<BeneInterface>());
         assertTrue(oldBeni.isEmpty());
 
     }

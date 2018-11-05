@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import progettotlp.classes.AccountEmail;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.facilities.BeanUtils;
+import progettotlp.interfaces.AccountEmailInterface;
 import progettotlp.persistenza.AccountManager;
 import progettotlp.persistenza.ManagerProvider;
 
@@ -24,7 +25,7 @@ public class AccountResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get(@QueryParam("id") Long id){
-		AccountEmail accountEmail = accountManager.get(AccountEmail.class, id);
+		AccountEmailInterface accountEmail = accountManager.get(AccountEmail.class, id);
 		return Response.ok(BeanUtils.createResponseBean(accountEmail), MediaType.APPLICATION_JSON_TYPE).build();
 	}
 	
@@ -40,7 +41,7 @@ public class AccountResource {
 	public Response deleteAzienda(
 			@QueryParam("id") Long id
 			) throws PersistenzaException{
-		AccountEmail accountEmail = accountManager.get(AccountEmail.class, id);
+		AccountEmailInterface accountEmail = accountManager.get(AccountEmail.class, id);
 		accountManager.cancellaAccount(accountEmail);
 		return Response.ok().build();
 	}

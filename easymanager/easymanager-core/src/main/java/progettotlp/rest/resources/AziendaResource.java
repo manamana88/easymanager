@@ -22,6 +22,7 @@ import progettotlp.exceptions.toprint.GenericExceptionToPrint;
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.BeanUtils;
 import progettotlp.facilities.Controlli;
+import progettotlp.interfaces.AziendaInterface;
 import progettotlp.persistenza.AziendaManager;
 import progettotlp.persistenza.ManagerProvider;
 
@@ -33,7 +34,7 @@ public class AziendaResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get(@QueryParam("id") String id){
-		Azienda azienda;
+		AziendaInterface azienda;
 		if ("PRINCIPALE".equalsIgnoreCase(id)){
 			azienda = aziendaManager.getAziendaPrincipale();
 		} else {
@@ -84,17 +85,17 @@ public class AziendaResource {
 	public Response deleteAzienda(
 			@QueryParam("id") Long id
 			) throws PersistenzaException{
-		Azienda a = aziendaManager.get(Azienda.class, id);
+		AziendaInterface a = aziendaManager.get(Azienda.class, id);
 		aziendaManager.cancellaAzienda(a);
 		return Response.ok().build();
 	}
 
-    protected void checkAzienda(Azienda a) throws ValidationException{
+    protected void checkAzienda(AziendaInterface a) throws ValidationException{
         String nome = a.getNome();
         if (nome==null || nome.trim().isEmpty()) {
             throw new ValidationException("Campo vuoto", "Il nome dell'azienda è necessario");
         }
-        if (!Controlli.checkIva(a.getpIva(), true)) {
+        if (!Controlli.checkIva(a.getPIva(), true)) {
             throw new ValidationException("Dati errati", "Partita IVA errata");
         }
         if (!Controlli.checkMail(a.getMail(), false)){
@@ -112,7 +113,7 @@ public class AziendaResource {
 		}
     }
 
-	private boolean isRegistrazioneEmpty(Azienda a) {
+	private boolean isRegistrazioneEmpty(AziendaInterface a) {
 		String numeroAutorizzazione = a.getNumeroAutorizzazione();
 		if (numeroAutorizzazione!=null && !numeroAutorizzazione.trim().isEmpty()){
 			return false;

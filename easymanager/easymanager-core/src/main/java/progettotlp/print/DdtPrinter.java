@@ -5,12 +5,13 @@ import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.List;
 
-import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
-import progettotlp.classes.DdT;
 import progettotlp.exceptions.PrintException;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.ConfigurationManager.Property;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
 import progettotlp.facilities.DateUtils;
 import progettotlp.print.events.PdfPCellBorder;
 
@@ -32,12 +33,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class DdtPrinter extends PdfPrinter {
 	
-	public static File printPage(Azienda principale, DdT ddt, boolean tempFile)
+	public static File printPage(AziendaInterface principale, DdTInterface ddt, boolean tempFile)
 			throws PrintException {
 		return printPage(principale, ddt, tempFile, false);
 	}
 	
-	protected static File printPage(Azienda principale, DdT ddt, boolean tempFile, boolean deleteOnExit)
+	protected static File printPage(AziendaInterface principale, DdTInterface ddt, boolean tempFile, boolean deleteOnExit)
 			throws PrintException {
 		try {
 			String folder = ConfigurationManager.getProperty(Property.DDT_FOLDER_PATH);
@@ -94,7 +95,7 @@ public class DdtPrinter extends PdfPrinter {
 		document.add(new Paragraph("PR=Prototipo, CP=Campionario, PC=Primo Capo, PZ=Piazzato, IA=Interamente Adesivato",createNormalFont()));
 	}
 
-	private static void addMainTable(DdT ddt, Document document) throws Exception {
+	private static void addMainTable(DdTInterface ddt, Document document) throws Exception {
 		PdfPTable table = new PdfPTable(16);
 		table.setWidthPercentage(99.1F);
 		table.setSpacingAfter(2.0F);
@@ -109,7 +110,7 @@ public class DdtPrinter extends PdfPrinter {
         table.addCell(createPdfPCell("IA", createSmallBoldFont()));
         table.addCell(createPdfPCell("Capi", createSmallBoldFont()));
         
-        List<Bene> beni = ddt.getBeni();
+        List<BeneInterface> beni = ddt.getBeni();
         int totRows = 22; 
 		for (int i = 0; i < totRows; i++) {
 			boolean isLastRow = i == totRows-1;
@@ -121,7 +122,7 @@ public class DdtPrinter extends PdfPrinter {
 	        }
 			BaseColor color = i%2 == 0 ? BaseColor.WHITE : new BaseColor(237, 237, 237);
 			if (i<beni.size()){
-				Bene bene = beni.get(i);
+				BeneInterface bene = beni.get(i);
 				table.addCell(createPdfPCell(bene.getCodice(), createSmallFont(), color, borders, 3));
 	        	table.addCell(createPdfPCell(bene.getCommessa(), createSmallFont(), color, borders, 3));
 	        	table.addCell(createPdfPCell(bene.getDescrizione(), createSmallFont(), color, borders, 4));
@@ -189,7 +190,7 @@ public class DdtPrinter extends PdfPrinter {
 		return result;
 	}
 	
-	private static void addSixthLine(DdT ddt, Document document) throws DocumentException {
+	private static void addSixthLine(DdTInterface ddt, Document document) throws DocumentException {
 		PdfPTable table = new PdfPTable(4);
 		table.setWidthPercentage(100.0F);
 		table.setSpacingAfter(0.0F);
@@ -210,7 +211,7 @@ public class DdtPrinter extends PdfPrinter {
 		document.add(table);
 	}
 	
-	private static void addFifthLine(DdT ddt, Document document) throws DocumentException {
+	private static void addFifthLine(DdTInterface ddt, Document document) throws DocumentException {
 		PdfPTable table = new PdfPTable(4);
 		table.setWidthPercentage(100.0F);
 		table.setSpacingAfter(0.0F);
@@ -228,7 +229,7 @@ public class DdtPrinter extends PdfPrinter {
 		document.add(table);
 	}
 	
-	private static void addFourthLine(DdT ddt, Document document) throws DocumentException {
+	private static void addFourthLine(DdTInterface ddt, Document document) throws DocumentException {
 		PdfPTable table = new PdfPTable(6);
 		table.setWidthPercentage(100.0F);
 		table.setSpacingAfter(0.0F);
@@ -253,7 +254,7 @@ public class DdtPrinter extends PdfPrinter {
 		document.add(table);
 	}
 
-	private static void addThirdLine(DdT ddt, Document document) throws DocumentException {
+	private static void addThirdLine(DdTInterface ddt, Document document) throws DocumentException {
 		PdfPTable table = new PdfPTable(6);
 		table.setWidthPercentage(100.0F);
 		table.setSpacingAfter(0.0F);
@@ -282,7 +283,7 @@ public class DdtPrinter extends PdfPrinter {
 		return pdfPCell;
 	}
 
-	private static void addSecondLine(DdT ddt, Document document) throws DocumentException {
+	private static void addSecondLine(DdTInterface ddt, Document document) throws DocumentException {
 		PdfPTable table = new PdfPTable(2);
 		table.setWidthPercentage(100.0F);
 		table.setSpacingAfter(0.0F);
@@ -296,7 +297,7 @@ public class DdtPrinter extends PdfPrinter {
 		document.add(table);
 	}
 
-	private static PdfPCell generateDestinazioneCell(DdT ddt) {
+	private static PdfPCell generateDestinazioneCell(DdTInterface ddt) {
 		PdfPCell generateTopCellWithFieldset = generateTopCellWithFieldset("Destinazione:");
 		String destinazione = ddt.getDestinazione();
 		Paragraph paragraph = new Paragraph(destinazione, createNormalFont());
@@ -305,9 +306,9 @@ public class DdtPrinter extends PdfPrinter {
 		return generateTopCellWithFieldset;
 	}
 
-	private static PdfPCell generateCessionarioCell(DdT ddt, PdfPTable table) {
+	private static PdfPCell generateCessionarioCell(DdTInterface ddt, PdfPTable table) {
 		PdfPCell generateTopCellWithFieldset = generateTopCellWithFieldset("Cessionario:");
-		Azienda cliente = ddt.getCliente();
+		AziendaInterface cliente = ddt.getCliente();
 		Paragraph paragraph = new Paragraph(cliente.getNome(),createNormalFont());
 		paragraph.add(Chunk.NEWLINE);
 		paragraph.add(new Chunk(generateVia(cliente)));
@@ -316,7 +317,7 @@ public class DdtPrinter extends PdfPrinter {
 		return generateTopCellWithFieldset;
 	}
 
-	private static void addFirstLine(Azienda principale, DdT ddt, Document document)
+	private static void addFirstLine(AziendaInterface principale, DdTInterface ddt, Document document)
 			throws DocumentException {
 		PdfPTable table = new PdfPTable(2);
 		table.setWidthPercentage(100.0F);
@@ -331,7 +332,7 @@ public class DdtPrinter extends PdfPrinter {
 		document.add(table);
 	}
 
-	private static PdfPCell generateDDTCell(DdT ddt) {
+	private static PdfPCell generateDDTCell(DdTInterface ddt) {
 		PdfPCell pdfPCell = generateTopCellWithFieldset("Documento Di Trasporto (D.d.T.)");
 		Paragraph paragraph = new Paragraph("D.P.R. 472 del 14/08/1996", createNormalFont());
 		paragraph.add(Chunk.NEWLINE);
@@ -354,7 +355,7 @@ public class DdtPrinter extends PdfPrinter {
 		return pdfPCell;
 	}
 
-	private static PdfPCell generateCedenteCell(Azienda principale, PdfPTable table) {
+	private static PdfPCell generateCedenteCell(AziendaInterface principale, PdfPTable table) {
 		PdfPCell pdfPCell = generateTopCellWithFieldset("Cedente:");
 		Paragraph paragraph = new Paragraph(principale.getNome(), createNormalFont());
 		pdfPCell.addElement(paragraph);
@@ -388,7 +389,7 @@ public class DdtPrinter extends PdfPrinter {
 		return pdfPCell;
 	}
 
-	private static String generateVia(Azienda cliente) {
+	private static String generateVia(AziendaInterface cliente) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Via ");
 		stringBuilder.append(cliente.getVia());

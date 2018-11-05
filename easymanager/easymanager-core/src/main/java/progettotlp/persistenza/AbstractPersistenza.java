@@ -13,6 +13,9 @@ import org.slf4j.Logger;
 import org.hibernate.HibernateException;
 
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
 
 import java.util.Properties;
 
@@ -215,20 +218,20 @@ public abstract class AbstractPersistenza implements BaseManager{
     }
 
     protected void initializeFattura(List<Fattura> list,boolean initializeDdT, boolean initializeBeni){
-        for(Fattura f:list){
+        for(FatturaInterface f:list){
             initializeFattura(f, initializeDdT, initializeBeni);
         }
     }
 
-    protected void initializeFattura(Fattura f, boolean initializeDdT, boolean initializeBeni){
+    protected void initializeFattura(FatturaInterface f, boolean initializeDdT, boolean initializeBeni){
         if (initializeDdT){
-            List<DdT> ddtList = f.getDdt();
+            List<DdTInterface> ddtList = f.getDdt();
             if (ddtList!=null){
                 ddtList.size();
             }
-            for (DdT d:ddtList){
+            for (DdTInterface d:ddtList){
                 if (initializeBeni){
-                    List<Bene> beni = d.getBeni();
+                    List<BeneInterface> beni = d.getBeni();
                     if (beni!=null){
                         beni.size();
                     }
@@ -239,20 +242,20 @@ public abstract class AbstractPersistenza implements BaseManager{
 
     protected void initializeDdT(List<?> list,boolean initializeBeni, boolean initializeFattura){
         for(Object d:list){
-        	DdT ddt = (DdT) d;
+        	DdTInterface ddt = (DdTInterface) d;
             initializeDdT(ddt, initializeBeni, initializeFattura);
         }
     }
 
-    protected void initializeDdT(DdT d,boolean initializeBeni, boolean initializeFattura){
+    protected void initializeDdT(DdTInterface d,boolean initializeBeni, boolean initializeFattura){
         if (initializeFattura){
-            Fattura fattura = d.getFattura();
+            FatturaInterface fattura = d.getFattura();
             if (fattura!=null){
                 fattura.hashCode();
             }
         }
         if (initializeBeni){
-            List<Bene> beni = d.getBeni();
+            List<BeneInterface> beni = d.getBeni();
             if (beni!=null){
                 beni.size();
             }

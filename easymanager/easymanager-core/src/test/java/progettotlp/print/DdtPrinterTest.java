@@ -16,6 +16,8 @@ import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
 
 public class DdtPrinterTest {
 
@@ -30,15 +32,15 @@ public class DdtPrinterTest {
 	
 	@Test
 	public void test() throws Exception{
-		DdT ddt = new DdT();
+		DdTInterface ddt = new DdT();
 		
-		Bene b1 = new Bene();
+		BeneInterface b1 = new Bene();
         b1.setCodice("cod");
         b1.setCommessa("com");
         b1.setDescrizione("descr");
         b1.setPiazzato(true);
         b1.setQta(1F);
-        Bene b2 = new Bene();
+        BeneInterface b2 = new Bene();
         b2.setCodice("cod2");
         b2.setCommessa("com2");
         b2.setDescrizione("descr2");

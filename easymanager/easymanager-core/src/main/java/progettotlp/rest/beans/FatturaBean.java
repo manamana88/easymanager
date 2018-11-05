@@ -3,13 +3,14 @@ package progettotlp.rest.beans;
 import progettotlp.classes.Fattura;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtilities;
+import progettotlp.interfaces.FatturaInterface;
 
 public class FatturaBean extends Fattura {
 
 	private Integer scadenzaGiorni;
 	private Integer capiTot;
 	
-	public FatturaBean(Fattura f){
+	public FatturaBean(FatturaInterface f){
 		setCliente(f.getCliente());
 		setDdt(f.getDdt());
 		setEmissione(f.getEmissione());

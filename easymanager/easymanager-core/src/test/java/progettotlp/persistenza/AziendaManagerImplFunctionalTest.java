@@ -14,6 +14,8 @@ import java.util.List;
 import org.junit.Test;
 import progettotlp.classes.Azienda;
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.interfaces.AziendaInterface;
+
 import static org.junit.Assert.*;
 
 /**
@@ -25,7 +27,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
 
     @Test
     public void testRegistraAzienda() throws PersistenzaException{
-        Azienda a = new Azienda();
+        AziendaInterface a = new Azienda();
         a.setCap("65129");
         a.setCitta("Pescara");
         a.setCivico("1");
@@ -45,7 +47,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
 
         Long id = a.getId();
         assertTrue(id != null && id > -1);
-        Azienda retrieved = retrieveObject(Azienda.class, id,aziendaManager);
+        AziendaInterface retrieved = retrieveObject(Azienda.class, id,aziendaManager);
         assertNotNull(retrieved);
         assertEquals(retrieved.getCap(), "65129");
         assertEquals("Pescara", retrieved.getCitta());
@@ -68,11 +70,11 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Azienda toModify = retrieveObject(Azienda.class, 1L,aziendaManager);
+        AziendaInterface toModify = retrieveObject(Azienda.class, 1L,aziendaManager);
         assertNotNull(toModify);
         toModify.setPIva("00000111112");
         aziendaManager.modificaAzienda(toModify);
-        Azienda modified = retrieveObject(Azienda.class, 1L,aziendaManager);
+        AziendaInterface modified = retrieveObject(Azienda.class, 1L,aziendaManager);
         assertNotNull(modified);
         assertEquals("00000111112", modified.getPIva());
     }
@@ -82,10 +84,10 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Azienda toDelete = retrieveObject(Azienda.class, 1L,aziendaManager);
+        AziendaInterface toDelete = retrieveObject(Azienda.class, 1L,aziendaManager);
         assertNotNull(toDelete);
         aziendaManager.cancellaAzienda(toDelete);
-        Azienda deleted = retrieveObject(Azienda.class, 1L,aziendaManager);
+        AziendaInterface deleted = retrieveObject(Azienda.class, 1L,aziendaManager);
         assertNull(deleted);
     }
 
@@ -114,7 +116,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Azienda aziendaPerNome = aziendaManager.getAziendaPerNome("ABTaglio");
+        AziendaInterface aziendaPerNome = aziendaManager.getAziendaPerNome("ABTaglio");
         assertNotNull(aziendaPerNome);
         assertEquals("ABTaglio", aziendaPerNome.getNome());
         aziendaPerNome = aziendaManager.getAziendaPerNome("ABBTaglio");
@@ -141,7 +143,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Azienda aziendaPrincipale = aziendaManager.getAziendaPrincipale();
+        AziendaInterface aziendaPrincipale = aziendaManager.getAziendaPrincipale();
         assertNotNull(aziendaPrincipale);
         assertEquals("CRTaglio", aziendaPrincipale.getNome());
     }

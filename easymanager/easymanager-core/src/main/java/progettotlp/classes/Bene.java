@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import progettotlp.interfaces.BeneInterface;
+
 /**
  * Bene è una classe che rappresenta un servizio fornito dall'Azienda, da inserire
  * in un Documento di Trasporto. è caratterizzato da un codice, una commessa, una
@@ -23,7 +25,7 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name="bene")
-public class Bene implements Serializable{
+public class Bene implements Serializable, BeneInterface{
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @Column(name="cod")
@@ -74,99 +76,123 @@ public class Bene implements Serializable{
         this.interamenteAdesivato = interamenteAdesivato;
     }
 
-    public Boolean getCampionario() {
+    @Override
+	public Boolean getCampionario() {
         return campionario;
     }
 
-    public void setCampionario(Boolean campionario) {
+    @Override
+	public void setCampionario(Boolean campionario) {
         this.campionario = campionario;
     }
 
-    public String getCodice() {
+    @Override
+	public String getCodice() {
         return codice;
     }
 
-    public void setCodice(String codice) {
+    @Override
+	public void setCodice(String codice) {
         this.codice = codice;
     }
 
-    public String getCommessa() {
+    @Override
+	public String getCommessa() {
         return commessa;
     }
 
-    public void setCommessa(String commessa) {
+    @Override
+	public void setCommessa(String commessa) {
         this.commessa = commessa;
     }
 
-    public String getDescrizione() {
+    @Override
+	public String getDescrizione() {
         return descrizione;
     }
 
-    public void setDescrizione(String descrizione) {
+    @Override
+	public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+	public void setId(Long id) {
         this.id = id;
     }
 
-    public Boolean getInteramenteAdesivato() {
+    @Override
+	public Boolean getInteramenteAdesivato() {
         return interamenteAdesivato;
     }
 
-    public void setInteramenteAdesivato(Boolean interamenteAdesivato) {
+    @Override
+	public void setInteramenteAdesivato(Boolean interamenteAdesivato) {
         this.interamenteAdesivato = interamenteAdesivato;
     }
 
-    public Boolean getPiazzato() {
+    @Override
+	public Boolean getPiazzato() {
         return piazzato;
     }
 
-    public void setPiazzato(Boolean piazzato) {
+    @Override
+	public void setPiazzato(Boolean piazzato) {
         this.piazzato = piazzato;
     }
 
-    public Float getPrezzo() {
+    @Override
+	public Float getPrezzo() {
         return prezzo;
     }
 
-    public void setPrezzo(Float prezzo) {
+    @Override
+	public void setPrezzo(Float prezzo) {
         this.prezzo = prezzo;
     }
 
-    public Boolean getPrimoCapo() {
+    @Override
+	public Boolean getPrimoCapo() {
         return primoCapo;
     }
 
-    public void setPrimoCapo(Boolean primoCapo) {
+    @Override
+	public void setPrimoCapo(Boolean primoCapo) {
         this.primoCapo = primoCapo;
     }
 
-    public Boolean getPrototipo() {
+    @Override
+	public Boolean getPrototipo() {
         return prototipo;
     }
 
-    public void setPrototipo(Boolean prototipo) {
+    @Override
+	public void setPrototipo(Boolean prototipo) {
         this.prototipo = prototipo;
     }
 
-    public Float getQta() {
+    @Override
+	public Float getQta() {
         return qta;
     }
 
-    public void setQta(Float qta) {
+    @Override
+	public void setQta(Float qta) {
         this.qta = qta;
     }
 
-    public Float getTot() {
+    @Override
+	public Float getTot() {
         return tot;
     }
 
-    public void setTot(Float tot) {
+    @Override
+	public void setTot(Float tot) {
         this.tot = tot;
     }
 

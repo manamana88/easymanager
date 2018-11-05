@@ -37,6 +37,8 @@ import progettotlp.exceptions.toprint.GenericExceptionToPrint;
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.BeanUtils;
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
 import progettotlp.persistenza.AziendaManager;
 import progettotlp.persistenza.DdTManager;
 import progettotlp.persistenza.ManagerProvider;
@@ -69,7 +71,7 @@ public class DdtResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDdt(@QueryParam("id") Long id) {
-		DdT ddt = ddtManager.getDdT(id, true, true);
+		DdTInterface ddt = ddtManager.getDdT(id, true, true);
 		return Response.ok(BeanUtils.createResponseBean(ddt), MediaType.APPLICATION_JSON_TYPE).build();
 	}
 	
@@ -77,7 +79,7 @@ public class DdtResource {
 	@Path("print")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response printDdt(@QueryParam("id") Long id) throws Exception {
-		DdT toPrint=ddtManager.getDdT(id, true, false);
+		DdTInterface toPrint=ddtManager.getDdT(id, true, false);
         if (toPrint!=null){
             try {
                 File file = DdtPrinter.printPage(aziendaManager.getAziendaPrincipale(), toPrint, false);
@@ -101,7 +103,7 @@ public class DdtResource {
 		} else {
 			allDdT = ddtManager.getAllDdT(false, true);
 		}
-		for (DdT ddt : allDdT) {
+		for (DdTInterface ddt : allDdT) {
 			ddt.setBeni(null);
 		}
 		return Response.ok(BeanUtils.createResponseBean(allDdT.toArray()), MediaType.APPLICATION_JSON_TYPE).build();
@@ -114,7 +116,7 @@ public class DdtResource {
 			@Context HttpServletResponse response,
 			ObjectNode ddt
 			) throws ValidationException, PersistenzaException, ParseException{
-		DdT parsed = parseDdT(ddt);
+		DdTInterface parsed = parseDdT(ddt);
 		ddtManager.registraDdT(parsed);
         return Response.ok().build();
 	}
@@ -125,7 +127,7 @@ public class DdtResource {
 			@Context HttpServletResponse response,
 			ObjectNode ddt
 			) throws ValidationException, PersistenzaException, GenericExceptionToPrint, ParseException{
-		DdT parsed = parseDdT(ddt);
+		DdTInterface parsed = parseDdT(ddt);
 		ddtManager.modificaDdT(parsed);
 		return Response.ok().build();
 	}
@@ -138,11 +140,11 @@ public class DdtResource {
 		return Response.ok().build();
 	}
 	
-	private DdT parseDdT(ObjectNode ddt) throws ParseException, ValidationException {
-		DdT ddtObject = new DdT();
+	private DdTInterface parseDdT(ObjectNode ddt) throws ParseException, ValidationException {
+		DdTInterface ddtObject = new DdT();
 		ddtObject.setAnnotazioni(getTextValue(ddt, "annotazioni"));
 		ddtObject.setAspettoEsteriore(getTextValue(ddt, "aspettoEsteriore"));
-		List<Bene> beni = parseBeni((ArrayNode) ddt.get("beni"));
+		List<BeneInterface> beni = parseBeni((ArrayNode) ddt.get("beni"));
         if (beni.isEmpty()){
             throw new ValidationException("Dati errati", "Il ddt non contiene beni");
         }
@@ -167,8 +169,8 @@ public class DdtResource {
 		return ddtObject;
 	}
 	
-	private List<Bene> parseBeni(ArrayNode arrayNode) throws ValidationException {
-		List<Bene> result = new ArrayList<Bene>();
+	private List<BeneInterface> parseBeni(ArrayNode arrayNode) throws ValidationException {
+		List<BeneInterface> result = new ArrayList<>();
 		for (JsonNode jsonNode : arrayNode) {
 			ObjectNode node = (ObjectNode) jsonNode;
 			Bene bene = new Bene();
@@ -190,7 +192,7 @@ public class DdtResource {
 		return result;
 	}
 
-    protected void validateBene(Bene bene) throws ValidationException {
+    protected void validateBene(BeneInterface bene) throws ValidationException {
         String codice = bene.getCodice();
         if (codice==null || codice.trim().isEmpty())
             throw new ValidationException("Dati errati", "Codice nullo");

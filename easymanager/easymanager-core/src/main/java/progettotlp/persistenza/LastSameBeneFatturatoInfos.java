@@ -6,8 +6,9 @@
 package progettotlp.persistenza;
 
 import java.util.Date;
-import progettotlp.classes.Bene;
+
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.BeneInterface;
 
 /**
  *
@@ -16,9 +17,9 @@ import progettotlp.facilities.DateUtils;
 public class LastSameBeneFatturatoInfos {
     private Integer fatturaId;
     private Date fatturaEmissione;
-    private Bene bene;
+    private BeneInterface bene;
 
-    public LastSameBeneFatturatoInfos(Integer fatturaId, Date fatturaEmissione, Bene b) {
+    public LastSameBeneFatturatoInfos(Integer fatturaId, Date fatturaEmissione, BeneInterface b) {
         this.fatturaId = fatturaId;
         this.fatturaEmissione = fatturaEmissione;
         this.bene = b;
@@ -28,11 +29,11 @@ public class LastSameBeneFatturatoInfos {
         return fatturaId+" del "+DateUtils.formatDate(fatturaEmissione);
     }
 
-    public Bene getBene() {
+    public BeneInterface getBene() {
         return bene;
     }
 
-    public void setBene(Bene b) {
+    public void setBene(BeneInterface b) {
         this.bene = b;
     }
 

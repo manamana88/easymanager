@@ -21,6 +21,7 @@ import org.hibernate.type.Type;
 
 import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;
+import progettotlp.interfaces.FatturaInterface;
 import progettotlp.statistiche.StatisticheConfronto;
 import progettotlp.statistiche.StatisticheFattura;
 
@@ -76,7 +77,7 @@ public class StatisticheManagerImpl extends AbstractPersistenza implements Stati
     private Map<Date,List<StatisticheFattura>> adaptResult(List<Fattura> list, Session sessione){
         Map<Date, List<StatisticheFattura>> result = new HashMap<Date, List<StatisticheFattura>>();
         if (list != null) {
-            for (Fattura f : list) {
+            for (FatturaInterface f : list) {
                 Double sumBeni = (Double) sessione.createQuery("select sum(b.qta) from Fattura as f join f.ddt as d join d.beni as b where f.realId=" + f.getRealId()).uniqueResult();
                 List<StatisticheFattura> get = result.get(f.getEmissione());
                 if (get == null) {
