@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import progettotlp.fatturapa.jaxb.adapter.SimpleDateAdapter;
+
 
 /**
  * <p>Java class for FatturaPrincipaleType complex type.
@@ -49,6 +51,7 @@ public class FatturaPrincipaleType {
     @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
     @XmlSchemaType(name = "normalizedString")
     protected String numeroFatturaPrincipale;
+    @XmlJavaTypeAdapter(SimpleDateAdapter.class)
     @XmlElement(name = "DataFatturaPrincipale", required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar dataFatturaPrincipale;

@@ -35,6 +35,11 @@ function stampaFattura(id){
 	});
 }
 
+function generaFatturaElettronica(id){
+	var targetUrl=getWebappUrl() + "/resources/fattura/elettronica?id="+encodeURIComponent(id);
+	window.open(targetUrl,'_blank');
+}
+
 function deleteFattura(id){
 	
 	var targetUrl=getWebappUrl() + "/resources/fattura?id="+encodeURIComponent(id);

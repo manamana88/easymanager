@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import progettotlp.fatturapa.jaxb.adapter.Amount2Digits;
+import progettotlp.fatturapa.jaxb.adapter.SimpleDateAdapter;
 
 
 /**
@@ -93,12 +94,14 @@ public class DettaglioPagamentoType {
     @XmlElement(name = "ModalitaPagamento", required = true)
     @XmlSchemaType(name = "string")
     protected ModalitaPagamentoType modalitaPagamento;
+    @XmlJavaTypeAdapter(SimpleDateAdapter.class)
     @XmlElement(name = "DataRiferimentoTerminiPagamento")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar dataRiferimentoTerminiPagamento;
     @XmlElement(name = "GiorniTerminiPagamento")
     @XmlSchemaType(name = "integer")
     protected Integer giorniTerminiPagamento;
+    @XmlJavaTypeAdapter(SimpleDateAdapter.class)
     @XmlElement(name = "DataScadenzaPagamento")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar dataScadenzaPagamento;

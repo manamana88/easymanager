@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import progettotlp.fatturapa.jaxb.adapter.SimpleDateAdapter;
+
 
 /**
  * <p>Java class for DatiDDTType complex type.
@@ -53,6 +55,7 @@ public class DatiDDTType {
     @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
     @XmlSchemaType(name = "normalizedString")
     protected String numeroDDT;
+    @XmlJavaTypeAdapter(SimpleDateAdapter.class)
     @XmlElement(name = "DataDDT", required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar dataDDT;

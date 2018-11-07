@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import progettotlp.fatturapa.jaxb.adapter.SimpleDateAdapter;
+
 
 /**
  * <p>Java class for DatiAnagraficiCedenteType complex type.
@@ -73,6 +75,7 @@ public class DatiAnagraficiCedenteType {
     @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
     @XmlSchemaType(name = "normalizedString")
     protected String numeroIscrizioneAlbo;
+    @XmlJavaTypeAdapter(SimpleDateAdapter.class)
     @XmlElement(name = "DataIscrizioneAlbo")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar dataIscrizioneAlbo;

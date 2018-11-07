@@ -12,5 +12,6 @@
 			class="text-danger fa fa-trash-o" title="Cancella"></i>
 	</a> <a href="mail.xhtml?company=<%= cliente.id %>&fattura=<%= realId %>"> <i class="text-warning fa fa-envelope" title="Invia"></i>
 	</a> <a href="#" onclick="stampaFattura(<%= realId %>)"> <i class="text-primary fa fa-print" title="Stampa"></i>
+	</a> <a href="#" onclick="generaFatturaElettronica(<%= realId %>)"> <i class="text-primary fa fa-file-code-o" title="Genera Fattura Elettronica"></i>
 	</a></td>
 </tr>

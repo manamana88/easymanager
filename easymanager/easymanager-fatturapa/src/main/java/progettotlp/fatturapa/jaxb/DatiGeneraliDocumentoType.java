@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import progettotlp.fatturapa.jaxb.adapter.Amount2Digits;
+import progettotlp.fatturapa.jaxb.adapter.SimpleDateAdapter;
 
 
 /**
@@ -75,6 +76,7 @@ public class DatiGeneraliDocumentoType {
     protected TipoDocumentoType tipoDocumento;
     @XmlElement(name = "Divisa", required = true)
     protected String divisa;
+    @XmlJavaTypeAdapter(SimpleDateAdapter.class)
     @XmlElement(name = "Data", required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar data;
