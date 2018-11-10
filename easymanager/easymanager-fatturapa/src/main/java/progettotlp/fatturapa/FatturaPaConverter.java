@@ -13,6 +13,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.fatturapa.jaxb.AnagraficaType;
 import progettotlp.fatturapa.jaxb.BolloVirtualeType;
@@ -54,20 +55,26 @@ public class FatturaPaConverter {
 	private static Logger logger = LoggerFactory.getLogger(FatturaPaConverter.class);
 			
 	//TODO export to properties as much as possible
-	private static final FormatoTrasmissioneType DEFAULT_VERSIONE = FormatoTrasmissioneType.FPR_12;
-	private static final String DEFAULT_NAZIONE_TYPE = "IT";
-	private static final String STANDARD_CODICE_DESTINATARIO = "0000000"; //7 caratteri per privati
-	private static final RegimeFiscaleType REGIME_FISCALE = RegimeFiscaleType.RF_17;
-	private static final CondizioniPagamentoType PAGAMENTO_COMPLETO = CondizioniPagamentoType.TP_02;
-	private static final ModalitaPagamentoType BONIFICO = ModalitaPagamentoType.MP_05;
-	private static final String BONIFICO_BENEFICIARIO = "C.R. di Caposano Raffaella";
-	private static final String BONIFICO_ISTITUTO_FINANZIARIO = "BPER";
-	private static final String BONIFICO_IBAN = "IT93A0538715400000000534628";
-	private static final NaturaType ESENZIONE_IVA = NaturaType.N_3;
-	private static final String DEFAULT_DIVISA = "EUR";
+	private static final FormatoTrasmissioneType DEFAULT_VERSIONE = FormatoTrasmissioneType.valueOf(ConfigurationManager.getProperty("versione_fattura"));
+	private static final String DEFAULT_NAZIONE_TYPE = ConfigurationManager.getProperty("nazione");
+	private static final String STANDARD_CODICE_DESTINATARIO = ConfigurationManager.getProperty("codice_destinatario");
+	private static final RegimeFiscaleType REGIME_FISCALE = RegimeFiscaleType.valueOf(ConfigurationManager.getProperty("regime_fiscale"));
+	private static final CondizioniPagamentoType PAGAMENTO_COMPLETO = CondizioniPagamentoType.valueOf(ConfigurationManager.getProperty("condizioni_pagamento"));
+	private static final ModalitaPagamentoType BONIFICO = ModalitaPagamentoType.valueOf(ConfigurationManager.getProperty("modalita_pagamento"));
+	private static final String BONIFICO_BENEFICIARIO = ConfigurationManager.getProperty("bonifico_beneficiario");
+	private static final String BONIFICO_ISTITUTO_FINANZIARIO = ConfigurationManager.getProperty("bonifico_istituto_finanziario");
+	private static final String BONIFICO_IBAN = ConfigurationManager.getProperty("bonifico_iban");
+	private static final NaturaType ESENZIONE_IVA = NaturaType.valueOf(ConfigurationManager.getProperty("esenzione_iva"));
+	private static final String DEFAULT_DIVISA = ConfigurationManager.getProperty("divisa");
 
-	private static final String CODICE_ARTICOLO_CODICE_KEY = "CODICE";
-	private static final String CODICE_ARTICOLO_COMMESSA_KEY = "COMMESSA";
+	private static final String CODICE_ARTICOLO_CODICE_KEY = ConfigurationManager.getProperty("codice_articolo_codice");
+	private static final String CODICE_ARTICOLO_COMMESSA_KEY = ConfigurationManager.getProperty("codice_articolo_commessa");
+	private static final String CODICE_ARTICOLO_CAMPIONARIO_KEY = ConfigurationManager.getProperty("codice_articolo_campionario");
+	private static final String CODICE_ARTICOLO_INTERAMENTE_ADESIVATO_KEY = ConfigurationManager.getProperty("codice_articolo_interamente_adesivato");
+	private static final String CODICE_ARTICOLO_PIAZZATO_KEY = ConfigurationManager.getProperty("codice_articolo_piazzato");
+	private static final String CODICE_ARTICOLO_PRIMO_CAPO_KEY = ConfigurationManager.getProperty("codice_articolo_primo_capo");
+	private static final String CODICE_ARTICOLO_PROTOTIPO_KEY = ConfigurationManager.getProperty("codice_articolo_prototipo");
+	private static final String CODICE_ARTICOLO_RISPOSTA = ConfigurationManager.getProperty("codice_articolo_risposta");
 
 	private static final BigDecimal DEFAULT_BOLLO = new BigDecimal(2);
 
@@ -266,6 +273,36 @@ public class FatturaPaConverter {
 			commessa.setCodiceValore(commessa2);
 			result.add(commessa);
 		}
+		if (Boolean.TRUE.equals(bene.getCampionario())) {
+			CodiceArticoloType commessa = new CodiceArticoloType();
+			commessa.setCodiceTipo(CODICE_ARTICOLO_CAMPIONARIO_KEY);
+			commessa.setCodiceValore(CODICE_ARTICOLO_RISPOSTA);
+			result.add(commessa);
+		}
+		if (Boolean.TRUE.equals(bene.getInteramenteAdesivato())) {
+			CodiceArticoloType commessa = new CodiceArticoloType();
+			commessa.setCodiceTipo(CODICE_ARTICOLO_INTERAMENTE_ADESIVATO_KEY);
+			commessa.setCodiceValore(CODICE_ARTICOLO_RISPOSTA);
+			result.add(commessa);
+		}
+		if (Boolean.TRUE.equals(bene.getPiazzato())) {
+			CodiceArticoloType commessa = new CodiceArticoloType();
+			commessa.setCodiceTipo(CODICE_ARTICOLO_PIAZZATO_KEY);
+			commessa.setCodiceValore(CODICE_ARTICOLO_RISPOSTA);
+			result.add(commessa);
+		}
+		if (Boolean.TRUE.equals(bene.getPrimoCapo())) {
+			CodiceArticoloType commessa = new CodiceArticoloType();
+			commessa.setCodiceTipo(CODICE_ARTICOLO_PRIMO_CAPO_KEY);
+			commessa.setCodiceValore(CODICE_ARTICOLO_RISPOSTA);
+			result.add(commessa);
+		}
+		if (Boolean.TRUE.equals(bene.getPrototipo())) {
+			CodiceArticoloType commessa = new CodiceArticoloType();
+			commessa.setCodiceTipo(CODICE_ARTICOLO_PROTOTIPO_KEY);
+			commessa.setCodiceValore(CODICE_ARTICOLO_RISPOSTA);
+			result.add(commessa);
+		}
 		return result;
 	}
 
@@ -303,6 +340,7 @@ public class FatturaPaConverter {
 		datiTrasmissioneType.setProgressivoInvio(createProgressivoInvio(fattura));
 		datiTrasmissioneType.setFormatoTrasmissione(FormatoTrasmissioneType.FPR_12);
 		datiTrasmissioneType.setCodiceDestinatario(STANDARD_CODICE_DESTINATARIO);
+		datiTrasmissioneType.setPECDestinatario(fattura.getCliente().getMail());
 		return datiTrasmissioneType;
 	}
 
