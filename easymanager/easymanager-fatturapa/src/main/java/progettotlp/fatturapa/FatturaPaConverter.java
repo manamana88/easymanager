@@ -310,16 +310,44 @@ public class FatturaPaConverter {
 		DatiRiepilogoType datiRiepilogoType = new DatiRiepilogoType();
 		//TODO handle esente iva
 		datiRiepilogoType.setAliquotaIVA(new BigDecimal(fattura.getIvaPerc()));
-		if (!fattura.getCliente().isTassabile()) {
+		AziendaInterface cliente = fattura.getCliente();
+		if (!cliente.isTassabile()) {
 			datiRiepilogoType.setNatura(ESENZIONE_IVA); //TODO verificare natura esenzione
+			String riferimentoNormativo = createRiferimentoNormativo(cliente);
+			datiRiepilogoType.setRiferimentoNormativo(riferimentoNormativo); //TODO verificare riferimento normativo legato a natura
 		}
 		//datiRiepilogoType.setSpeseAccessorie(null);
 		//datiRiepilogoType.setArrotondamento(null);
 		datiRiepilogoType.setImponibileImporto(new BigDecimal(fattura.getNetto()));
 		datiRiepilogoType.setImposta(new BigDecimal(fattura.getIva()));
 		//datiRiepilogoType.setEsigibilitaIVA(); //TODO verificare esigibilita' IVA
-		//datiRiepilogoType.setRiferimentoNormativo(null); //TODO verificare riferimento normativo legato a natura
 		return Arrays.asList(datiRiepilogoType);
+	}
+
+	protected static String createRiferimentoNormativo(AziendaInterface cliente) {
+		StringBuilder sb = new StringBuilder();
+		String nazione = cliente.getNazione();
+		String toLowerCase = nazione.toLowerCase();
+		if(toLowerCase.startsWith("it")){
+			sb.append("Art. 8 comma 1 lett. C del DPR 633/72");
+		    //law = "Non imponibile art.8 comma 1 lettera C DPR 633-1972";
+		} else {
+			sb.append("Art. 7/ter comma 1 del DPR 633/1972");
+		}
+		sb.append(" come da vs. autorizzazione n. ");
+		sb.append(cliente.getNumeroAutorizzazione());
+		sb.append(" del ");
+		sb.append(DateUtils.formatDate(cliente.getDataAutorizzazione()));
+		sb.append(" da noi registrata al n. ");
+		sb.append(cliente.getNumeroRegistrazione());
+		sb.append(" del ");
+		sb.append(DateUtils.formatDate(cliente.getDataRegistrazione()));
+//            String bollo = f.getBollo();
+//			if (ConfigurationManager.getBolloLimit() < f.getTotale() && bollo != null && !bollo.trim().isEmpty()){
+//            	rifBollo = "Imposta di bollo assolta sull'originale ID="+bollo;
+//            }
+		//TODO verifica bollo e riferimento normativo
+		return sb.toString();
 	}
 
 	private static FatturaElettronicaHeaderType createFatturaElettronicaHeader(AziendaInterface principale, FatturaInterface fattura) {

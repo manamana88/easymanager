@@ -7,23 +7,6 @@
   </parent>
   <artifactId>easymanager-api</artifactId>
   <dependencies>
-  
-		<!-- SWING -->
-		<dependency>
-			<groupId>org.jdesktop</groupId>
-			<artifactId>appframework</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.swinglabs</groupId>
-			<artifactId>swing-layout</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.netbeans</groupId>
-			<artifactId>AbsoluteLayout</artifactId>
-			<version>1.0.0</version>
-			<scope>system</scope>
-			<systemPath>${project.build.directory}}/../externalLibs/AbsoluteLayout.jar</systemPath>
-		</dependency>
 		<!-- LOG -->
 		<dependency>
 			<groupId>log4j</groupId>
