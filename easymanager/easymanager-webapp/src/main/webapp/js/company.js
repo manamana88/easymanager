@@ -89,6 +89,8 @@ function fillForm(currentCompany){
 	$("#dataAut").val(currentCompany.dataAutorizzazione);
 	$("#numReg").val(currentCompany.numeroRegistrazione);
 	$("#dataReg").val(currentCompany.dataRegistrazione);
+	$("#pec").val(currentCompany.pec);
+	$("#codiceFatturaPa").val(currentCompany.codiceFatturaPa);
 }
 
 function lockForm(){
@@ -158,5 +160,7 @@ function loadAzienda(){
     azienda.dataAutorizzazione = $("#dataAut").val();
     azienda.numeroRegistrazione = $("#numReg").val();
     azienda.dataRegistrazione = $("#dataReg").val();
+    azienda.pec = $("#pec").val();
+    azienda.codiceFatturaPa = $("#codiceFatturaPa").val();
     return azienda;
 }

@@ -23,6 +23,8 @@ CREATE TABLE `azienda` (
   `data_aut` date DEFAULT NULL,
   `num_reg` varchar(45) DEFAULT NULL,
   `data_reg` date DEFAULT NULL,
+  `pec` varchar(50) DEFAULT NULL,
+  `codice_fattura_pa` varchar(7) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uc_piva` (`p_iva`),
   UNIQUE KEY `uc_codfis` (`cod_fis`)

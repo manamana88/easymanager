@@ -329,16 +329,16 @@ public class FatturaPaConverter {
 		String nazione = cliente.getNazione();
 		String toLowerCase = nazione.toLowerCase();
 		if(toLowerCase.startsWith("it")){
-			sb.append("Art. 8 comma 1 lett. C del DPR 633/72");
+			sb.append("Art.8 co.1 lett.C DPR 633/72");
 		    //law = "Non imponibile art.8 comma 1 lettera C DPR 633-1972";
 		} else {
-			sb.append("Art. 7/ter comma 1 del DPR 633/1972");
+			sb.append("Art.7/ter co.1 DPR 633/1972");
 		}
-		sb.append(" come da vs. autorizzazione n. ");
+		sb.append(" come da vs.aut n.");
 		sb.append(cliente.getNumeroAutorizzazione());
 		sb.append(" del ");
 		sb.append(DateUtils.formatDate(cliente.getDataAutorizzazione()));
-		sb.append(" da noi registrata al n. ");
+		sb.append(" da noi reg al n.");
 		sb.append(cliente.getNumeroRegistrazione());
 		sb.append(" del ");
 		sb.append(DateUtils.formatDate(cliente.getDataRegistrazione()));
@@ -367,8 +367,15 @@ public class FatturaPaConverter {
 		datiTrasmissioneType.setIdTrasmittente(createIdFiscale(principale));
 		datiTrasmissioneType.setProgressivoInvio(createProgressivoInvio(fattura));
 		datiTrasmissioneType.setFormatoTrasmissione(FormatoTrasmissioneType.FPR_12);
-		datiTrasmissioneType.setCodiceDestinatario(STANDARD_CODICE_DESTINATARIO);
-		datiTrasmissioneType.setPECDestinatario(fattura.getCliente().getMail());
+		
+		AziendaInterface cliente = fattura.getCliente();
+		String codiceFatturaPa = cliente.getCodiceFatturaPa();
+		if (codiceFatturaPa!=null && !codiceFatturaPa.trim().isEmpty()) {
+			datiTrasmissioneType.setCodiceDestinatario(codiceFatturaPa);
+		} else {
+			datiTrasmissioneType.setCodiceDestinatario(STANDARD_CODICE_DESTINATARIO);
+			datiTrasmissioneType.setPECDestinatario(cliente.getPEC());
+		}
 		return datiTrasmissioneType;
 	}
 

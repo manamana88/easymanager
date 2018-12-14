@@ -177,5 +177,13 @@ public interface AziendaInterface {
 	Date getDataRegistrazione();
 
 	void setDataRegistrazione(Date dataRegistrazione);
+	
+	String getCodiceFatturaPa();
+	
+	void setCodiceFatturaPa(String codiceFatturaPa);
+	
+	String getPEC();
+	
+	void setPEC(String pec);
 
 }

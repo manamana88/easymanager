@@ -101,6 +101,17 @@ public class AziendaResource {
         if (!Controlli.checkMail(a.getMail(), false)){
             throw new ValidationException("E-mail errata", "Inserire una mail valida");
         }
+        String pec = a.getPEC();
+		if (!Controlli.checkMail(pec, false)){
+        	throw new ValidationException("PEC errata", "Inserire una PEC valida");
+        }
+        String codiceFatturaPa = a.getCodiceFatturaPa();
+		if (!Controlli.checkCodiceFatturaPa(codiceFatturaPa, false)){
+        	throw new ValidationException("Codice Fattura PA errata", "Inserire un Codice Fattura PA valido. Deve essere un codice di 6 o 7 cifre");
+        }
+        if ((pec==null || pec.trim().isEmpty()) && (codiceFatturaPa==null || codiceFatturaPa.trim().isEmpty())){
+        	throw new ValidationException("Campi obbligatori", "Inserire almeno uno fra PEC e Codice Fattura PA");
+        }
         if (!Controlli.checkCodFIS(a.getCodFis(), true)){
             throw new ValidationException("Dati errati", "Il campo Codice Fiscale contiene dei dati errati");
         }

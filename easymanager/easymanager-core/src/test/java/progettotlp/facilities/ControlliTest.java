@@ -47,4 +47,24 @@ public class ControlliTest {
         assertFalse(Controlli.checkIva("01234567", true));
         assertTrue(Controlli.checkIva("01234567890", true));
     }
+    
+    @Test
+    public void testCodiceFatturaPa() {
+    	assertFalse(Controlli.checkCodiceFatturaPa(null, true));
+    	assertFalse(Controlli.checkCodiceFatturaPa("", true));
+    	assertTrue(Controlli.checkCodiceFatturaPa(null, false));
+    	assertTrue(Controlli.checkCodiceFatturaPa("", false));
+    	assertFalse(Controlli.checkCodiceFatturaPa("A", true));
+    	assertFalse(Controlli.checkCodiceFatturaPa("A", false));
+    	assertFalse(Controlli.checkCodiceFatturaPa("01234", true));
+    	assertFalse(Controlli.checkCodiceFatturaPa("01234", false));
+    	assertFalse(Controlli.checkCodiceFatturaPa("01234567", true));
+    	assertFalse(Controlli.checkCodiceFatturaPa("01234567", false));
+    	assertTrue(Controlli.checkCodiceFatturaPa("012345", true));
+    	assertTrue(Controlli.checkCodiceFatturaPa("012345", false));
+    	assertTrue(Controlli.checkCodiceFatturaPa("0123456", true));
+    	assertTrue(Controlli.checkCodiceFatturaPa("0123456", false));
+    	assertFalse(Controlli.checkCodiceFatturaPa("A123456", true));
+    	assertFalse(Controlli.checkCodiceFatturaPa("A123456", false));
+    }
 }

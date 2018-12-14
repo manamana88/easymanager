@@ -65,13 +65,17 @@ public class Azienda implements Serializable, AziendaInterface {
     @JsonDeserialize(using=DateDeserializer.class)
     @Column(name="data_reg")
     private Date dataRegistrazione;
+    private String pec;
+    @Column(name="codice_fattura_pa")
+    private String codiceFatturaPa;
 
     public Azienda(){}
     
     public Azienda(String nome, String pIva, String codFis, String via, String civico, 
             String cap, String citta, String provincia, String nazione, String mail, 
             String telefono, String fax, Boolean principale, String numeroAutorizzazione, 
-            Date dataAutorizzazione, String numeroRegistrazione, Date dataRegistrazione) {
+            Date dataAutorizzazione, String numeroRegistrazione, Date dataRegistrazione,
+            String pec, String codiceFatturaPa) {
         this.nome = nome;
         this.pIva = pIva;
         this.codFis = codFis;
@@ -89,6 +93,8 @@ public class Azienda implements Serializable, AziendaInterface {
         this.dataAutorizzazione=dataAutorizzazione;
         this.numeroRegistrazione=numeroRegistrazione;
         this.dataRegistrazione=dataRegistrazione;
+		this.pec = pec;
+		this.codiceFatturaPa = codiceFatturaPa;
     }
 
     @Override
@@ -383,13 +389,39 @@ public class Azienda implements Serializable, AziendaInterface {
 	}
 
 	@Override
+	public String getPEC() {
+		return pec;
+	}
+
+	@Override
+	public void setPEC(String pec) {
+		this.pec = pec;
+	}
+
+	@Override
+	public String getCodiceFatturaPa() {
+		return codiceFatturaPa;
+	}
+
+	@Override
+	public void setCodiceFatturaPa(String codiceFatturaPa) {
+		this.codiceFatturaPa = codiceFatturaPa;
+	}
+
+	@Override
 	public String toString() {
-		return "Azienda [id=" + id + ", nome=" + nome + ", pIva=" + pIva + ", codFis=" + codFis + ", via=" + via
-				+ ", civico=" + civico + ", cap=" + cap + ", citta=" + citta + ", provincia=" + provincia + ", nazione="
-				+ nazione + ", mail=" + mail + ", telefono=" + telefono + ", fax=" + fax + ", tassabile=" + tassabile
-				+ ", principale=" + principale + ", numeroAutorizzazione=" + numeroAutorizzazione
-				+ ", dataAutorizzazione=" + dataAutorizzazione + ", numeroRegistrazione=" + numeroRegistrazione
-				+ ", dataRegistrazione=" + dataRegistrazione + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Azienda [id=").append(id).append(", nome=").append(nome).append(", pIva=").append(pIva)
+				.append(", codFis=").append(codFis).append(", via=").append(via).append(", civico=").append(civico)
+				.append(", cap=").append(cap).append(", citta=").append(citta).append(", provincia=").append(provincia)
+				.append(", nazione=").append(nazione).append(", mail=").append(mail).append(", telefono=")
+				.append(telefono).append(", fax=").append(fax).append(", tassabile=").append(tassabile)
+				.append(", principale=").append(principale).append(", numeroAutorizzazione=")
+				.append(numeroAutorizzazione).append(", dataAutorizzazione=").append(dataAutorizzazione)
+				.append(", numeroRegistrazione=").append(numeroRegistrazione).append(", dataRegistrazione=")
+				.append(dataRegistrazione).append(", pec=").append(pec).append(", codiceFatturaPa=")
+				.append(codiceFatturaPa).append("]");
+		return builder.toString();
 	}
 
 	@Override
@@ -400,6 +432,7 @@ public class Azienda implements Serializable, AziendaInterface {
 		result = prime * result + ((citta == null) ? 0 : citta.hashCode());
 		result = prime * result + ((civico == null) ? 0 : civico.hashCode());
 		result = prime * result + ((codFis == null) ? 0 : codFis.hashCode());
+		result = prime * result + ((codiceFatturaPa == null) ? 0 : codiceFatturaPa.hashCode());
 		result = prime * result + ((dataAutorizzazione == null) ? 0 : dataAutorizzazione.hashCode());
 		result = prime * result + ((dataRegistrazione == null) ? 0 : dataRegistrazione.hashCode());
 		result = prime * result + ((fax == null) ? 0 : fax.hashCode());
@@ -410,6 +443,7 @@ public class Azienda implements Serializable, AziendaInterface {
 		result = prime * result + ((numeroAutorizzazione == null) ? 0 : numeroAutorizzazione.hashCode());
 		result = prime * result + ((numeroRegistrazione == null) ? 0 : numeroRegistrazione.hashCode());
 		result = prime * result + ((pIva == null) ? 0 : pIva.hashCode());
+		result = prime * result + ((pec == null) ? 0 : pec.hashCode());
 		result = prime * result + ((principale == null) ? 0 : principale.hashCode());
 		result = prime * result + ((provincia == null) ? 0 : provincia.hashCode());
 		result = prime * result + ((tassabile == null) ? 0 : tassabile.hashCode());
@@ -446,6 +480,11 @@ public class Azienda implements Serializable, AziendaInterface {
 			if (other.codFis != null)
 				return false;
 		} else if (!codFis.equals(other.codFis))
+			return false;
+		if (codiceFatturaPa == null) {
+			if (other.codiceFatturaPa != null)
+				return false;
+		} else if (!codiceFatturaPa.equals(other.codiceFatturaPa))
 			return false;
 		if (dataAutorizzazione == null) {
 			if (other.dataAutorizzazione != null)
@@ -497,6 +536,11 @@ public class Azienda implements Serializable, AziendaInterface {
 				return false;
 		} else if (!pIva.equals(other.pIva))
 			return false;
+		if (pec == null) {
+			if (other.pec != null)
+				return false;
+		} else if (!pec.equals(other.pec))
+			return false;
 		if (principale == null) {
 			if (other.principale != null)
 				return false;
@@ -524,8 +568,5 @@ public class Azienda implements Serializable, AziendaInterface {
 			return false;
 		return true;
 	}
-
-
-    
 
 }
