@@ -12,7 +12,7 @@ public class Controlli {
     private static final String MAIL = "[a-zA-Z0-9][a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+\\.[a-zA-Z]{2,4}";
     private static final String IVA = "\\d{11}";
     private static final String CODFIS = IVA+"||[a-zA-Z]{6}\\d{2}[a-zA-Z]\\d{2}[a-zA-Z]\\d{3}[a-zA-Z]";
-    private static final String CODICE_FATTURA_PA = "\\d{6,7}";
+    private static final String CODICE_FATTURA_PA = "[a-zA-Z0-9]{6,7}";
     
     private static boolean generalCheck(String regex, String toCheck, boolean obbligatorio){
         boolean isEmpty = toCheck == null || toCheck.trim().isEmpty();

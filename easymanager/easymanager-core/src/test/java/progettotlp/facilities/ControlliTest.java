@@ -64,7 +64,7 @@ public class ControlliTest {
     	assertTrue(Controlli.checkCodiceFatturaPa("012345", false));
     	assertTrue(Controlli.checkCodiceFatturaPa("0123456", true));
     	assertTrue(Controlli.checkCodiceFatturaPa("0123456", false));
-    	assertFalse(Controlli.checkCodiceFatturaPa("A123456", true));
-    	assertFalse(Controlli.checkCodiceFatturaPa("A123456", false));
+    	assertTrue(Controlli.checkCodiceFatturaPa("A123456", true));
+    	assertTrue(Controlli.checkCodiceFatturaPa("A123456", false));
     }
 }
