@@ -37,6 +37,16 @@ function loadCompanySelector(companies){
 		var company = companies[i];
 		$(aziendaSelect).append("<option value='"+company.id+"'>"+company.nome+"</option>");
 	}
+	
+	aziendaSelect.change(function(){
+		var selectedAzienda = $("#azienda").val();
+		var options = _.map(destinations[selectedAzienda],function (obj){
+			return obj.name+"\n"+obj.address1+"\n"+obj.address2;
+		});
+		$("#destinazione").autocomplete({
+			source:options.sort()
+		});
+	});
 }
 
 function initTable(){

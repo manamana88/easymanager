@@ -58,10 +58,7 @@ public class DdtResource {
 	@Path("next")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getNextDdt() {
-		Integer lastDdT = ddtManager.getLastDdT();
-		if (lastDdT==null){
-			lastDdT=0;
-		}
+		int lastDdT = ddtManager.getLastDdT();
 		int nextDdtNumber = lastDdT+1;
 		String todayDate = DateUtils.formatDate(new Date());
 		List<Azienda> aziende = aziendaManager.getAziendeNonPrincipali();
