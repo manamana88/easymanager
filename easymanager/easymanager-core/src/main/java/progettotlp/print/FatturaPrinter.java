@@ -2,14 +2,14 @@ package progettotlp.print;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import progettotlp.classes.Bene;
-import progettotlp.classes.DdT;
 import progettotlp.exceptions.PrintException;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
@@ -21,6 +21,7 @@ import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
 import progettotlp.interfaces.FatturaInterface;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -41,6 +42,8 @@ public class FatturaPrinter extends PdfPrinter
     private static final int MAX_ROWS = 34;
 
     private static Logger logger = LoggerFactory.getLogger(FatturaPrinter.class);
+
+	private static Image imageInstance;
 
     public static File printPage(FatturaInterface f, AziendaInterface principale, boolean deleteOnExit)
                                                                                            throws PrintException
@@ -120,8 +123,7 @@ public class FatturaPrinter extends PdfPrinter
 			boolean enabled) throws Exception {
 		PdfPCell result;
 		if (enabled) {
-			Image instance = Image.getInstance(ConfigurationManager.getProperty(Property.EXTERNAL_RESOURCES)+"/img/ok2.png");
-			instance.scaleAbsolute(7.0F, 7.0F);
+			Image instance = getImageInstance();
 			result = new PdfPCell(instance);
 		} else {
 			result = new PdfPCell();
@@ -132,6 +134,14 @@ public class FatturaPrinter extends PdfPrinter
 		result.setBorder(borders);
 		result.setBackgroundColor(color);
 		return result;
+	}
+
+	private static Image getImageInstance() throws BadElementException, MalformedURLException, IOException {
+		if (imageInstance==null) {			
+			imageInstance = Image.getInstance(ConfigurationManager.getProperty(Property.EXTERNAL_RESOURCES)+"/img/ok2.png");
+			imageInstance.scaleAbsolute(7.0F, 7.0F);
+		}
+		return imageInstance;
 	}
 
     private static void printHeader(Document d, AziendaInterface principale, AziendaInterface cliente) throws DocumentException {
