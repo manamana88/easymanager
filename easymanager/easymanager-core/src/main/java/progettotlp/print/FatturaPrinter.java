@@ -395,9 +395,8 @@ public class FatturaPrinter extends PdfPrinter
             }
             law+="\n Come da vs. autorizzazione n. "+azienda.getNumeroAutorizzazione()+" del "+DateUtils.formatDate(azienda.getDataAutorizzazione());
             law+=" da noi registrata al n. "+azienda.getNumeroRegistrazione()+" del "+DateUtils.formatDate(azienda.getDataRegistrazione());
-            String bollo = f.getBollo();
-			if (ConfigurationManager.getBolloLimit() < f.getTotale() && bollo != null && !bollo.trim().isEmpty()){
-            	rifBollo = "Imposta di bollo assolta sull'originale ID="+bollo;
+			if (ConfigurationManager.getBolloLimit() < f.getTotale()){
+            	rifBollo = "Bollo assolto ai sensi del decreto MEF 17 giugno 2014 (art. 6)";
             }
         }
         p = new Paragraph(rifBollo, createSmallFont());

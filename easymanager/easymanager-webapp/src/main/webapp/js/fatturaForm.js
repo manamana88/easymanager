@@ -4,7 +4,7 @@ var isTassabile;
 $(document).ready(function() {
 	fatturaRowTemplate = loadTemplate("templates/fatturaFormRow.html");
 	cancellaDdtFatturaModalTemplate = loadTemplate("templates/cancellaDdtFatturaModal.html");
-	caricaBolloLimit();
+	//caricaBolloLimit();
 
 	var fatturaId = getParameterByName("fattura");
 	var mode = getParameterByName("action");
@@ -27,7 +27,7 @@ $(document).ready(function() {
 			} else {
 				suggestPrices();
 				enableEditControls();
-				updateBollo();
+				//updateBollo();
 				$("#button").text("Salva");
 				$("#button").bind("click", modificaFattura);
 				$(".breadcrumb li[class*='active']").text("Modifica fattura numero "+currentFattura.id);
@@ -64,7 +64,7 @@ $(document).ready(function() {
 				$("#scadenza").val(responseData.items[0]);
 			});
 			enableEditControls();
-			updateBollo();
+			//updateBollo();
 			$("#button").bind("click", registraFattura);
 		});
 		
@@ -73,17 +73,17 @@ $(document).ready(function() {
 	}
 });
 
-function caricaBolloLimit(){
-	targetUrl=getWebappUrl() + "/resources/utils/getProperty?name="+encodeURIComponent("bollo_limit");
-	$.ajax({
-		url : targetUrl,
-		cache : false,
-		success : function(response) {
-			bolloLimit = eval(response.items[0]);
-		},
-		async : false
-	});
-}
+//function caricaBolloLimit(){
+//	targetUrl=getWebappUrl() + "/resources/utils/getProperty?name="+encodeURIComponent("bollo_limit");
+//	$.ajax({
+//		url : targetUrl,
+//		cache : false,
+//		success : function(response) {
+//			bolloLimit = eval(response.items[0]);
+//		},
+//		async : false
+//	});
+//}
 
 function suggestPrices(){
 	$("tbody tr").each(function(index){
@@ -176,7 +176,7 @@ function recalculateTotHandler(event){
 				}
 				var diff = round(tot - firstPriceVal);
 				updateBottom(diff);
-				updateBollo();
+				//updateBollo();
 			}
 		}
 	} catch (e){
@@ -200,17 +200,17 @@ function updateBottom(diff){
 	$("#totale").val(totale);
 }
 
-function updateBollo(){
-	if (isBolloQualifying()){
-		$("#bollo").prop("readonly", "");
-	} else {
-		$("#bollo").prop("readonly", "readonly");
-	}
-}
-
-function isBolloQualifying(){
-	return eval($("#totale").val())>bolloLimit && !isTassabile;
-}
+//function updateBollo(){
+//	if (isBolloQualifying()){
+//		$("#bollo").prop("readonly", "");
+//	} else {
+//		$("#bollo").prop("readonly", "readonly");
+//	}
+//}
+//
+//function isBolloQualifying(){
+//	return eval($("#totale").val())>bolloLimit && !isTassabile;
+//}
 
 function calculateTotFlat(row){
 	return eval($("#td"+row+"11").text().trim().replace(",","."));
@@ -270,7 +270,7 @@ function fillPage(currentFattura){
 	$("#ivaTot").val(currentFattura.iva);
 	$("#totale").val(currentFattura.totale);
 	$("#scadenza").val(currentFattura.scadenza);
-	$("#bollo").val(currentFattura.bollo);
+	//$("#bollo").val(currentFattura.bollo);
 }
 
 function fillTable(ddtList, showPrices){
@@ -350,9 +350,9 @@ function caricaFattura(){
 	fattura.netto=round(netto);
 	fattura.iva = round(multiply(netto,fattura.ivaPerc) / 100);
 	fattura.totale=round(fattura.netto + fattura.iva);
-	if (isBolloQualifying()){
-		fattura.bollo=$("#bollo").val();
-	}
+//	if (isBolloQualifying()){
+//		fattura.bollo=$("#bollo").val();
+//	}
 	return fattura;
 }
 
