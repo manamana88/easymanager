@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
+import progettotlp.facilities.FatturaUtils;
 import progettotlp.fatturapa.jaxb.AnagraficaType;
 import progettotlp.fatturapa.jaxb.BolloVirtualeType;
 import progettotlp.fatturapa.jaxb.CedentePrestatoreType;
@@ -198,8 +199,7 @@ public class FatturaPaConverter {
 
 
 	private static DatiBolloType createDatiBollo(FatturaInterface fattura) {
-		String bollo = fattura.getBollo();
-		if (bollo!=null && !bollo.trim().isEmpty()) {
+		if (FatturaUtils.isBolloMandatory(fattura)) {
 			DatiBolloType result = new DatiBolloType();
 			result.setBolloVirtuale(BolloVirtualeType.SI);
 			result.setImportoBollo(DEFAULT_BOLLO);

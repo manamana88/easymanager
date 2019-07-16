@@ -40,6 +40,11 @@ function generaFatturaElettronica(id){
 	window.open(targetUrl,'_blank');
 }
 
+function generaFatturaElettronicaWeb(id){
+	var targetUrl=getWebappUrl() + "/resources/fattura/elettronica/web?id="+encodeURIComponent(id);
+	window.open(targetUrl,'_blank');
+}
+
 function deleteFattura(id){
 	
 	var targetUrl=getWebappUrl() + "/resources/fattura?id="+encodeURIComponent(id);
