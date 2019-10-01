@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<head>
+<title>EasyManager</title>
+<ui:include src="include/headLibraries.xhtml" />
+<script src="js/ddtList.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<ui:include src="include/menu.xhtml" />
+		<div class="row body">
+			<div class="main col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<ol class="breadcrumb">
+							<li><a href="#{request.getContextPath()}">Home</a></li>
+							<li class="active">Lista DdT</li>
+						</ol>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<a class="btn btn-default"
+							href="#{request.getContextPath()}/ddt.xhtml?action=insert"
+							role="button"><i class="fa fa-plus"></i> Aggiungi</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>Numero</th>
+									<th>Data</th>
+									<th>Nome Azienda</th>
+									<th>Operazioni</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row footer"></div>
+	</div>
+</body>
+</html>

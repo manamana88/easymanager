@@ -1,0 +1,57 @@
+body {
+	background-color: lightgrey
+}
+
+.header {
+	background-color: lightblue;
+}
+
+.body {
+	padding: 10px;
+}
+
+.main {
+	background-color: white;
+	min-height: 400px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+form input[type="checkbox"] {
+	margin-top: 11px;
+}
+
+td input[type="checkbox"] {
+	margin-top: 0px;
+    vertical-align: middle;
+}
+
+#destinazione{
+    min-height: 80px;
+}
+
+.fattura-container {
+	max-height: 65%;
+	overflow-y: scroll;
+}
+
+textarea {
+	resize: vertical;
+}
+
+.fattura-bottom div.col-sm-1 {
+    width: 10.33333333%;
+}
+
+.fattura-bottom label {
+    width: 6.33333333%;
+}
+
+#newFatturaModal-body {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.info-prezzo {
+	margin-right: 5px;	
+}

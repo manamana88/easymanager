@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<head>
+<title>EasyManager</title>
+<ui:include src="include/headLibraries.xhtml" />
+<script src="js/company.js"></script>
+
+</head>
+<body>
+	<div class="container-fluid">
+		<ui:include src="include/menu.xhtml" />
+		<div class="row body">
+			<div class="main col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<ol class="breadcrumb">
+							<li><a href="#{request.getContextPath()}">Home</a></li>
+							<li><a href="#{request.getContextPath()}/companiesList.xhtml">Lista Clienti</a></li>
+							<li class="active">Inserisci Nuova Azienda</li>
+						</ol>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<form class="form-horizontal">
+							<input type="hidden" id="id" name="id" />
+							<input type="hidden" id="principale" name="principale" />
+							<div class="form-group">
+								<label for="nome" class="col-sm-2 control-label">Nome
+									Azienda</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="nome" name="nome"
+										placeholder="Nome Azienda" />
+								</div>
+								<label for="giuridica" class="col-sm-2 control-label"> Persona Giuridica </label>
+								<div class="col-sm-1">
+									<input type="checkbox" id="giuridica" name="giuridica" />
+								</div>
+								<label for="tassabile" class="col-sm-2 control-label"> Tassabile </label>
+								<div class="col-sm-1">
+									<input type="checkbox" id="tassabile" name="tassabile" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="piva" class="col-sm-2 control-label">Partita
+									IVA</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="piva" name="piva"
+										placeholder="Partita IVA" />
+								</div>
+								<label for="numAut" class="col-sm-1 control-label">Autorizzazione</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="numAut" name="numAut"
+										placeholder="Numero" />
+								</div>
+								<label for="dataAut" class="col-sm-1 control-label">Data</label>
+								<div class="col-sm-2">
+									<div class="input-group input-append data">
+						                <input type="text" class="form-control" id="dataAut" name="dataAut" 
+						                	placeholder="gg/mm/aaaa" />
+						                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+						            </div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="codfis" class="col-sm-2 control-label">Codice
+									Fiscale</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="codfis" name="codfis"
+										placeholder="Codice Fiscale" />
+								</div>
+								<label for="numReg" class="col-sm-1 control-label">Registrazione</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="numReg" name="numReg"
+										placeholder="Numero" />
+								</div>
+								<label for="numReg" class="col-sm-1 control-label">Data</label>
+								<div class="col-sm-2">
+									<div class="input-group input-append data">
+						                <input type="text" class="form-control" id="dataReg" name="dataReg" 
+						                	placeholder="gg/mm/aaaa" />
+						                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+						            </div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="via" class="col-sm-2 control-label">Via</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="via" name="via"
+										placeholder="Via" />
+								</div>
+								<label for="numero" class="col-sm-1 control-label">Numero</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="numero" name="numero"
+										placeholder="Numero" />
+								</div>
+								<label for="cap" class="col-sm-1 control-label">CAP</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="cap" name="cap"
+										placeholder="CAP" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="citta" class="col-sm-2 control-label">Citt&#224;</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="citta" name="citta"
+										placeholder="Citt&#224;" />
+								</div>
+								<label for="provincia" class="col-sm-1 control-label">Provincia</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="provincia" name="provincia"
+										placeholder="Provincia" />
+								</div>
+								<label for="nazione" class="col-sm-1 control-label">Nazione</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="nazione" name="nazione"
+										placeholder="Nazione" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="telefono" class="col-sm-2 control-label">Telefono</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="telefono" name="telefono"
+										placeholder="Telefono" />
+								</div>
+								<label for="fax" class="col-sm-1 control-label">Fax</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" id="fax" name="fax"
+										placeholder="Fax" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="email" class="col-sm-2 control-label">Email</label>
+								<div class="col-sm-4">
+									<input type="email" class="form-control" id="email" name="email"
+										placeholder="Email" />
+								</div>
+								<label for="pec" class="col-sm-1 control-label">PEC</label>
+								<div class="col-sm-5">
+									<input type="email" class="form-control" id="pec" name="pec"
+										placeholder="PEC" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="codiceFatturaPa" class="col-sm-2 control-label">Codice Fattura PA</label>
+								<div class="col-sm-10">
+									<input type="input" class="form-control" id="codiceFatturaPa" name="codiceFatturaPa"
+										placeholder="Codice Fattura PA" />
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<a id="button" class="btn btn-default" href="#" role="button">Registra</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row footer"></div>
+	</div>
+</body>
+</html>

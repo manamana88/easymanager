@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:jsp="http://java.sun.com/JSP/Page">
+<head>
+<title>EasyManager</title>
+<ui:include src="include/headLibraries.xhtml" />
+</head>
+<body>
+	<div class="container-fluid">
+		<ui:include src="include/menu.xhtml" />
+		<div class="row body">
+			<div class="main col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<ol class="breadcrumb">
+							<li><a href="#{request.getContextPath()}">Home</a></li>
+						</ol>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row footer"></div>
+	</div>
+</body>
+</html>
