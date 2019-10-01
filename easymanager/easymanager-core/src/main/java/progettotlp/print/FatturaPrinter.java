@@ -1,5 +1,27 @@
 package progettotlp.print;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import progettotlp.exceptions.PrintException;
+import progettotlp.facilities.ConfigurationManager;
+import progettotlp.facilities.DateUtils;
+import progettotlp.facilities.FatturaUtilities;
+import progettotlp.facilities.StringUtils;
+import progettotlp.facilities.ConfigurationManager.Property;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
+
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -10,135 +32,148 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import progettotlp.classes.Azienda;
-import progettotlp.classes.Bene;
-import progettotlp.classes.DdT;
-import progettotlp.classes.Fattura;
-import progettotlp.exceptions.PrintException;
-import progettotlp.facilities.DateUtils;
-import progettotlp.facilities.FatturaUtilities;
-import progettotlp.facilities.StringUtils;
 
-public class FatturaPrinter
+public class FatturaPrinter extends PdfPrinter
 {
-    private static final int MAX_TABLE_HEIGHT = 544;
+    private static final int MAX_ROWS = 34;
 
     private static Logger logger = LoggerFactory.getLogger(FatturaPrinter.class);
 
-    public static List<File> printPage(Fattura f, Azienda principale, boolean deleteOnExit)
+	private static Image imageInstance;
+
+    public static File printPage(FatturaInterface f, AziendaInterface principale, boolean deleteOnExit)
                                                                                            throws PrintException
     {
         return printPage(f, principale, null, null, deleteOnExit);
     }
 
-    public static List<File> printPage(Fattura f,
-                                       Azienda principale,
+    public static File printPage(FatturaInterface f,
+                                       AziendaInterface principale,
                                        String folder,
                                        String filePrefix,
                                        boolean deleteOnExit) throws PrintException {
         try {
-            List<File> result = new ArrayList<File>();
-            List tableBodies = getTableBodies(f.getDdt());
+        	System.out.println("Start"+System.currentTimeMillis());
+            List<PdfPTable> tableBodies = getTableBodies(f.getDdt());
+            System.out.println("After Bodies"+System.currentTimeMillis());
+            File file;
+            if ((folder == null) || (filePrefix == null))
+            	file = File.createTempFile("emem", "emem");
+            else {
+            	file = new File(folder + File.separator + filePrefix + ".pdf");
+            }
+            if ((!(file.exists())) && (!(file.createNewFile()))) {
+            	throw new PrintException("Impossibile creare il file");
+            }
+            FileOutputStream outputStream = new FileOutputStream(file);
+            Document document = new Document(PageSize.A4);
+            PdfWriter.getInstance(document, outputStream);
+            document.addAuthor("C.R.Taglio");
+            document.addCreator("EasyManager");
+            document.addSubject("Fattura");
+            document.addCreationDate();
+            document.addTitle("Fattura per " + f.getCliente().getNome());
+            document.setMargins(15.0F, 15.0F, 15.0F, 15.0F);
+            document.open();
             for (int i = 0; i < tableBodies.size(); ++i)
             {
-                File file;
-                if ((folder == null) || (filePrefix == null))
-                    file = File.createTempFile("emem", "emem");
-                else {
-                    file = new File(folder + File.separator + filePrefix + " - Pagina " + (i + 1) + ".pdf");
-                }
-                if ((!(file.exists())) && (!(file.createNewFile()))) {
-                    throw new PrintException("Impossibile creare il file");
-                }
-                result.add(file);
-                FileOutputStream outputStream = new FileOutputStream(file);
-                Document document = new Document(PageSize.A4);
-                PdfWriter writer = PdfWriter.getInstance(document, outputStream);
-                document.addAuthor("C.R.Taglio");
-                document.addCreator("EasyManager");
-                document.addSubject("Fattura");
-                document.addCreationDate();
-                document.addTitle("Fattura per " + f.getCliente().getNome());
-                document.setMargins(15.0F, 15.0F, 15.0F, 15.0F);
-                document.open();
                 printHeader(document, principale, f.getCliente());
                 printTableHeader(document, f, i + 1, tableBodies.size());
-                document.add((Element) tableBodies.get(i));
+                document.add(tableBodies.get(i));
                 printTableFooter(document, f, i == tableBodies.size() - 1);
-                printSubtitels(document, f.getCliente());
-                document.close();
-                outputStream.flush();
-                outputStream.close();
+                printSubtitels(document, f);
+                document.newPage();
             }
+            document.close();
+            outputStream.flush();
+            outputStream.close();
             if (deleteOnExit) {
-                for (File file : result) {
-                    file.deleteOnExit();
-                }
+            	file.deleteOnExit();
             }
-            return result;
+            System.out.println("End"+System.currentTimeMillis());
+            return file;
         } catch (Exception ex) {
             throw new PrintException("Impossibile stampare la fattura", ex);
         }
     }
+    
+	private static PdfPCell createPdfPCell(String text, Font f) {
+		return createPdfPCell(text, f, BaseColor.WHITE, -1);
+	}
 
-    private static Font createHeaderBoldFont() {
-        return new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 1, BaseColor.BLACK);
-    }
+	private static PdfPCell createPdfPCell(String text, Font f,
+			BaseColor color, int borders) {
+		PdfPCell result = new PdfPCell();
+		if (borders > -1) {
+			result.setBorder(borders);
+		}
+		result.setHorizontalAlignment(Element.ALIGN_CENTER);
+		result.setVerticalAlignment(Element.ALIGN_MIDDLE);
+		result.setPhrase(new Phrase(text, f));
+		result.setFixedHeight(16.0F);
+		result.setBackgroundColor(color);
+		return result;
+	}
 
-    private static Font createNormalFont() {
-        return new Font(Font.FontFamily.COURIER, 9.0F, -1, BaseColor.BLACK);
-    }
+	private static PdfPCell createImage(BaseColor color, int borders,
+			boolean enabled) throws Exception {
+		PdfPCell result;
+		if (enabled) {
+			Image instance = getImageInstance();
+			result = new PdfPCell(instance);
+		} else {
+			result = new PdfPCell();
+		}
+		result.setHorizontalAlignment(Element.ALIGN_CENTER);
+		result.setVerticalAlignment(Element.ALIGN_MIDDLE);
+		result.setFixedHeight(16.0F);
+		result.setBorder(borders);
+		result.setBackgroundColor(color);
+		return result;
+	}
 
-    private static Font createNormalBoldFont() {
-        return new Font(Font.FontFamily.COURIER, 9.0F, 1, BaseColor.BLACK);
-    }
+	private static Image getImageInstance() throws BadElementException, MalformedURLException, IOException {
+		if (imageInstance==null) {			
+			imageInstance = Image.getInstance(ConfigurationManager.getProperty(Property.EXTERNAL_RESOURCES)+"/img/ok2.png");
+			imageInstance.scaleAbsolute(7.0F, 7.0F);
+		}
+		return imageInstance;
+	}
 
-    private static Font createSmallBoldFont() {
-        return new Font(Font.FontFamily.COURIER, 9.0F, 1, BaseColor.BLACK);
-    }
-
-    private static Font createSmallFont() {
-        return new Font(Font.FontFamily.COURIER, 7.0F, -1, BaseColor.BLACK);
-    }
-
-    private static void printHeader(Document d, Azienda principale, Azienda cliente) throws DocumentException {
+    private static void printHeader(Document d, AziendaInterface principale, AziendaInterface cliente) throws DocumentException {
         Paragraph p = new Paragraph(principale.getNome(), createHeaderBoldFont());
         p.setSpacingAfter(8.0F);
         d.add(p);
         Paragraph p2 = new Paragraph();
+        p2.setTabSettings(new TabSettings(56f));
         p2.setLeading(12.0F);
         p2.setFont(createNormalFont());
         p2.add("Via:");
-        p2.add(Chunk.createTabspace());
+        p2.add(Chunk.TABBING);
         p2.add(principale.getVia());
         p2.add(Chunk.NEWLINE);
         p2.add("P. Iva:");
-        p2.add(Chunk.createTabspace());
+        p2.add(Chunk.TABBING);
         p2.add(principale.getPIva());
         p2.add(Chunk.NEWLINE);
         p2.add("Cod Fis:");
-        p2.add(Chunk.createTabspace());
+        p2.add(Chunk.TABBING);
         p2.add(principale.getCodFis());
         p2.add(Chunk.NEWLINE);
         p2.add("Telefono:");
-        p2.add(Chunk.createTabspace());
+        p2.add(Chunk.TABBING);
         p2.add(principale.getTelefono());
         p2.add(Chunk.NEWLINE);
         p2.add("Fax:");
-        p2.add(Chunk.createTabspace());
+        p2.add(Chunk.TABBING);
         p2.add(principale.getFax());
         p2.add(Chunk.NEWLINE);
         p2.add("Email:");
-        p2.add(Chunk.createTabspace());
+        p2.add(Chunk.TABBING);
         p2.add(principale.getMail());
         d.add(p2);
         p2 = new Paragraph();
@@ -172,50 +207,14 @@ public class FatturaPrinter
         d.add(p2);
     }
 
-    private static PdfPCell createPdfPCell(String text, Font f) {
-        return createPdfPCell(text, f, BaseColor.WHITE, -1);
-    }
-
-    private static PdfPCell createPdfPCell(String text, Font f, BaseColor color, int borders) {
-        PdfPCell result = new PdfPCell();
-        if (borders > -1) {
-            result.setBorder(borders);
-        }
-        result.setHorizontalAlignment(1);
-        result.setVerticalAlignment(1);
-        result.setPhrase(new Phrase(text, f));
-        result.setFixedHeight(16.0F);
-        result.setBackgroundColor(color);
-        return result;
-    }
-
-    private static PdfPCell createImage(BaseColor color, int borders, boolean enabled)
-                                                                                      throws Exception
-    {
-        PdfPCell result;
-        if (enabled) {
-            Image instance = Image.getInstance("img/signedReduced.jpeg");
-            instance.scaleAbsolute(10.0F, 10.0F);
-            result = new PdfPCell(instance);
-        } else {
-            result = new PdfPCell();
-        }
-        result.setHorizontalAlignment(1);
-        result.setVerticalAlignment(1);
-        result.setFixedHeight(16.0F);
-        result.setBorder(borders);
-        result.setBackgroundColor(color);
-        return result;
-    }
-
-    private static void printTableHeader(Document d, Fattura f, int page, int totPage) throws Exception {
+    private static void printTableHeader(Document d, FatturaInterface f, int page, int totPage) throws Exception {
         PdfPTable table = new PdfPTable(6);
         table.setSpacingBefore(20.0F);
         table.setWidthPercentage(100.0F);
         table.setSpacingAfter(0.0F);
         table.addCell(createPdfPCell("Partita Iva", createNormalBoldFont()));
         table.addCell(createPdfPCell("Codice Fiscale", createNormalBoldFont()));
-        table.addCell(createPdfPCell("Fattura nÂ°", createNormalBoldFont()));
+        table.addCell(createPdfPCell("Fattura n°", createNormalBoldFont()));
         table.addCell(createPdfPCell("Emissione", createNormalBoldFont()));
         table.addCell(createPdfPCell("Regolamento", createNormalBoldFont()));
         table.addCell(createPdfPCell("Pagina", createNormalBoldFont()));
@@ -310,77 +309,44 @@ public class FatturaPrinter
         table.addCell(createPdfPCell(StringUtils.formatNumber(b.getBene().getTot()), createSmallFont(), color, borders));
     }
 
-    private static void addDdT(DdT d, PdfPTable table, int startingRow) throws Exception {
-        List beni = d.getBeni();
+    private static void addDdT(DdTInterface d, PdfPTable table, int startingRow) throws Exception {
+        List<BeneInterface> beni = d.getBeni();
         for (int i = 0; i < beni.size(); ++i)
-            addRow(new BeneFattura((Bene) beni.get(i), d.getData(), d.getId()), table, startingRow++, false);
+            addRow(new BeneFattura(beni.get(i), d.getData(), d.getId()), table, startingRow++, false);
     }
 
-    private static int tryToAddDdT(DdT d, PdfPTable table, int startingRow, boolean isLast) throws Exception
-    {
-        Document document = new Document(PageSize.A4);
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(File.createTempFile("emem", "emem")));
-        document.open();
-        addDdT(d, table, startingRow);
-        document.add(table);
-        int res = (int) table.getTotalHeight();
-        for (int i = 0; i < d.getBeni().size(); ++i) {
-            table.deleteLastRow();
-        }
-        document.close();
-        return res;
-    }
-
-    private static int getHeight(PdfPTable table) throws Exception {
-        Document document = new Document(PageSize.A4);
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(File.createTempFile("emem", "emem")));
-        document.open();
-        document.add(table);
-        int res = (int) table.getTotalHeight();
-        document.close();
-        return res;
-    }
-
-    private static List<PdfPTable> getTableBodies(List<DdT> list) throws Exception {
-        List result = new ArrayList();
+    private static List<PdfPTable> getTableBodies(List<DdTInterface> list) throws Exception {
+        List<PdfPTable> result = new ArrayList<PdfPTable>();
         PdfPTable t = retrieveTableBodyWithHeader();
         int currentRow = 0;
-        boolean insertFattura = false;
+//        boolean insertFattura = false;
         for (int i = 0; i < list.size(); ++i) {
-            DdT get = (DdT) list.get(i);
-            int oldCurrentRow = currentRow;
-            if (tryToAddDdT(get, t, 0, false) < 544) {
+        	System.out.println("StartFor"+System.currentTimeMillis());
+            DdTInterface get = (DdTInterface) list.get(i);
+            int beniSize = get.getBeni().size();
+			if (currentRow+beniSize<=MAX_ROWS){
                 addDdT(get, t, currentRow);
-                oldCurrentRow += get.getBeni().size();
-                currentRow = oldCurrentRow;
             } else {
-                int height = getHeight(t);
-                if ((height > 528) && (height < 560)) {
-                    t.deleteLastRow();
-                    DdT previousDdt = (DdT) list.get(i - 1);
-                    int size = previousDdt.getBeni().size();
-                    addRow(new BeneFattura((Bene) previousDdt.getBeni().get(size - 1), previousDdt.getData(),
-                                           previousDdt.getId()), t, oldCurrentRow - 1, true);
-                }
-                i--;
-                insertFattura = true;
-            }
-            if ((insertFattura) || (i == list.size() - 1)) {
-                int height = getHeight(t);
-                int limit = (544 - height) / 16;
-                for (int k = 0; k < limit; ++k) {
-                    addEmptyRow(t, oldCurrentRow++, k + 1 >= limit);
-                }
+            	fillWithEmptyRows(t, currentRow);
                 result.add(t);
                 t = retrieveTableBodyWithHeader();
-                currentRow = 0;
-                insertFattura = false;
+                currentRow=0;
+                addDdT(get, t, currentRow);
             }
+			currentRow += beniSize;
         }
+        fillWithEmptyRows(t, currentRow);
+        result.add(t);
         return result;
     }
 
-    private static void printTableFooter(Document d, Fattura f, boolean isLast) throws Exception {
+	private static void fillWithEmptyRows(PdfPTable t, int currentRow) throws Exception {
+		for (int i=currentRow; i<MAX_ROWS; i++){
+        	addEmptyRow(t, i, i==MAX_ROWS-1);
+        }
+	}
+
+    private static void printTableFooter(Document d, FatturaInterface f, boolean isLast) throws Exception {
         PdfPTable table = new PdfPTable(5);
         table.setSpacingBefore(5.0F);
         table.setWidthPercentage(100.0F);
@@ -407,33 +373,36 @@ public class FatturaPrinter
         d.add(table);
     }
 
-    private static void printSubtitels(Document document, Azienda azienda) throws Exception {
+    private static void printSubtitels(Document document, FatturaInterface f) throws Exception {
         Paragraph p =
             new Paragraph("PR=Prototipo, CP=Campionario, PC=Primo Capo, PZ=Piazzato, IA=Interamente Adesivato",
                           createSmallFont());
         p.setAlignment(1);
         document.add(p);
-        p = new Paragraph("I Prezzi sono comprensivi di preadesivazione e rifilo", createSmallFont());
-        p.setAlignment(1);
-        document.add(p);
-        String law;
+        String rifBollo = "I Prezzi sono comprensivi di preadesivazione e rifilo";
+        String law = "Operazione con iva per cassa ai sensi dell'art. 32 bis del D.L. n.83/2012";
+        AziendaInterface azienda = f.getCliente();
         logger.info(azienda.getNome());
         logger.info(azienda.isTassabile().toString());
         if (!azienda.isTassabile()){
             String nazione = azienda.getNazione();
             String toLowerCase = nazione.toLowerCase();
             if(toLowerCase.startsWith("it")){
-                law = "Non imponibile art.8 comma 1 lettera C DPR 633-1972";
+            	law = "Operazione non imponibile IVA ai sensi dell'art. 8 comma 1 lett. C del D.P.R. 633/72";
+                //law = "Non imponibile art.8 comma 1 lettera C DPR 633-1972";
             } else {
-                law = "F.C. IVA art. 7/ter comma 1 DPR 633/1972";
+                law = "Operazione non imponibile IVA ai sensi dell'art. 7/ter comma 1 del DPR 633/1972";
             }
-        } else {
-            law = "Imposta a esigibilit\u00e0 differita ai sensi dell'art. 7, D.L. 185/2008 convertito dalla L. 2/2009";
+            law+="\n Come da vs. autorizzazione n. "+azienda.getNumeroAutorizzazione()+" del "+DateUtils.formatDate(azienda.getDataAutorizzazione());
+            law+=" da noi registrata al n. "+azienda.getNumeroRegistrazione()+" del "+DateUtils.formatDate(azienda.getDataRegistrazione());
+			if (ConfigurationManager.getBolloLimit() < f.getTotale()){
+            	rifBollo = "Bollo assolto ai sensi del decreto MEF 17 giugno 2014 (art. 6)";
+            }
         }
-        p =
-            new Paragraph(
-                          law,
-                          createSmallFont());
+        p = new Paragraph(rifBollo, createSmallFont());
+        p.setAlignment(1);
+        document.add(p);
+        p = new Paragraph(law, createSmallFont());
         p.setAlignment(1);
         document.add(p);
         p = new Paragraph("BANCA BLS - IBAN: IT93A0538715400000000534628 - SWIFT: BPM0IT22", createSmallBoldFont());

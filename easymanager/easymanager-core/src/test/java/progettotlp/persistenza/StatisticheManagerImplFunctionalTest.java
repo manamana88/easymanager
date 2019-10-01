@@ -44,7 +44,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15L);
+                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -54,10 +54,10 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40L);
+                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
                     break;
                 case 2:
-                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25L);
+                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -75,7 +75,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40L);
+                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -85,7 +85,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15L);
+                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -119,10 +119,10 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40L);
+                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
                     break;
                 case 2:
-                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25L);
+                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -132,7 +132,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15L);
+                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -145,7 +145,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 400F,84F,484F, 0L);
+                    assertEqualsStatistiche(s, "azienda2", 400F,84F,484F, 0F);
                     break;
                 default:
                     fail("Unexpected id");
@@ -170,10 +170,10 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40L);
+                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
                     break;
                 case 2:
-                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25L);
+                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -183,7 +183,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15L);
+                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -196,7 +196,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 400F,84F,484F, 0L);
+                    assertEqualsStatistiche(s, "azienda2", 400F,84F,484F, 0F);
                     break;
                 default:
                     fail("Unexpected id");
@@ -216,7 +216,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
         return this;
     }
 
-    private void assertEqualsStatistiche(StatisticheFattura s, String nome, Float netto, Float iva, Float totale, Long capiTagliati){
+    private void assertEqualsStatistiche(StatisticheFattura s, String nome, Float netto, Float iva, Float totale, Float capiTagliati){
         assertEquals(nome, s.getCliente().getNome());
         assertEquals(netto, s.getNetto());
         assertEquals(iva, s.getIva());

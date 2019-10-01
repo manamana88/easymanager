@@ -5,23 +5,27 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.Type;
 
+import progettotlp.interfaces.BeneInterface;
+
 /**
- * Bene √® una classe che rappresenta un servizio fornito dall'Azienda, da inserire
- * in un Documento di Trasporto. √à caratterizzato da un codice, una commessa, una
- * descrizione, una quantit√†, un prezzo, un totale e degli attributi supplementari.
+ * Bene Ë una classe che rappresenta un servizio fornito dall'Azienda, da inserire
+ * in un Documento di Trasporto. Ë caratterizzato da un codice, una commessa, una
+ * descrizione, una quantit‡, un prezzo, un totale e degli attributi supplementari.
  * @author Vincenzo Barrea, Alessio Felicioni
  */
 @Entity
 @Table(name="bene")
-public class Bene implements Serializable{
+public class Bene implements Serializable, BeneInterface{
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @Column(name="cod")
@@ -29,7 +33,7 @@ public class Bene implements Serializable{
     private String commessa;
     private String descrizione;
     @Column(name="quantita")
-    private Integer qta;
+    private Float qta;
     private Float prezzo;
     private Float tot;
     @Type(type="yes_no")
@@ -46,7 +50,7 @@ public class Bene implements Serializable{
     private Boolean interamenteAdesivato=false;
 
     public Bene(){}
-    public Bene(String codice, String commessa, String descrizione, int qta, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
+    public Bene(String codice, String commessa, String descrizione, Float qta, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
         this.codice = codice;
         this.commessa = commessa;
         this.descrizione = descrizione;
@@ -58,7 +62,7 @@ public class Bene implements Serializable{
         this.interamenteAdesivato = interamenteAdesivato;
     }
 
-    public Bene(String codice, String commessa, String descrizione, int qta, Float prezzo, Float tot, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
+    public Bene(String codice, String commessa, String descrizione, Float qta, Float prezzo, Float tot, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
         this.codice = codice;
         this.commessa = commessa;
         this.descrizione = descrizione;
@@ -73,103 +77,122 @@ public class Bene implements Serializable{
     }
 
     @Override
-    public String toString() {
-        return "Bene{" + "id=" + id + "codice=" + codice + "commessa=" + commessa + "descrizione=" + descrizione + "qta=" + qta + "prezzo=" + prezzo + "tot=" + tot + "prototipo=" + prototipo + "campionario=" + campionario + "primoCapo=" + primoCapo + "piazzato=" + piazzato + "interamenteAdesivato=" + interamenteAdesivato + '}';
-    }
-
-    public Boolean getCampionario() {
+	public Boolean getCampionario() {
         return campionario;
     }
 
-    public void setCampionario(Boolean campionario) {
+    @Override
+	public void setCampionario(Boolean campionario) {
         this.campionario = campionario;
     }
 
-    public String getCodice() {
+    @Override
+	public String getCodice() {
         return codice;
     }
 
-    public void setCodice(String codice) {
+    @Override
+	public void setCodice(String codice) {
         this.codice = codice;
     }
 
-    public String getCommessa() {
+    @Override
+	public String getCommessa() {
         return commessa;
     }
 
-    public void setCommessa(String commessa) {
+    @Override
+	public void setCommessa(String commessa) {
         this.commessa = commessa;
     }
 
-    public String getDescrizione() {
+    @Override
+	public String getDescrizione() {
         return descrizione;
     }
 
-    public void setDescrizione(String descrizione) {
+    @Override
+	public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+	public void setId(Long id) {
         this.id = id;
     }
 
-    public Boolean getInteramenteAdesivato() {
+    @Override
+	public Boolean getInteramenteAdesivato() {
         return interamenteAdesivato;
     }
 
-    public void setInteramenteAdesivato(Boolean interamenteAdesivato) {
+    @Override
+	public void setInteramenteAdesivato(Boolean interamenteAdesivato) {
         this.interamenteAdesivato = interamenteAdesivato;
     }
 
-    public Boolean getPiazzato() {
+    @Override
+	public Boolean getPiazzato() {
         return piazzato;
     }
 
-    public void setPiazzato(Boolean piazzato) {
+    @Override
+	public void setPiazzato(Boolean piazzato) {
         this.piazzato = piazzato;
     }
 
-    public Float getPrezzo() {
+    @Override
+	public Float getPrezzo() {
         return prezzo;
     }
 
-    public void setPrezzo(Float prezzo) {
+    @Override
+	public void setPrezzo(Float prezzo) {
         this.prezzo = prezzo;
     }
 
-    public Boolean getPrimoCapo() {
+    @Override
+	public Boolean getPrimoCapo() {
         return primoCapo;
     }
 
-    public void setPrimoCapo(Boolean primoCapo) {
+    @Override
+	public void setPrimoCapo(Boolean primoCapo) {
         this.primoCapo = primoCapo;
     }
 
-    public Boolean getPrototipo() {
+    @Override
+	public Boolean getPrototipo() {
         return prototipo;
     }
 
-    public void setPrototipo(Boolean prototipo) {
+    @Override
+	public void setPrototipo(Boolean prototipo) {
         this.prototipo = prototipo;
     }
 
-    public Integer getQta() {
+    @Override
+	public Float getQta() {
         return qta;
     }
 
-    public void setQta(Integer qta) {
+    @Override
+	public void setQta(Float qta) {
         this.qta = qta;
     }
 
-    public Float getTot() {
+    @Override
+	public Float getTot() {
         return tot;
     }
 
-    public void setTot(Float tot) {
+    @Override
+	public void setTot(Float tot) {
         this.tot = tot;
     }
 
@@ -238,6 +261,15 @@ public class Bene implements Serializable{
         hash = 37 * hash + (this.interamenteAdesivato != null ? this.interamenteAdesivato.hashCode() : 0);
         return hash;
     }
+	@Override
+	public String toString() {
+		return "Bene [id=" + id + ", codice=" + codice + ", commessa="
+				+ commessa + ", descrizione=" + descrizione + ", qta=" + qta
+				+ ", prezzo=" + prezzo + ", tot=" + tot + ", prototipo="
+				+ prototipo + ", campionario=" + campionario + ", primoCapo="
+				+ primoCapo + ", piazzato=" + piazzato
+				+ ", interamenteAdesivato=" + interamenteAdesivato + "]";
+	}
 
     
     

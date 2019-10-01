@@ -19,6 +19,12 @@ CREATE TABLE `azienda` (
   `email` varchar(50) DEFAULT NULL,
   `principale` varchar(1) NOT NULL DEFAULT 'N',
   `tassabile` varchar(1) NOT NULL DEFAULT 'Y',
+  `num_aut` varchar(45) DEFAULT NULL,
+  `data_aut` date DEFAULT NULL,
+  `num_reg` varchar(45) DEFAULT NULL,
+  `data_reg` date DEFAULT NULL,
+  `pec` varchar(50) DEFAULT NULL,
+  `codice_fattura_pa` varchar(7) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uc_piva` (`p_iva`),
   UNIQUE KEY `uc_codfis` (`cod_fis`)
@@ -41,6 +47,7 @@ CREATE TABLE `ddt` (
   `ritiro` varchar(255) DEFAULT NULL,
   `annotazioni` varchar(250) DEFAULT NULL,
   `progressivo` int(10) DEFAULT NULL,
+  `fatturabile` varchar(1) DEFAULT 'Y',
   `fattura` int(11) DEFAULT NULL,
   `idx` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`real_id`) USING BTREE,
@@ -76,6 +83,7 @@ CREATE TABLE `fattura` (
   `iva_perc` float NOT NULL,
   `iva` float NOT NULL,
   `totale` float NOT NULL,
+  `bollo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`real_id`),
   KEY `cliente` (`cliente`),
   CONSTRAINT `fattura_ibfk_1` FOREIGN KEY (`cliente`) REFERENCES `azienda` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE

@@ -4,23 +4,26 @@
  */
 package progettotlp.facilities;
 
-import progettotlp.ProgettoTLPView;
-import java.util.GregorianCalendar;
-import java.util.Calendar;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JTable;
+
+import progettotlp.Constants;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.exceptions.NotSameClassException;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
 import progettotlp.print.BeneFattura;
-import progettotlp.ui.FormSceltaFatturaUtilities;
-import static progettotlp.facilities.Utility.*;
+import progettotlp.rest.resources.FatturaResource;
 
 /**
  *
@@ -30,7 +33,7 @@ public class Utility {
 
 
     public static int getSelectedAnno(){
-        String property = System.getProperty(ProgettoTLPView.CURRENT_YEAR_PROPERTY);
+        String property = System.getProperty(Constants.CURRENT_YEAR_PROPERTY);
         return property==null || property.trim().isEmpty()?GregorianCalendar.getInstance().get(Calendar.YEAR):Integer.parseInt(property);
     }
     /**
@@ -94,11 +97,11 @@ public class Utility {
         return true;
     }
     
-    public static Map<Integer,Map<Long,Bene>> mapDdT(List<DdT> list){
-        Map<Integer,Map<Long,Bene>> res=new HashMap<Integer,Map<Long,Bene>>();
-        for (DdT d : list){
-            Map<Long,Bene> mappingBene=new HashMap<Long,Bene>();
-            for (Bene bene:d.getBeni()){
+    public static Map<Integer,Map<Long,BeneInterface>> mapDdT(List<DdTInterface> list){
+        Map<Integer,Map<Long,BeneInterface>> res=new HashMap<>();
+        for (DdTInterface d : list){
+            Map<Long,BeneInterface> mappingBene=new HashMap<>();
+            for (BeneInterface bene:d.getBeni()){
                 mappingBene.put(bene.getId(), bene);
             }
             res.put(d.getId(), mappingBene);
@@ -106,19 +109,19 @@ public class Utility {
         return res;
     }
     
-    public static Map<Integer,List<BeneFattura>> getPagineBeni(List<DdT> lista){
+    public static Map<Integer,List<BeneFattura>> getPagineBeni(List<DdTInterface> lista){
         Map<Integer,List<BeneFattura>> res=new HashMap<Integer,List<BeneFattura>>();
         Integer page=1;
         List<BeneFattura> realList=new ArrayList<BeneFattura>();
-        Iterator<DdT> itDdT=lista.iterator();
+        Iterator<DdTInterface> itDdT=lista.iterator();
         while(itDdT.hasNext()){
             List<BeneFattura> tempList=new ArrayList<BeneFattura>();
-            DdT curr=itDdT.next();
-            Iterator<Bene> itBeni=curr.getBeni().iterator();
+            DdTInterface curr=itDdT.next();
+            Iterator<BeneInterface> itBeni=curr.getBeni().iterator();
             while (itBeni.hasNext()){
                 tempList.add(new BeneFattura(itBeni.next(), curr.getData(),curr.getId()));
             }
-            if (realList.size()+tempList.size()<FormSceltaFatturaUtilities.ROWS_PER_PAGE){
+            if (realList.size()+tempList.size()<FatturaResource.ROWS_PER_PAGE){
                 realList.addAll(tempList);
             } else {
                 res.put(page++, realList);
@@ -130,12 +133,12 @@ public class Utility {
         return res;
     }
     
-    public static long getTotCapi(List<DdT> list){
-        long tot=0;
-        Iterator<DdT> itDdT=list.iterator();
+    public static Float getTotCapi(List<DdTInterface> list){
+        float tot=0;
+        Iterator<DdTInterface> itDdT=list.iterator();
         while(itDdT.hasNext()){
-            DdT curr=itDdT.next();
-            Iterator<Bene> itBeni=curr.getBeni().iterator();
+            DdTInterface curr=itDdT.next();
+            Iterator<BeneInterface> itBeni=curr.getBeni().iterator();
             while (itBeni.hasNext()){
                 tot+=itBeni.next().getQta();
             }

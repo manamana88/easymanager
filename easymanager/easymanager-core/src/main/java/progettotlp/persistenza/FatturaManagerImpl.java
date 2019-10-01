@@ -4,22 +4,23 @@
  */
 package progettotlp.persistenza;
 
+import static progettotlp.facilities.Conversioni.boolToYN;
+
 import java.util.ArrayList;
-import org.hibernate.criterion.Order;
-import org.hibernate.Criteria;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import progettotlp.classes.Azienda;
-import progettotlp.classes.Bene;
+
 import progettotlp.classes.Fattura;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.Utility;
-import static progettotlp.facilities.Conversioni.*;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.FatturaInterface;
 
 /**
  *
@@ -35,7 +36,7 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         super();
     }
 
-    public boolean existsFattura(int mese, Azienda a) {
+    public boolean existsFattura(int mese, AziendaInterface a) {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -68,11 +69,11 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
     }
 
     public boolean existsFattura(int id) {
-        Fattura fattura = getFattura(id,false,false);
+        FatturaInterface fattura = getFattura(id,false,false);
         return fattura!=null;
     }
 
-    public void modificaFattura(Fattura f) throws PersistenzaException {
+    public void modificaFattura(FatturaInterface f) throws PersistenzaException {
         update(f);
     }
 
@@ -106,9 +107,9 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         }
     }
 
-    public void registraFattura(Fattura f) throws PersistenzaException {
+    public void registraFattura(FatturaInterface f) throws PersistenzaException {
         try {
-            Fattura fatturaById = getFattura(f.getId(),false,false);
+            FatturaInterface fatturaById = getFattura(f.getId(),false,false);
             if (fatturaById!=null){
                 throw new PersistenzaException("Fattura with id: "+f.getId()+" yet exists in year: "+DateUtils.getYear(f.getEmissione()));
             }
@@ -118,7 +119,7 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         }
     }
 
-    public LastSameBeneFatturatoInfos getLastSameBeneFatturatoInfos(Bene b) {
+    public LastSameBeneFatturatoInfos getLastSameBeneFatturatoInfos(BeneInterface b) {
         Session sessione=null;
         try{
             sessione=sessionFactory.openSession();
@@ -133,10 +134,26 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
                 return null;
             }
             Object[] first = results.get(0);
-            return new LastSameBeneFatturatoInfos((Integer)first[0], (Date)first[1], (Bene)first[2]);
+            return new LastSameBeneFatturatoInfos((Integer)first[0], (Date)first[1], (BeneInterface)first[2]);
         } finally{
             sessione.close();
         }
+    }
+    
+    public List<Fattura> getFattureByAzienda(Long aziendaId, boolean initializeDdT, boolean initializeBeni) {
+    	Session sessione=null;
+    	try{
+    		int selectedAnno = Utility.getSelectedAnno();
+    		sessione=sessionFactory.openSession();
+    		List<Fattura> list = sessione.createQuery("select f from Fattura as f join f.cliente as c where "
+    				+ "c.id='"+aziendaId+"' "
+    				+ " and year(f.emissione)=" + selectedAnno
+    				+ " order by f.emissione desc").list();
+    		initializeFattura(list, initializeDdT, initializeBeni);
+    		return list==null?new ArrayList<Fattura>():list;
+    	} finally {
+    		sessione.close();
+    	}
     }
 
     public List<Fattura> getFattureByAziendaName(String aziendaName) {

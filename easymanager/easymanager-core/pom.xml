@@ -9,6 +9,11 @@
 	<artifactId>easymanager-core</artifactId>
 	<dependencies>
 		<dependency>
+			<groupId>com.crtaglio</groupId>
+			<artifactId>easymanager-fatturapa</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
 		</dependency>
@@ -48,21 +53,9 @@
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
 		</dependency>
-		<!-- SWING -->
 		<dependency>
-			<groupId>org.jdesktop</groupId>
-			<artifactId>appframework</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.swinglabs</groupId>
-			<artifactId>swing-layout</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.netbeans</groupId>
-			<artifactId>AbsoluteLayout</artifactId>
-			<version>1.0.0</version>
-			<scope>system</scope>
-			<systemPath>${project.build.directory}}/../externalLibs/AbsoluteLayout.jar</systemPath>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
 		</dependency>
 
 		<!-- REST -->

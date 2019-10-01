@@ -12,13 +12,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import progettotlp.interfaces.AccountEmailInterface;
+
 /**
  *
  * @author vincenzo
  */
 @Entity
 @Table(name="account")
-public class AccountEmail implements Serializable{
+public class AccountEmail implements Serializable, AccountEmailInterface{
     
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -36,35 +38,43 @@ public class AccountEmail implements Serializable{
         this.smtp = smtp;
     }
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+	public void setId(Long id) {
         this.id = id;
     }
 
-    public String getPassword() {
+    @Override
+	public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    @Override
+	public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getSmtp() {
+    @Override
+	public String getSmtp() {
         return smtp;
     }
 
-    public void setSmtp(String smtp) {
+    @Override
+	public void setSmtp(String smtp) {
         this.smtp = smtp;
     }
 
-    public String getUsername() {
+    @Override
+	public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    @Override
+	public void setUsername(String username) {
         this.username = username;
     }
 

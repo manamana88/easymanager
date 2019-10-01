@@ -3,10 +3,10 @@ package progettotlp.facilities;
 
 import java.io.File;
 import java.util.List;
-import progettotlp.classes.Azienda;
-import progettotlp.classes.Bene;
-import progettotlp.classes.DdT;
-import progettotlp.classes.Fattura;
+
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
 import progettotlp.print.BeneFattura;
 
 public class FatturaUtilities
@@ -20,24 +20,24 @@ public class FatturaUtilities
         return tot;
     }
 
-    public static int getTotCapi(Fattura f) {
+    public static int getTotCapi(FatturaInterface f) {
         int tot = 0;
-        for (DdT d : f.getDdt()) {
-            for (Bene b : d.getBeni()) {
+        for (DdTInterface d : f.getDdt()) {
+            for (BeneInterface b : d.getBeni()) {
                 tot += b.getQta().intValue();
             }
         }
         return tot;
     }
 
-    public static String getDirectoryPath(Fattura fattura, String basePath) {
+    public static String getDirectoryPath(FatturaInterface fattura, String basePath) {
         return basePath + File.separator
             + DateUtils.getYear(fattura.getEmissione())
             + File.separator
             + DateUtils.getMonthString(fattura.getEmissione());
     }
 
-    public static String getFileName(Fattura fattura) {
+    public static String getFileName(FatturaInterface fattura) {
         return fattura.getId() + " - " + fattura.getCliente().getNome();
     }
 }

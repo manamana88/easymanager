@@ -8,17 +8,18 @@ package progettotlp.persistenza;
 import java.util.List;
 import progettotlp.classes.AccountEmail;
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.interfaces.AccountEmailInterface;
 
 /**
  *
  * @author vincenzo
  */
-public interface AccountManager {
+public interface AccountManager extends BaseManager {
 
-    public void registraAccount(AccountEmail accountEmail) throws PersistenzaException;
-    public void modificaAccount(AccountEmail accountEmail) throws PersistenzaException;
-    public void cancellaAccount(AccountEmail accountEmail) throws PersistenzaException;
-    public AccountEmail getAccount(Long id);
-    public AccountEmail getAccountByUsername(String username);
+    public void registraAccount(AccountEmailInterface accountEmail) throws PersistenzaException;
+    public void modificaAccount(AccountEmailInterface accountEmail) throws PersistenzaException;
+    public void cancellaAccount(AccountEmailInterface accountEmail) throws PersistenzaException;
+    public AccountEmailInterface getAccount(Long id);
+    public AccountEmailInterface getAccountByUsername(String username);
     public List<AccountEmail> getAccounts();
 }

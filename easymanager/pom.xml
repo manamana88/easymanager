@@ -8,6 +8,8 @@
 	<modules>
 		<module>easymanager-core</module>
 		<module>easymanager-webapp</module>
+		<module>easymanager-fatturapa</module>
+		<module>easymanager-api</module>
 	</modules>
 	<properties>
 		<jersey.version>2.22.2</jersey.version>
@@ -80,17 +82,10 @@
 				<artifactId>itextpdf</artifactId>
 				<version>5.5.8</version>
 			</dependency>
-
-			<!-- SWING -->
 			<dependency>
-				<groupId>org.jdesktop</groupId>
-				<artifactId>appframework</artifactId>
-				<version>1.0.3</version>
-			</dependency>
-			<dependency>
-				<groupId>org.swinglabs</groupId>
-				<artifactId>swing-layout</artifactId>
-				<version>1.0.3</version>
+			  <groupId>commons-io</groupId>
+			  <artifactId>commons-io</artifactId>
+			  <version>2.6</version>
 			</dependency>
 
 			<!-- LOG -->

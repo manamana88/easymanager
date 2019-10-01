@@ -11,14 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
-import progettotlp.ProgettoTLPView;
+import progettotlp.Constants;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.exceptions.NotSameClassException;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
 import progettotlp.print.BeneFattura;
 
 /**
@@ -29,10 +30,10 @@ public class UtilityTest {
 
     @Test
     public void getSelectedAnnoTest(){
-    	System.clearProperty(ProgettoTLPView.CURRENT_YEAR_PROPERTY);
+    	System.clearProperty(Constants.CURRENT_YEAR_PROPERTY);
         int year = Calendar.getInstance().get(Calendar.YEAR);
         Assert.assertEquals(year, Utility.getSelectedAnno());
-        System.setProperty(ProgettoTLPView.CURRENT_YEAR_PROPERTY, ""+2010);
+        System.setProperty(Constants.CURRENT_YEAR_PROPERTY, ""+2010);
         Assert.assertEquals(2010, Utility.getSelectedAnno());
     }
     @Test
@@ -107,29 +108,29 @@ public class UtilityTest {
     }
     @Test
     public void getTotCapiTest(){
-        Bene b1=new Bene();
-        b1.setQta(1);
-        Bene b2=new Bene();
-        b2.setQta(3);
-        Bene b3=new Bene();
-        b3.setQta(15);
-        DdT d1=new DdT();
+        BeneInterface b1=new Bene();
+        b1.setQta(1F);
+        BeneInterface b2=new Bene();
+        b2.setQta(3F);
+        BeneInterface b3=new Bene();
+        b3.setQta(15F);
+        DdTInterface d1=new DdT();
         d1.setBeni(Arrays.asList(b1));
-        DdT d2=new DdT();
+        DdTInterface d2=new DdT();
         d2.setBeni(Arrays.asList(b2,b3));
-        Assert.assertEquals(19,Utility.getTotCapi(Arrays.asList(d1,d2)));
+        Assert.assertEquals(new Float(19),Utility.getTotCapi(Arrays.asList(d1,d2)));
     }
     @Test
     public void mapDdTTest(){
-        ArrayList<DdT> lst= generateDdTList(10,10);
-        Map<Integer, Map<Long, Bene>> mapDdT = Utility.mapDdT(lst);
+        ArrayList<DdTInterface> lst= generateDdTList(10,10);
+        Map<Integer, Map<Long, BeneInterface>> mapDdT = Utility.mapDdT(lst);
         Assert.assertEquals(10, mapDdT.size());
-        for (Entry<Integer, Map<Long, Bene>> entry : mapDdT.entrySet()){
+        for (Entry<Integer, Map<Long, BeneInterface>> entry : mapDdT.entrySet()){
             Integer key = entry.getKey();
             Assert.assertTrue(key>=0 && key<10);
-            Map<Long, Bene> value = entry.getValue();
+            Map<Long, BeneInterface> value = entry.getValue();
             Assert.assertEquals(10, value.size());
-            for (Entry<Long,Bene> entry2:value.entrySet()){
+            for (Entry<Long,BeneInterface> entry2:value.entrySet()){
                 Assert.assertEquals(entry2.getKey(),entry2.getValue().getId());
             }
         }
@@ -137,7 +138,7 @@ public class UtilityTest {
 
     @Test
     public void getPagineBeniTest(){
-        ArrayList<DdT> lst = generateDdTList(10,10);
+        ArrayList<DdTInterface> lst = generateDdTList(10,10);
         Map<Integer, List<BeneFattura>> pagineBeni = Utility.getPagineBeni(lst);
         Assert.assertEquals(4, pagineBeni.size());
         for (Entry<Integer, List<BeneFattura>> entry:pagineBeni.entrySet()){
@@ -165,10 +166,10 @@ public class UtilityTest {
         }
     }
 
-    private ArrayList<DdT> generateDdTList(int ddtNumber, int beniForDdTNumber) {
-        ArrayList<DdT> lst = new ArrayList<DdT>();
+    private ArrayList<DdTInterface> generateDdTList(int ddtNumber, int beniForDdTNumber) {
+        ArrayList<DdTInterface> lst = new ArrayList<>();
         for (int i = 0; i < ddtNumber; i++) {
-            ArrayList<Bene> lstBene = new ArrayList<Bene>();
+            ArrayList<BeneInterface> lstBene = new ArrayList<>();
             for (int j = 0; j < beniForDdTNumber; j++) {
                 Bene bene = new Bene();
                 bene.setId(new Long(j));

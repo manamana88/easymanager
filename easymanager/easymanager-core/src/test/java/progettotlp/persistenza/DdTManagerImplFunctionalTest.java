@@ -6,8 +6,6 @@
 package progettotlp.persistenza;
 
 import java.util.ArrayList;
-import org.junit.After;
-import org.junit.Before;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +20,10 @@ import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
+
 import static org.junit.Assert.*;
 
 /**
@@ -36,17 +38,17 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Bene b1 = new Bene();
+        BeneInterface b1 = new Bene();
         b1.setCodice("cod");
         b1.setCommessa("com");
         b1.setDescrizione("descr");
-        b1.setQta(1);
-        Bene b2 = new Bene();
+        b1.setQta(1F);
+        BeneInterface b2 = new Bene();
         b2.setCodice("cod2");
         b2.setCommessa("com2");
         b2.setDescrizione("descr2");
-        b2.setQta(2);
-        DdT toSave = new DdT();
+        b2.setQta(2F);
+        DdTInterface toSave = new DdT();
         toSave.setBeni(Arrays.asList(b1, b2));
         Date data = DateUtils.parseDate("01-01-2012");
         toSave.setData(data);
@@ -58,20 +60,20 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         ddTManager.registraDdT(toSave);
 
 
-        DdT retrieved = retrieveObject(DdT.class, toSave.getRealId(),ddTManager,Arrays.asList("beni"));
+        DdTInterface retrieved = retrieveObject(DdT.class, toSave.getRealId(),ddTManager,Arrays.asList("beni"));
         assertNotNull(retrieved);
-        List<Bene> beni = retrieved.getBeni();
+        List<BeneInterface> beni = retrieved.getBeni();
         assertEquals(2, beni.size());
         b1 = beni.get(0);
         assertEquals("cod", b1.getCodice());
         assertEquals("com", b1.getCommessa());
         assertEquals("descr", b1.getDescrizione());
-        assertEquals(new Integer(1), b1.getQta());
+        assertEquals(new Float(1), b1.getQta());
         b2 = beni.get(1);
         assertEquals("cod2", b2.getCodice());
         assertEquals("com2", b2.getCommessa());
         assertEquals("descr2", b2.getDescrizione());
-        assertEquals(new Integer(2), b2.getQta());
+        assertEquals(new Float(2), b2.getQta());
         assertEquals(data, retrieved.getData());
         assertEquals(cliente, retrieved.getCliente());
         assertEquals("Cessionario", retrieved.getMezzo());
@@ -83,15 +85,15 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        DdT toModify = retrieveObject(DdT.class, 1L,ddTManager,Arrays.asList("beni"));
+        DdTInterface toModify = retrieveObject(DdT.class, 1L,ddTManager,Arrays.asList("beni"));
         toModify.setId(234);
 
-        List<Bene> beni = toModify.getBeni();
+        List<BeneInterface> beni = toModify.getBeni();
         for (int i=0; i<beni.size();i++){
-            Bene b=beni.get(i);
+            BeneInterface b=beni.get(i);
             Long id = b.getId();
             if (id.equals(1L)) {
-                b.setQta(1);
+                b.setQta(1F);
                 b.setCampionario(Boolean.TRUE);
                 b.setPiazzato(Boolean.TRUE);
                 b.setPrimoCapo(Boolean.TRUE);
@@ -102,17 +104,17 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
                 fail();
             }
         }
-        Bene beneToAdd = new Bene("cod3", "com3", "descr3", 30, true, true, true, true,true);
+        Bene beneToAdd = new Bene("cod3", "com3", "descr3", 30F, true, true, true, true,true);
         beni.add(beneToAdd);
 
         ddTManager.modificaDdT(toModify);
-        DdT modified = retrieveObject(DdT.class, 1L,ddTManager,Arrays.asList("beni"));
+        DdTInterface modified = retrieveObject(DdT.class, 1L,ddTManager,Arrays.asList("beni"));
         assertEquals(new Integer(234), modified.getId());
         beni = modified.getBeni();
         assertEquals(2, beni.size());
-        for (Bene b : beni) {
+        for (BeneInterface b : beni) {
             if (b.getId().equals(1L)) {
-                assertEquals(new Integer(1), b.getQta());
+                assertEquals(new Float(1), b.getQta());
                 assertEquals(new Float(21), b.getPrezzo());
                 assertTrue(b.getCampionario());
                 assertTrue(b.getPiazzato());
@@ -132,10 +134,10 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        DdT toDelete = retrieveObject(DdT.class, 1L,ddTManager);
+        DdTInterface toDelete = retrieveObject(DdT.class, 1L,ddTManager);
         assertNotNull(toDelete);
         ddTManager.cancellaDdT(toDelete.getRealId());
-        DdT deleted = retrieveObject(DdT.class, 1L,ddTManager);
+        DdTInterface deleted = retrieveObject(DdT.class, 1L,ddTManager);
         assertNull(deleted);
 
     }
@@ -164,8 +166,8 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Azienda azienda = retrieveObject(Azienda.class, 3L,ddTManager);
-        List<DdT> allDdT = ddTManager.getAllDdT(azienda, 6,false,false);
+        AziendaInterface azienda = retrieveObject(Azienda.class, 3L,ddTManager);
+        List<DdTInterface> allDdT = ddTManager.getAllDdT(azienda, 6,false,false);
         assertEquals(2, allDdT.size());
         allDdT = ddTManager.getAllDdT(azienda, 5,false,false);
         assertTrue(allDdT.isEmpty());
@@ -219,9 +221,9 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Azienda azienda1 = retrieveObject(Azienda.class, 1L,ddTManager);
-        Azienda azienda2 = retrieveObject(Azienda.class, 2L,ddTManager);
-        Azienda azienda3 = retrieveObject(Azienda.class, 3L,ddTManager);
+        AziendaInterface azienda1 = retrieveObject(Azienda.class, 1L,ddTManager);
+        AziendaInterface azienda2 = retrieveObject(Azienda.class, 2L,ddTManager);
+        AziendaInterface azienda3 = retrieveObject(Azienda.class, 3L,ddTManager);
         assertTrue(ddTManager.isEmptyDdTListMese(6, azienda1));
         assertFalse(ddTManager.isEmptyDdTListMese(6, azienda2));
         assertFalse(ddTManager.isEmptyDdTListMese(6, azienda3));

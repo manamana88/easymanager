@@ -1,3 +1,5 @@
+commonMultiplier = 100;
+
 datepickerOptions = {
 	format : "dd/mm/yyyy",
 	language : "it",
@@ -6,8 +8,20 @@ datepickerOptions = {
 	forceParse: false
 }
 
-function addDatepickers(){
+function addDatepickers(updateDate){
 	$('.data input').datepicker(datepickerOptions);
+	if (updateDate){
+		$('.data input').each(function (){
+			var currentDateString = $(this).val();
+			if (currentDateString){
+				var currentDate = new Date(currentDateString.substring(6), currentDateString.substring(3,5), currentDateString.substring(0,2));
+			}
+		});
+	}
+}
+
+function removeDatepickers(){
+	$('.data input').datepicker("remove");
 }
 
 function makeTextInputReadOnly(){
@@ -24,6 +38,12 @@ function makeCheckboxReadOnly(){
 
 function makeSelectReadonly(){
 	$("select").prop("disabled", "true");
+}
+
+function makeAllReadonly(){
+	makeCheckboxReadOnly();
+	makeTextInputReadOnly();
+	makeSelectReadonly();
 }
 
 function addDisabledColorToTable(){
@@ -135,5 +155,56 @@ function iterateTable(toApply) {
 		$(this).find("td").each(function(index2) {
 			toApply(this, index, index2);
 		});
+	});
+}
+
+function multiply(a, b){
+	var roundedA = round(a * commonMultiplier) ;
+	var roundedB = round(b * commonMultiplier);
+	return round((roundedA * roundedB) / (commonMultiplier * commonMultiplier));
+}
+
+function round(a){
+	return Math.round(a*commonMultiplier) / 100;
+}
+
+function isChecked(checkbox){
+	return $(checkbox).prop("checked");
+}
+
+function setChecked(checkbox, value){
+	var toSet = value ? "checked" : "";
+	return $(checkbox).prop("checked", toSet);
+}
+
+function displaySelezionaAnnoModal(){
+	var baseUrl = getWebappUrl() + "/resources/anno";
+	var targetUrl=baseUrl + "/list";
+	doCall('GET', targetUrl, {}, "", function (responseData){
+		var anni = responseData.items;
+		var annoSelect = $("#annoGenerale");
+		$(annoSelect).empty();
+		for (var i in anni){
+			var anno = anni[i];
+			$(annoSelect).append("<option value=\""+anno+"\">"+anno+"</option>");
+		}
+		doCall('GET', baseUrl, {}, "", function (responseData){
+			$("#annoGenerale").val(responseData.items[0]);
+			$("#selectAnnoModal").modal("show");
+		});
+	});
+}
+
+function salvaAnno(){
+	var anno = $("#annoGenerale").val();
+	if (!anno){
+		notifyModal("Errore", "Anno non selezionato");
+	}
+	var targetUrl = getWebappUrl() + "/resources/anno?year="+anno;
+	doCall('POST', targetUrl, {}, "", function (responseData){
+		notifyModal("Successo", "Anno registrato con successo");
+		_.delay(function(){
+			window.location.reload(true);
+		}, 2000);
 	});
 }

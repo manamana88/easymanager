@@ -6,8 +6,14 @@
 package progettotlp.persistenza;
 
 import java.util.List;
+
 import progettotlp.facilities.DateUtils;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.BeneInterface;
+import progettotlp.interfaces.DdTInterface;
+import progettotlp.interfaces.FatturaInterface;
 import progettotlp.classes.Bene;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +21,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+
 import org.junit.Test;
+
 import progettotlp.classes.Azienda;
 import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;
@@ -35,8 +43,8 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        DdT ddt2=retrieveObject(DdT.class, 2L,fatturaManager);
-        Fattura newFattura = new Fattura(
+        DdTInterface ddt2=retrieveObject(DdT.class, 2L,fatturaManager);
+        FatturaInterface newFattura = new Fattura(
                 Arrays.asList(ddt2),
                 new Date(),
                 new Date(),
@@ -45,7 +53,8 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
                 10F,
                 ConfigurationManager.getIvaDefault(),
                 2.1F,
-                12.1F);
+                12.1F,
+                null);
         ddt2.setFattura(newFattura);
         try{
             fatturaManager.registraFattura(newFattura);
@@ -61,7 +70,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Fattura retrieved = retrieveObject(Fattura.class, 1L,fatturaManager);
+        FatturaInterface retrieved = retrieveObject(Fattura.class, 1L,fatturaManager);
         assertNotNull(retrieved);
         Float newNetto = new Float(154);
         Integer newId = new Integer(15);
@@ -126,8 +135,8 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Azienda azienda3 = retrieveObject(Azienda.class, 3L,fatturaManager);
-        Azienda azienda2 = retrieveObject(Azienda.class, 2L,fatturaManager);
+        AziendaInterface azienda3 = retrieveObject(Azienda.class, 3L,fatturaManager);
+        AziendaInterface azienda2 = retrieveObject(Azienda.class, 2L,fatturaManager);
         assertFalse(fatturaManager.existsFattura(6, azienda2));
         assertFalse(fatturaManager.existsFattura(5, azienda2));
         assertFalse(fatturaManager.existsFattura(7, azienda2));
@@ -150,7 +159,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareLastBeneTest.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        Bene b=new Bene();
+        BeneInterface b=new Bene();
         b.setCodice("0001");
         b.setCampionario(Boolean.TRUE);
         b.setPiazzato(Boolean.TRUE);
@@ -161,11 +170,11 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         assertEquals(new Integer(4),lastSameBene.getFatturaId());
         Date emissione = DateUtils.parseDate("30/03/2012");
         assertEquals(emissione,lastSameBene.getFatturaEmissione());
-        Bene b1 = lastSameBene.getBene();
+        BeneInterface b1 = lastSameBene.getBene();
         assertEquals("0001",b1.getCodice());
         assertEquals("C0001",b1.getCommessa());
         assertEquals("Abito",b1.getDescrizione());
-        assertEquals(new Integer(15),b1.getQta());
+        assertEquals(new Float(15),b1.getQta());
         assertEquals(new Float(3),b1.getPrezzo());
         assertEquals(new Float(45),b1.getTot());
         assertEquals(new Float(3),b1.getPrezzo());

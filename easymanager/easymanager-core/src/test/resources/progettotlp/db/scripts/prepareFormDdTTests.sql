@@ -11,7 +11,7 @@ INSERT INTO fattura (`real_id`,`id`,`emissione`,`scadenza`,`cliente`,`netto`,`iv
     (2,2,'2012-05-01','2012-07-01',3,10.0,21,2.1,12.1),
     (10,2,'2011-05-01','2012-07-01',3,10.0,21,2.1,12.1);
 
-INSERT INTO ddt VALUES
+INSERT INTO ddt (`real_id`,`data`,`id`,`cliente`,`mezzo`,`causale`,`destinazione`,`vostro_ordine`,`vostro_ordine_del`,`tipo`,`aspetto_esteriore`,`colli`,`peso`,`porto`,`ritiro`,`annotazioni`,`progressivo`,`fattura`,`idx`) VALUES
     (1,'2012-05-01',106,2,'Cessionario','Reso c/adesivazione',NULL,'',NULL,'','',NULL,NULL,'',NULL,'',NULL,NULL,NULL),
     (2,'2012-05-02',107,3,'Cessionario','Reso c/adesivazione',NULL,'',NULL,'','',NULL,NULL,'',NULL,'',NULL,NULL,NULL),
     (3,'2012-05-03',108,4,'Cessionario','Reso c/adesivazione',NULL,'',NULL,'','',NULL,NULL,'',NULL,'',NULL,NULL,NULL),

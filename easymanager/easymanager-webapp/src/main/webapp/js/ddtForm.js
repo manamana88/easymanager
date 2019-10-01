@@ -7,6 +7,7 @@ $(document).ready(function() {
 	doCall('GET', targetUrl, {}, "", function (responseData){
 		$("#numero").val(responseData.items[0]);
 		$("#data").val(responseData.items[1]);
+		setChecked($("#fatturabile"), true);
 		loadCompanySelector(responseData.items[2]);
 		initTable();
 
@@ -36,6 +37,16 @@ function loadCompanySelector(companies){
 		var company = companies[i];
 		$(aziendaSelect).append("<option value='"+company.id+"'>"+company.nome+"</option>");
 	}
+	
+	aziendaSelect.change(function(){
+		var selectedAzienda = $("#azienda").val();
+		var options = _.map(destinations[selectedAzienda],function (obj){
+			return obj.name+"\n"+obj.address1+"\n"+obj.address2;
+		});
+		$("#destinazione").autocomplete({
+			source:options.sort()
+		});
+	});
 }
 
 function initTable(){
@@ -82,13 +93,14 @@ function fillForm(currentDdt){
 	$("#realId").val(currentDdt.realId);
 	$("#numero").val(currentDdt.id);
 	$("#data").val(currentDdt.data);
+	setChecked($("#fatturabile"),currentDdt.fatturabile);
 	selectOption("azienda", currentDdt.cliente.id);
 	fillTable(currentDdt.beni);
 	selectOption("mezzo", currentDdt.mezzo);
 	$("#causale").val(currentDdt.causale);
 	$("#colli").val(currentDdt.colli);
 	$("#peso").val(currentDdt.peso);
-	$("#destinazione").text(currentDdt.destinazione);
+	$("#destinazione").text(currentDdt.destinazione.replace(/"/g,"'"));
 	$("#aspetto").val(currentDdt.aspettoEsteriore);
 	selectOption("porto", currentDdt.porto);
 	$("#ritiro").val(currentDdt.ritiro);
@@ -167,7 +179,8 @@ function loadDdt() {
 	ddtJson.beni = loadBeni();
 	ddtJson.causale = $("#causale").val();
 	ddtJson.data = $("#data").val();
-	ddtJson.destinazione = $("#destinazione").val();
+	ddtJson.destinazione = $("#destinazione").val().replace(/"/g,"'");
+	ddtJson.fatturabile = isChecked($("#fatturabile"));
 	ddtJson.mezzo = $("#mezzo").val();
 	ddtJson.porto = $("#porto").val();
 	ddtJson.ritiro = $("#ritiro").val();

@@ -6,19 +6,18 @@
 package progettotlp.test;
 
 import org.junit.Before;
-import org.junit.Ignore;
-import progettotlp.ProgettoTLPView;
+
+import progettotlp.Constants;
 
 /**
  *
  * @author vincenzo
  */
-@Ignore
 public class AnnualTest {
 
     @Before
     public void setYear(){
-        System.setProperty(ProgettoTLPView.CURRENT_YEAR_PROPERTY, "2012");
+        System.setProperty(Constants.CURRENT_YEAR_PROPERTY, "2012");
     }
 
 }

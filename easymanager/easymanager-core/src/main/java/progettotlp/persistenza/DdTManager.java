@@ -4,12 +4,14 @@
  */
 package progettotlp.persistenza;
 
+import java.util.Date;
 import java.util.List;
 
-import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.interfaces.DdTInterface;
 
 /**
  *
@@ -25,22 +27,28 @@ public interface DdTManager extends BaseManager {
 
     public List<DdT> getAllDdT(boolean initializeBeni, boolean initializeFattura);
 
-    public List<DdT> getAllDdT(Azienda a, int mese,boolean initializeBeni, boolean initializeFattura);
+    public List<DdT> getAllDdT(Long aziendaId);
+
+    public List<DdTInterface> getAllDdT(AziendaInterface a, int mese,boolean initializeBeni, boolean initializeFattura);
+
+    public List<DdT> getAllDdT(AziendaInterface a, Date startDate, Date endDate);
+
+    public List<DdTInterface> getAllDdTWithoutFattura(AziendaInterface a, Date startDate, Date endDate);
 
     public List<DdT> getAllDdTWithoutFattura(boolean initializeBeni, boolean initializeFattura);
 
     public List<Bene> getBeniDdT(int id) throws PersistenzaException;
 
-    public DdT getDdTById(int id,boolean initializeBeni, boolean initializeFattura);
+    public DdTInterface getDdTById(int id,boolean initializeBeni, boolean initializeFattura);
 
     public DdT getDdT(Long id,boolean initializeBeni, boolean initializeFattura);
 
     public int getLastDdT();
 
-    public boolean isEmptyDdTListMese(int selectedMese, Azienda azienda);
+    public boolean isEmptyDdTListMese(int selectedMese, AziendaInterface azienda);
 
-    public void modificaDdT(DdT toModify) throws PersistenzaException;
+    public void modificaDdT(DdTInterface toModify) throws PersistenzaException;
 
-    public void registraDdT(DdT d) throws PersistenzaException;
+    public void registraDdT(DdTInterface d) throws PersistenzaException;
     
 }

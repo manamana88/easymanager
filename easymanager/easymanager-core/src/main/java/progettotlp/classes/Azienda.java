@@ -2,13 +2,25 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import progettotlp.interfaces.AziendaInterface;
+import progettotlp.rest.utils.DateDeserializer;
+import progettotlp.rest.utils.DateSerializer;
 
 /**
  * Azienda rappresenta sia l'ente che emette le fatture che i clienti di quest'ente, 
@@ -17,7 +29,7 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name="azienda")
-public class Azienda implements Serializable {
+public class Azienda implements Serializable, AziendaInterface {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String nome;
@@ -38,12 +50,32 @@ public class Azienda implements Serializable {
     @Type(type="yes_no")
     private Boolean tassabile;
     @Type(type="yes_no")
-    private Boolean principale;
+    private Boolean principale = false;
+    @Column(name="num_aut")
+    private String numeroAutorizzazione;
+    @Temporal(TemporalType.DATE)
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
+    @Column(name="data_aut")
+    private Date dataAutorizzazione;
+    @Column(name="num_reg")
+    private String numeroRegistrazione;
+    @Temporal(TemporalType.DATE)
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
+    @Column(name="data_reg")
+    private Date dataRegistrazione;
+    private String pec;
+    @Column(name="codice_fattura_pa")
+    private String codiceFatturaPa;
 
     public Azienda(){}
     
     public Azienda(String nome, String pIva, String codFis, String via, String civico, 
-            String cap, String citta, String provincia, String nazione, String mail, String telefono, String fax, Boolean principale) {
+            String cap, String citta, String provincia, String nazione, String mail, 
+            String telefono, String fax, Boolean principale, String numeroAutorizzazione, 
+            Date dataAutorizzazione, String numeroRegistrazione, Date dataRegistrazione,
+            String pec, String codiceFatturaPa) {
         this.nome = nome;
         this.pIva = pIva;
         this.codFis = codFis;
@@ -57,13 +89,21 @@ public class Azienda implements Serializable {
         this.telefono=telefono;
         this.fax=fax;
         this.principale=principale;
+        this.numeroAutorizzazione=numeroAutorizzazione;
+        this.dataAutorizzazione=dataAutorizzazione;
+        this.numeroRegistrazione=numeroRegistrazione;
+        this.dataRegistrazione=dataRegistrazione;
+		this.pec = pec;
+		this.codiceFatturaPa = codiceFatturaPa;
     }
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+	public void setId(Long id) {
         this.id = id;
     }
 
@@ -71,7 +111,8 @@ public class Azienda implements Serializable {
      * Restituisce il numero di fax di un'{@link Azienda}.
      * @return String fax : numero di fax dell'Azienda.
      */
-    public String getFax() {
+    @Override
+	public String getFax() {
         return fax;
     }
 
@@ -79,7 +120,8 @@ public class Azienda implements Serializable {
      * Imposta il numero di fax di un'{@link Azienda}.
      * @param fax 
      */
-    public void setFax(String fax) {
+    @Override
+	public void setFax(String fax) {
         this.fax = fax;
     }
 
@@ -87,7 +129,8 @@ public class Azienda implements Serializable {
      * Restituisce la provincia in cui si trova la sede di un'Azienda.
      * @return String provincia : la provincia in cui si trova l'Azienda.
      */
-    public String getProvincia() {
+    @Override
+	public String getProvincia() {
         return provincia;
     }
 
@@ -95,7 +138,8 @@ public class Azienda implements Serializable {
      * Imposta la provincia in cui si trova la sede di un'Azienda.
      * @param provincia 
      */
-    public void setProvincia(String provincia) {
+    @Override
+	public void setProvincia(String provincia) {
         this.provincia = provincia;
     }
 
@@ -103,7 +147,8 @@ public class Azienda implements Serializable {
      * Restituisce il numero di telefono dell'Azienda.
      * @return String telefono : il numero di telefono dell'Azienda.
      */
-    public String getTelefono() {
+    @Override
+	public String getTelefono() {
         return telefono;
     }
 
@@ -111,7 +156,8 @@ public class Azienda implements Serializable {
      * Imposta il numero di telefono dell'Azienda.
      * @param telefono 
      */
-    public void setTelefono(String telefono) {
+    @Override
+	public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
     
@@ -119,7 +165,8 @@ public class Azienda implements Serializable {
      * Restituisce il CAP per un'Azienda. 
      * @return String CAP : il numero di CAP dell'Azienda.
      */
-    public String getCap() {
+    @Override
+	public String getCap() {
         return cap;
     }
 
@@ -127,7 +174,8 @@ public class Azienda implements Serializable {
      * Imposta il CAP dell'Azienda.
      * @param cap 
      */
-    public void setCap(String cap) {
+    @Override
+	public void setCap(String cap) {
         this.cap = cap;
     }
 
@@ -135,7 +183,8 @@ public class Azienda implements Serializable {
      * Restituisce la Città in cui si trova la sede di un'Azienda
      * @return String citta : la città in cui si trova l'azienda.
      */
-    public String getCitta() {
+    @Override
+	public String getCitta() {
         return citta;
     }
 
@@ -143,7 +192,8 @@ public class Azienda implements Serializable {
      * Imposta la Città in cui si trova la sede dell'Azienda.
      * @param citta 
      */
-    public void setCitta(String citta) {
+    @Override
+	public void setCitta(String citta) {
         this.citta = citta;
     }
 
@@ -151,7 +201,8 @@ public class Azienda implements Serializable {
      * Restituisce il numero civico della sede dell'Azienda
      * @return String civico : il numero civico dell'Azienda.
      */
-    public String getCivico() {
+    @Override
+	public String getCivico() {
         return civico;
     }
 
@@ -159,7 +210,8 @@ public class Azienda implements Serializable {
      * Imposta il numero civico di un'Azienda.
      * @param civico 
      */
-    public void setCivico(String civico) {
+    @Override
+	public void setCivico(String civico) {
         this.civico = civico;
     }
 
@@ -167,7 +219,8 @@ public class Azienda implements Serializable {
      * Restituisce il codice fiscale di un'Azienda.
      * @return String cod_fis : il codice fiscale dell'Azienda.
      */
-    public String getCodFis() {
+    @Override
+	public String getCodFis() {
         return codFis;
     }
 
@@ -175,7 +228,8 @@ public class Azienda implements Serializable {
      * Imposta il codice fiscale di un'Azienda.
      * @param cod_fis 
      */
-    public void setCodFis(String cod_fis) {
+    @Override
+	public void setCodFis(String cod_fis) {
         this.codFis = cod_fis;
     }
 
@@ -183,7 +237,8 @@ public class Azienda implements Serializable {
      * Restituisce l'indirizzo email di un'Azienda.
      * @return String mail : indirizzo email dell'Azienda.
      */
-    public String getMail() {
+    @Override
+	public String getMail() {
         return mail;
     }
    
@@ -191,7 +246,8 @@ public class Azienda implements Serializable {
      * Imposta l'indirizzo email di un'Azienda.
      * @param mail 
      */
-    public void setMail(String mail) {
+    @Override
+	public void setMail(String mail) {
         this.mail=mail;
     }
 
@@ -199,7 +255,8 @@ public class Azienda implements Serializable {
      * Restituisce la Nazione in cui si trova l'Azienda.
      * @return String nazione : la Nazione dell'Azienda. 
      */
-    public String getNazione() {
+    @Override
+	public String getNazione() {
         return nazione;
     }
 
@@ -207,7 +264,8 @@ public class Azienda implements Serializable {
      * Imposta la Nazione in cui si trova l'Azienda.
      * @param nazione 
      */
-    public void setNazione(String nazione) {
+    @Override
+	public void setNazione(String nazione) {
         this.nazione = nazione;
     }
 
@@ -215,7 +273,8 @@ public class Azienda implements Serializable {
      * Restituisce il nome dell'Azienda.
      * @return String nome : il nome dell'Azienda.
      */
-    public String getNome() {
+    @Override
+	public String getNome() {
         return nome;
     }
 
@@ -223,7 +282,8 @@ public class Azienda implements Serializable {
      * Imposta il nome dell'Azienda
      * @param nome 
      */
-    public void setNome(String nome) {
+    @Override
+	public void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -231,7 +291,8 @@ public class Azienda implements Serializable {
      * Restituisce la partita iva di un'Azienda.
      * @return String p_iva : la partita iva dell'Azienda.
      */
-    public String getPIva() {
+    @Override
+	public String getPIva() {
         return pIva;
     }
 
@@ -239,7 +300,8 @@ public class Azienda implements Serializable {
      * Imposta la partita iva di un'Azienda.
      * @param p_iva 
      */
-    public void setPIva(String p_iva) {
+    @Override
+	public void setPIva(String p_iva) {
         this.pIva = p_iva;
     }
 
@@ -247,7 +309,8 @@ public class Azienda implements Serializable {
      * Restituisce la via in cui si trova un'Azienda.
      * @return String via : la via in cui si trova l'Azienda.
      */
-    public String getVia() {
+    @Override
+	public String getVia() {
         return via;
     }
 
@@ -255,121 +318,255 @@ public class Azienda implements Serializable {
      * Imposta la via in cui si trova l'Azienda
      * @param via 
      */
-    public void setVia(String via) {
+    @Override
+	public void setVia(String via) {
         this.via = via;
     }
 
-    public String getpIva() {
-        return pIva;
-    }
-
-    public void setpIva(String pIva) {
-        this.pIva = pIva;
-    }
-
-    public Boolean isPrincipale() {
+    @Override
+	public Boolean isPrincipale() {
         return principale;
     }
 
-    public void setPrincipale(Boolean principale) {
+    @Override
+	public void setPrincipale(Boolean principale) {
         this.principale = principale;
     }
 
-    public Boolean isTassabile() {
+    @Override
+	public Boolean isTassabile() {
         return tassabile;
     }
 
-    public Boolean getTassabile() {
+    @Override
+	public Boolean getTassabile() {
         return tassabile;
     }
 
-    public void setTassabile(Boolean tassabile) {
+    @Override
+	public void setTassabile(Boolean tassabile) {
         this.tassabile = tassabile;
     }
 
     @Override
-    public String toString() {
-        return "Azienda{" + "id=" + id + "nome=" + nome + "pIva=" + pIva + "codFis=" + codFis + "via=" + via + "civico=" + civico + "cap=" + cap + "citta=" + citta + "provincia=" + provincia + "nazione=" + nazione + "mail=" + mail + "telefono=" + telefono + "fax=" + fax + "tassabile=" + tassabile + "principale=" + principale + '}';
-    }
+	public String getNumeroAutorizzazione() {
+		return numeroAutorizzazione;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Azienda other = (Azienda) obj;
-        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
-            return false;
-        }
-        if ((this.nome == null) ? (other.nome != null) : !this.nome.equals(other.nome)) {
-            return false;
-        }
-        if ((this.pIva == null) ? (other.pIva != null) : !this.pIva.equals(other.pIva)) {
-            return false;
-        }
-        if ((this.codFis == null) ? (other.codFis != null) : !this.codFis.equals(other.codFis)) {
-            return false;
-        }
-        if ((this.via == null) ? (other.via != null) : !this.via.equals(other.via)) {
-            return false;
-        }
-        if ((this.civico == null) ? (other.civico != null) : !this.civico.equals(other.civico)) {
-            return false;
-        }
-        if ((this.cap == null) ? (other.cap != null) : !this.cap.equals(other.cap)) {
-            return false;
-        }
-        if ((this.citta == null) ? (other.citta != null) : !this.citta.equals(other.citta)) {
-            return false;
-        }
-        if ((this.provincia == null) ? (other.provincia != null) : !this.provincia.equals(other.provincia)) {
-            return false;
-        }
-        if ((this.nazione == null) ? (other.nazione != null) : !this.nazione.equals(other.nazione)) {
-            return false;
-        }
-        if ((this.mail == null) ? (other.mail != null) : !this.mail.equals(other.mail)) {
-            return false;
-        }
-        if ((this.telefono == null) ? (other.telefono != null) : !this.telefono.equals(other.telefono)) {
-            return false;
-        }
-        if ((this.fax == null) ? (other.fax != null) : !this.fax.equals(other.fax)) {
-            return false;
-        }
-        if (this.tassabile != other.tassabile && (this.tassabile == null || !this.tassabile.equals(other.tassabile))) {
-            return false;
-        }
-        if (this.principale != other.principale && (this.principale == null || !this.principale.equals(other.principale))) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public void setNumeroAutorizzazione(String numeroAutorizzazione) {
+		this.numeroAutorizzazione = numeroAutorizzazione;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 23 * hash + (this.id != null ? this.id.hashCode() : 0);
-        hash = 23 * hash + (this.nome != null ? this.nome.hashCode() : 0);
-        hash = 23 * hash + (this.pIva != null ? this.pIva.hashCode() : 0);
-        hash = 23 * hash + (this.codFis != null ? this.codFis.hashCode() : 0);
-        hash = 23 * hash + (this.via != null ? this.via.hashCode() : 0);
-        hash = 23 * hash + (this.civico != null ? this.civico.hashCode() : 0);
-        hash = 23 * hash + (this.cap != null ? this.cap.hashCode() : 0);
-        hash = 23 * hash + (this.citta != null ? this.citta.hashCode() : 0);
-        hash = 23 * hash + (this.provincia != null ? this.provincia.hashCode() : 0);
-        hash = 23 * hash + (this.nazione != null ? this.nazione.hashCode() : 0);
-        hash = 23 * hash + (this.mail != null ? this.mail.hashCode() : 0);
-        hash = 23 * hash + (this.telefono != null ? this.telefono.hashCode() : 0);
-        hash = 23 * hash + (this.fax != null ? this.fax.hashCode() : 0);
-        hash = 23 * hash + (this.tassabile != null ? this.tassabile.hashCode() : 0);
-        hash = 23 * hash + (this.principale != null ? this.principale.hashCode() : 0);
-        return hash;
-    }
+	@Override
+	public Date getDataAutorizzazione() {
+		return dataAutorizzazione;
+	}
 
-    
+	@Override
+	public void setDataAutorizzazione(Date dataAutorizzazione) {
+		this.dataAutorizzazione = dataAutorizzazione;
+	}
+
+	@Override
+	public String getNumeroRegistrazione() {
+		return numeroRegistrazione;
+	}
+
+	@Override
+	public void setNumeroRegistrazione(String numeroRegistrazione) {
+		this.numeroRegistrazione = numeroRegistrazione;
+	}
+
+	@Override
+	public Date getDataRegistrazione() {
+		return dataRegistrazione;
+	}
+
+	@Override
+	public void setDataRegistrazione(Date dataRegistrazione) {
+		this.dataRegistrazione = dataRegistrazione;
+	}
+
+	@Override
+	public String getPEC() {
+		return pec;
+	}
+
+	@Override
+	public void setPEC(String pec) {
+		this.pec = pec;
+	}
+
+	@Override
+	public String getCodiceFatturaPa() {
+		return codiceFatturaPa;
+	}
+
+	@Override
+	public void setCodiceFatturaPa(String codiceFatturaPa) {
+		this.codiceFatturaPa = codiceFatturaPa;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Azienda [id=").append(id).append(", nome=").append(nome).append(", pIva=").append(pIva)
+				.append(", codFis=").append(codFis).append(", via=").append(via).append(", civico=").append(civico)
+				.append(", cap=").append(cap).append(", citta=").append(citta).append(", provincia=").append(provincia)
+				.append(", nazione=").append(nazione).append(", mail=").append(mail).append(", telefono=")
+				.append(telefono).append(", fax=").append(fax).append(", tassabile=").append(tassabile)
+				.append(", principale=").append(principale).append(", numeroAutorizzazione=")
+				.append(numeroAutorizzazione).append(", dataAutorizzazione=").append(dataAutorizzazione)
+				.append(", numeroRegistrazione=").append(numeroRegistrazione).append(", dataRegistrazione=")
+				.append(dataRegistrazione).append(", pec=").append(pec).append(", codiceFatturaPa=")
+				.append(codiceFatturaPa).append("]");
+		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cap == null) ? 0 : cap.hashCode());
+		result = prime * result + ((citta == null) ? 0 : citta.hashCode());
+		result = prime * result + ((civico == null) ? 0 : civico.hashCode());
+		result = prime * result + ((codFis == null) ? 0 : codFis.hashCode());
+		result = prime * result + ((codiceFatturaPa == null) ? 0 : codiceFatturaPa.hashCode());
+		result = prime * result + ((dataAutorizzazione == null) ? 0 : dataAutorizzazione.hashCode());
+		result = prime * result + ((dataRegistrazione == null) ? 0 : dataRegistrazione.hashCode());
+		result = prime * result + ((fax == null) ? 0 : fax.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
+		result = prime * result + ((nazione == null) ? 0 : nazione.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((numeroAutorizzazione == null) ? 0 : numeroAutorizzazione.hashCode());
+		result = prime * result + ((numeroRegistrazione == null) ? 0 : numeroRegistrazione.hashCode());
+		result = prime * result + ((pIva == null) ? 0 : pIva.hashCode());
+		result = prime * result + ((pec == null) ? 0 : pec.hashCode());
+		result = prime * result + ((principale == null) ? 0 : principale.hashCode());
+		result = prime * result + ((provincia == null) ? 0 : provincia.hashCode());
+		result = prime * result + ((tassabile == null) ? 0 : tassabile.hashCode());
+		result = prime * result + ((telefono == null) ? 0 : telefono.hashCode());
+		result = prime * result + ((via == null) ? 0 : via.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Azienda other = (Azienda) obj;
+		if (cap == null) {
+			if (other.cap != null)
+				return false;
+		} else if (!cap.equals(other.cap))
+			return false;
+		if (citta == null) {
+			if (other.citta != null)
+				return false;
+		} else if (!citta.equals(other.citta))
+			return false;
+		if (civico == null) {
+			if (other.civico != null)
+				return false;
+		} else if (!civico.equals(other.civico))
+			return false;
+		if (codFis == null) {
+			if (other.codFis != null)
+				return false;
+		} else if (!codFis.equals(other.codFis))
+			return false;
+		if (codiceFatturaPa == null) {
+			if (other.codiceFatturaPa != null)
+				return false;
+		} else if (!codiceFatturaPa.equals(other.codiceFatturaPa))
+			return false;
+		if (dataAutorizzazione == null) {
+			if (other.dataAutorizzazione != null)
+				return false;
+		} else if (!dataAutorizzazione.equals(other.dataAutorizzazione))
+			return false;
+		if (dataRegistrazione == null) {
+			if (other.dataRegistrazione != null)
+				return false;
+		} else if (!dataRegistrazione.equals(other.dataRegistrazione))
+			return false;
+		if (fax == null) {
+			if (other.fax != null)
+				return false;
+		} else if (!fax.equals(other.fax))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (mail == null) {
+			if (other.mail != null)
+				return false;
+		} else if (!mail.equals(other.mail))
+			return false;
+		if (nazione == null) {
+			if (other.nazione != null)
+				return false;
+		} else if (!nazione.equals(other.nazione))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (numeroAutorizzazione == null) {
+			if (other.numeroAutorizzazione != null)
+				return false;
+		} else if (!numeroAutorizzazione.equals(other.numeroAutorizzazione))
+			return false;
+		if (numeroRegistrazione == null) {
+			if (other.numeroRegistrazione != null)
+				return false;
+		} else if (!numeroRegistrazione.equals(other.numeroRegistrazione))
+			return false;
+		if (pIva == null) {
+			if (other.pIva != null)
+				return false;
+		} else if (!pIva.equals(other.pIva))
+			return false;
+		if (pec == null) {
+			if (other.pec != null)
+				return false;
+		} else if (!pec.equals(other.pec))
+			return false;
+		if (principale == null) {
+			if (other.principale != null)
+				return false;
+		} else if (!principale.equals(other.principale))
+			return false;
+		if (provincia == null) {
+			if (other.provincia != null)
+				return false;
+		} else if (!provincia.equals(other.provincia))
+			return false;
+		if (tassabile == null) {
+			if (other.tassabile != null)
+				return false;
+		} else if (!tassabile.equals(other.tassabile))
+			return false;
+		if (telefono == null) {
+			if (other.telefono != null)
+				return false;
+		} else if (!telefono.equals(other.telefono))
+			return false;
+		if (via == null) {
+			if (other.via != null)
+				return false;
+		} else if (!via.equals(other.via))
+			return false;
+		return true;
+	}
 
 }

@@ -12,6 +12,8 @@ import java.util.List;
 import org.junit.Test;
 import progettotlp.classes.AccountEmail;
 import progettotlp.exceptions.PersistenzaException;
+import progettotlp.interfaces.AccountEmailInterface;
+
 import static org.junit.Assert.*;
 
 /**
@@ -23,7 +25,7 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
 
     @Test
     public void testRegistraAzienda() throws PersistenzaException{
-        AccountEmail daSalvare= new AccountEmail();
+        AccountEmailInterface daSalvare= new AccountEmail();
         String username="username";
         String password="password";
         String smtp="smtp";
@@ -35,7 +37,7 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
         accountManagerImpl.registraAccount(daSalvare);
         Long id = daSalvare.getId();
         assertNotNull(id);
-        AccountEmail retrieved = retrieveObject(AccountEmail.class, id,accountManagerImpl);
+        AccountEmailInterface retrieved = retrieveObject(AccountEmail.class, id,accountManagerImpl);
         assertNotNull(retrieved);
         assertEquals(username,retrieved.getUsername());
         assertEquals(password,retrieved.getPassword());
@@ -50,7 +52,7 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
         List<AccountEmail> accounts = accountManagerImpl.getAccounts();
         assertNotNull(accounts);
         assertEquals(3, accounts.size());
-        for(AccountEmail accountEmail : accounts){
+        for(AccountEmailInterface accountEmail : accounts){
             if (accountEmail.getId().equals(1L)){
                 assertEquals("username1",accountEmail.getUsername());
                 assertEquals("password1",accountEmail.getPassword());
@@ -74,7 +76,7 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAccountTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        AccountEmail accountEmail = accountManagerImpl.getAccountByUsername("username1");
+        AccountEmailInterface accountEmail = accountManagerImpl.getAccountByUsername("username1");
         assertNotNull(accountEmail);
         assertEquals("username1",accountEmail.getUsername());
         assertEquals("password1",accountEmail.getPassword());
@@ -89,7 +91,7 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAccountTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        AccountEmail accountEmail = accountManagerImpl.getAccount(1L);
+        AccountEmailInterface accountEmail = accountManagerImpl.getAccount(1L);
         assertNotNull(accountEmail);
         assertEquals("username1",accountEmail.getUsername());
         assertEquals("password1",accountEmail.getPassword());
@@ -110,7 +112,7 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
         String password="password";
         String smtp="smtp";
 
-        AccountEmail daSalvare = retrieveObject(AccountEmail.class, id,accountManagerImpl);
+        AccountEmailInterface daSalvare = retrieveObject(AccountEmail.class, id,accountManagerImpl);
         daSalvare.setPassword(password);
         daSalvare.setSmtp(smtp);
         daSalvare.setUsername(username);
@@ -130,7 +132,7 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
         executeSQL(file);
 
         Long id=1L;
-        AccountEmail daCancellare = retrieveObject(AccountEmail.class, id,accountManagerImpl);
+        AccountEmailInterface daCancellare = retrieveObject(AccountEmail.class, id,accountManagerImpl);
         assertNotNull(daCancellare);
 
         accountManagerImpl.cancellaAccount(daCancellare);

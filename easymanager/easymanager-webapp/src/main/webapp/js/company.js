@@ -14,7 +14,11 @@ $( document ).ready(function() {
 	if (mode==="insert"){
 		$("#button").bind("click", registraAzienda);
 	}
-	
+	$("#tassabile").change(tassabileChangeHandler);
+	if (mode!=="show"){
+		addDatepickers(true);
+		tassabileChangeHandler();
+	}
 	$("#giuridica").change(toggleReadOnly);
 	$("#piva").change(function(){
 		if ($("#giuridica").prop("checked")){
@@ -23,13 +27,32 @@ $( document ).ready(function() {
 	});
 });
 
+function tassabileChangeHandler(){
+	if ($("#tassabile").prop("checked")){
+		$("#numAut").prop("readonly", "readonly");
+		$("#numAut").val("");
+		$("#dataAut").prop("readonly", "readonly");
+		$("#dataAut").val("");
+		$("#numReg").prop("readonly", "readonly");
+		$("#numReg").val("");
+		$("#dataReg").prop("readonly", "readonly");
+		$("#dataReg").val("");
+		removeDatepickers();
+	} else {
+		$("#numAut").removeAttr("readonly");
+		$("#dataAut").removeAttr("readonly");
+		$("#numReg").removeAttr("readonly");
+		$("#dataReg").removeAttr("readonly");
+		addDatepickers(true);
+	}
+}
+
 function fillPage(currentCompany){
 	var mode = getParameterByName("action");
 	if (mode==="show"){
 		$(".breadcrumb li[class*='active']").text("Visualizza "+currentCompany.nome);
 		fillForm(currentCompany);
 		makeCheckboxReadOnly();
-		destroyDatepickers();
 		makeTextInputReadOnly();
 		$("#button").hide();
 	} else if (mode === "edit"){
@@ -45,10 +68,14 @@ function fillForm(currentCompany){
 	$("#id").val(currentCompany.id);
 	$("#principale").val(currentCompany.principale);
 	$("#nome").val(currentCompany.nome);
-	$('#giuridica').prop('checked', currentCompany.pIva === currentCompany.codFis);
+	$('#giuridica').prop('checked', currentCompany.piva === currentCompany.codFis);
 	$('#tassabile').prop('checked', currentCompany.tassabile);
-	$("#piva").val(currentCompany.pIva);
+	$("#piva").val(currentCompany.piva);
+	$("#numAut").val(currentCompany.numeroAutorizzazione); 
+	$("#dataAut").val(currentCompany.dataAutorizzazione); 
 	$("#codfis").val(currentCompany.codFis);
+	$("#numReg").val(currentCompany.numeroRegistrazione); 
+	$("#dataReg").val(currentCompany.dataRegistrazione); 
 	$("#via").val(currentCompany.via);
 	$("#numero").val(currentCompany.civico);
 	$("#cap").val(currentCompany.cap);
@@ -58,6 +85,12 @@ function fillForm(currentCompany){
 	$("#telefono").val(currentCompany.telefono);
 	$("#fax").val(currentCompany.fax);
 	$("#email").val(currentCompany.mail);
+	$("#numAut").val(currentCompany.numeroAutorizzazione);
+	$("#dataAut").val(currentCompany.dataAutorizzazione);
+	$("#numReg").val(currentCompany.numeroRegistrazione);
+	$("#dataReg").val(currentCompany.dataRegistrazione);
+	$("#pec").val(currentCompany.pec);
+	$("#codiceFatturaPa").val(currentCompany.codiceFatturaPa);
 }
 
 function lockForm(){
@@ -75,10 +108,12 @@ function toggleReadOnly(){
 
 function registraAzienda(){
 
-	var urlString = formToUrlString();
+	var aziendaObject = loadAzienda();
+	var aziendaJson = JSON.stringify(aziendaObject);
+	var headers = {"Content-Type": "application/json"};
 	var targetUrl=getWebappUrl() + "/resources/azienda";
 
-	doCall('POST', targetUrl, {}, urlString, function (responseData){
+	doCall('POST', targetUrl, headers, aziendaJson, function (responseData){
 		notifyModal("Successo", "Azienda registrata con successo");
 		_.delay(function(){
 			window.location.href=getWebappUrl()+"/companiesList.xhtml";
@@ -88,10 +123,12 @@ function registraAzienda(){
 
 function modificaAzienda(){
 	
-	var urlString = formToUrlString();
+	var aziendaObject = loadAzienda();
+	var aziendaJson = JSON.stringify(aziendaObject);
+	var headers = {"Content-Type": "application/json"};
 	var targetUrl=getWebappUrl() + "/resources/azienda";
 	
-	doCall('PUT', targetUrl, {}, urlString, function (responseData){
+	doCall('PUT', targetUrl, headers, aziendaJson, function (responseData){
 		notifyModal("Successo", "Azienda modificata con successo");
 		_.delay(function(){
 			window.location.href=getWebappUrl()+"/companiesList.xhtml";
@@ -99,39 +136,31 @@ function modificaAzienda(){
 	});
 }
 
-function formToUrlString(){
-	var id = $("#id").val();
-	var nome = $("#nome").val();
-	var giuridica = $("#giuridica").prop("checked");
-	var tassabile = $("#tassabile").prop("checked");
-	var piva = $("#piva").val();
-	var codFis = $("#codfis").val();
-	var via = $("#via").val();
-	var civico = $("#numero").val();
-	var cap = $("#cap").val();
-	var citta = $("#citta").val();
-	var provincia = $("#provincia").val();
-	var nazione = $("#nazione").val();
-	var telefono = $("#telefono").val();
-	var fax = $("#fax").val();
-	var email = $("#email").val();
-	var principale = $("#principale").val();
-	
-	var urlString="";
-	urlString += "id="+encodeURIComponent(id);
-	urlString += "&nome="+encodeURIComponent(nome);
-	urlString += "&piva="+encodeURIComponent(piva);
-	urlString += "&codFis="+encodeURIComponent(codFis);
-	urlString += "&via="+encodeURIComponent(via);
-	urlString += "&civico="+encodeURIComponent(civico);
-	urlString += "&cap="+encodeURIComponent(cap);
-	urlString += "&citta="+encodeURIComponent(citta);
-	urlString += "&provincia="+encodeURIComponent(provincia);
-	urlString += "&nazione="+encodeURIComponent(nazione);
-	urlString += "&mail="+encodeURIComponent(email);
-	urlString += "&telefono="+encodeURIComponent(telefono);
-	urlString += "&fax="+encodeURIComponent(fax);
-	urlString += "&tassabile="+encodeURIComponent(tassabile);
-	urlString += "&principale="+encodeURIComponent(principale);
-	return urlString;
+function loadAzienda(){
+	var azienda = {};
+	azienda.id = $("#id").val();
+    azienda.nome = $("#nome").val();
+    azienda.piva = $("#piva").val();
+    azienda.codFis = $("#codfis").val();
+    azienda.via = $("#via").val();
+    azienda.civico = $("#numero").val();
+    azienda.cap = $("#cap").val();
+    azienda.citta = $("#citta").val();
+    azienda.provincia = $("#provincia").val();
+    azienda.nazione = $("#nazione").val();
+    azienda.mail = $("#email").val();
+    azienda.telefono = $("#telefono").val();
+    azienda.fax = $("#fax").val();
+    azienda.tassabile = $("#tassabile").prop("checked");
+    azienda.principale = $("#principale").val();
+    if (!azienda.principale) {
+    	azienda.principale = false;
+    }
+    azienda.numeroAutorizzazione = $("#numAut").val();
+    azienda.dataAutorizzazione = $("#dataAut").val();
+    azienda.numeroRegistrazione = $("#numReg").val();
+    azienda.dataRegistrazione = $("#dataReg").val();
+    azienda.pec = $("#pec").val();
+    azienda.codiceFatturaPa = $("#codiceFatturaPa").val();
+    return azienda;
 }
