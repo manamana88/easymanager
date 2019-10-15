@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtils;
+import progettotlp.facilities.NumberUtils;
 import progettotlp.fatturapa.jaxb.AnagraficaType;
 import progettotlp.fatturapa.jaxb.BolloVirtualeType;
 import progettotlp.fatturapa.jaxb.CedentePrestatoreType;
@@ -44,8 +45,10 @@ import progettotlp.fatturapa.jaxb.IndirizzoType;
 import progettotlp.fatturapa.jaxb.ModalitaPagamentoType;
 import progettotlp.fatturapa.jaxb.NaturaType;
 import progettotlp.fatturapa.jaxb.RegimeFiscaleType;
+import progettotlp.fatturapa.jaxb.ScontoMaggiorazioneType;
 import progettotlp.fatturapa.jaxb.SoggettoEmittenteType;
 import progettotlp.fatturapa.jaxb.TipoDocumentoType;
+import progettotlp.fatturapa.jaxb.TipoScontoMaggiorazioneType;
 import progettotlp.interfaces.AziendaInterface;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
@@ -229,7 +232,7 @@ public class FatturaPaConverter {
 		return result;
 	}
 
-	private static DettaglioLineeType createDettaglioLinea(DdTInterface ddt, BeneInterface bene) {
+	protected static DettaglioLineeType createDettaglioLinea(DdTInterface ddt, BeneInterface bene) {
 		DettaglioLineeType dettaglioLinea = new DettaglioLineeType();
 		//dettaglioLinea.setTipoCessionePrestazione(); //TODO confermare esente
 		dettaglioLinea.setCodiceArticolo(createCodiceArticolo(bene));
@@ -242,17 +245,42 @@ public class FatturaPaConverter {
 		Float prezzo = bene.getPrezzo();
 		if (prezzo == null) {
 			prezzo = bene.getTot()/bene.getQta();
+			prezzo = NumberUtils.roundNumber(prezzo);
 		}
 		dettaglioLinea.setPrezzoUnitario(new BigDecimal(prezzo));
-		//dettaglioLinea.setScontoMaggiorazione(null);
+		List<ScontoMaggiorazioneType> scontoMaggiorazioneList = createScontoMaggiorazione(bene, prezzo);
+		dettaglioLinea.setScontoMaggiorazione(scontoMaggiorazioneList);
 		dettaglioLinea.setPrezzoTotale(new BigDecimal(bene.getTot()));
 		//dettaglioLinea.setRitenuta(null); //TODO confermare esente
 		if (!ddt.getCliente().isTassabile()) {
-			dettaglioLinea.setNatura(ESENZIONE_IVA); //TODO confermare esente
+			dettaglioLinea.setNatura(ESENZIONE_IVA);
 		}
 		//dettaglioLinea.setRiferimentoAmministrazione(null); //TODO confermare esente
 		//dettaglioLinea.setAltriDatiGestionali(null); //TODO confermare esente
 		return dettaglioLinea;
+	}
+
+	protected static List<ScontoMaggiorazioneType> createScontoMaggiorazione(BeneInterface bene, Float prezzo) {
+		List<ScontoMaggiorazioneType> result = new ArrayList<>();
+		BigDecimal tot = new BigDecimal(Float.toString(bene.getTot()));
+		BigDecimal qta = new BigDecimal(Float.toString(bene.getQta()));
+		BigDecimal prezzoBD = new BigDecimal(Float.toString(prezzo));
+		
+		BigDecimal roundDifference = tot.subtract(prezzoBD.multiply(qta));
+		int compareTo = roundDifference.compareTo(new BigDecimal("0"));
+		if (compareTo!=0) {
+			ScontoMaggiorazioneType scontoMaggiorazione = new ScontoMaggiorazioneType();
+			TipoScontoMaggiorazioneType tipo;
+			if (compareTo>0) {
+				tipo = TipoScontoMaggiorazioneType.MG;
+			} else {
+				tipo = TipoScontoMaggiorazioneType.SC;
+			}
+			scontoMaggiorazione.setTipo(tipo);
+			scontoMaggiorazione.setImporto(roundDifference.abs().setScale(2));
+			result.add(scontoMaggiorazione);
+		}
+		return result;
 	}
 
 	private static List<CodiceArticoloType> createCodiceArticolo(BeneInterface bene) {
