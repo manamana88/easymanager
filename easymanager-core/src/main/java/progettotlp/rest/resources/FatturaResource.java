@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -286,8 +287,10 @@ public class FatturaResource {
 	            	throw new Exception("Impossibile trovare questo bene: ["+bene.toString()+"]");
 	            }
 	            BigDecimal prezzo = bene.getPrezzo();
-				riga.setPrezzo(prezzo.setScale(2));
-	            riga.setTot(bene.getTot().setScale(2));
+	            if (prezzo!=null) {	            	
+	            	riga.setPrezzo(prezzo.setScale(2, RoundingMode.HALF_DOWN));
+	            }
+	            riga.setTot(bene.getTot().setScale(2, RoundingMode.HALF_DOWN));
 	            checkConsistency(riga);
         	}
         	for (DdTInterface ddt : listaDdT) {
@@ -297,14 +300,14 @@ public class FatturaResource {
 			}
         }
         Boolean tassabile = clienteAzienda.isTassabile();
-        BigDecimal netto = f.getNetto().setScale(2);
+        BigDecimal netto = f.getNetto().setScale(2, RoundingMode.HALF_DOWN);
         BigDecimal ivaPerc;
         BigDecimal ivaTotale;
         BigDecimal totale;
 		if (tassabile){
 			ivaPerc = f.getIvaPerc();
-			ivaTotale = f.getIva().setScale(2);
-			totale = f.getTotale().setScale(2);
+			ivaTotale = f.getIva().setScale(2, RoundingMode.HALF_DOWN);
+			totale = f.getTotale().setScale(2, RoundingMode.HALF_DOWN);
         } else {
         	ivaPerc = new BigDecimal("0");
         	ivaTotale = new BigDecimal("0");
@@ -327,17 +330,19 @@ public class FatturaResource {
 				netto = netto.add(bene.getTot());
 			}
 		}
-		BigDecimal roundedNetto = netto.setScale(2);
+		BigDecimal roundedNetto = netto.setScale(2, RoundingMode.HALF_DOWN);
 		if (!fattura.getNetto().equals(roundedNetto)){
 			throw new Exception("Netto inconsistente: "+fattura.getNetto()+" contro "+roundedNetto);
 		}
 		
 		if (tassabile){
-			BigDecimal ivaTot = fattura.getNetto().multiply(fattura.getIvaPerc()).divide(new BigDecimal("100")).setScale(2);
+			BigDecimal netto2 = fattura.getNetto();
+			BigDecimal multiply = netto2.multiply(fattura.getIvaPerc());
+			BigDecimal ivaTot = multiply.divide(new BigDecimal("100"), 2, RoundingMode.HALF_DOWN);
 			if (!fattura.getIva().equals(ivaTot)){
 				throw new Exception("Iva inconsistente: "+fattura.getIva()+" contro "+ivaTot);
 			}
-			BigDecimal totale = roundedNetto.add(ivaTot).setScale(2);
+			BigDecimal totale = roundedNetto.add(ivaTot).setScale(2, RoundingMode.HALF_DOWN);
 			if (!fattura.getTotale().equals(totale)){
 				throw new Exception("Totale inconsistente: "+fattura.getTotale()+" contro "+totale);
 			}
@@ -358,7 +363,7 @@ public class FatturaResource {
 			throw new Exception("Prezzo non trovato: "+riga.toString());
 		} else if (prezzo!=null){
 			BigDecimal checkTot = riga.getQta().multiply(prezzo);
-			if (!checkTot.setScale(2).equals(riga.getTot())){
+			if (!checkTot.setScale(2, RoundingMode.HALF_DOWN).equals(riga.getTot())){
 				throw new Exception("Datin inconsistenti: "+riga);
 			}
 		}

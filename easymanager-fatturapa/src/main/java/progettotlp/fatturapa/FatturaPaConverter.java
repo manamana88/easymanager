@@ -2,6 +2,7 @@ package progettotlp.fatturapa;
 
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtils;
-import progettotlp.facilities.NumberUtils;
 import progettotlp.fatturapa.jaxb.AnagraficaType;
 import progettotlp.fatturapa.jaxb.BolloVirtualeType;
 import progettotlp.fatturapa.jaxb.CedentePrestatoreType;
@@ -246,8 +246,7 @@ public class FatturaPaConverter {
 		if (prezzo == null) {
 			BigDecimal tot = bene.getTot();
 			BigDecimal qta = bene.getQta();
-			BigDecimal divide = tot.divide(qta);
-			prezzo = divide.setScale(2);
+			prezzo = tot.divide(qta, 2, RoundingMode.HALF_DOWN);
 		}
 		dettaglioLinea.setPrezzoUnitario(prezzo);
 		List<ScontoMaggiorazioneType> scontoMaggiorazioneList = createScontoMaggiorazione(bene, prezzo);
@@ -278,7 +277,7 @@ public class FatturaPaConverter {
 				tipo = TipoScontoMaggiorazioneType.SC;
 			}
 			scontoMaggiorazione.setTipo(tipo);
-			scontoMaggiorazione.setImporto(roundDifference.abs().setScale(2));
+			scontoMaggiorazione.setImporto(roundDifference.abs().setScale(2, RoundingMode.HALF_DOWN));
 			result.add(scontoMaggiorazione);
 		}
 		return result;
