@@ -3,6 +3,7 @@ package progettotlp.print;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -300,7 +301,7 @@ public class FatturaPrinter extends PdfPrinter
         table.addCell(createImage(color, bordersImage, b.getBene().getPiazzato().booleanValue()));
         table.addCell(createImage(color, bordersImage, b.getBene().getInteramenteAdesivato().booleanValue()));
         table.addCell(createPdfPCell(b.getBene().getQta().toString(), createSmallFont(), color, borders));
-        Float prezzo = b.getBene().getPrezzo();
+        BigDecimal prezzo = b.getBene().getPrezzo();
         if (prezzo == null)
             table.addCell(createPdfPCell("", createSmallFont(), color, borders));
         else {
@@ -395,7 +396,7 @@ public class FatturaPrinter extends PdfPrinter
             }
             law+="\n Come da vs. autorizzazione n. "+azienda.getNumeroAutorizzazione()+" del "+DateUtils.formatDate(azienda.getDataAutorizzazione());
             law+=" da noi registrata al n. "+azienda.getNumeroRegistrazione()+" del "+DateUtils.formatDate(azienda.getDataRegistrazione());
-			if (ConfigurationManager.getBolloLimit() < f.getTotale()){
+			if (ConfigurationManager.getBolloLimit().compareTo(f.getTotale())<0){
             	rifBollo = "Bollo assolto ai sensi del decreto MEF 17 giugno 2014 (art. 6)";
             }
         }

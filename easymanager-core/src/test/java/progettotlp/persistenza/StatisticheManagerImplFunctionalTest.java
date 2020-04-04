@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Arrays;
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("100"),new BigDecimal("21"),new BigDecimal("121"), new BigDecimal("15"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -54,10 +55,10 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("300"),new BigDecimal("63"),new BigDecimal("363"), new BigDecimal("40"));
                     break;
                 case 2:
-                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25F);
+                    assertEqualsStatistiche(s, "azienda1", new BigDecimal("200"),new BigDecimal("42"),new BigDecimal("242"), new BigDecimal("25"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -75,7 +76,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("300"),new BigDecimal("63"),new BigDecimal("363"), new BigDecimal("40"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -85,7 +86,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("100"),new BigDecimal("21"),new BigDecimal("121"), new BigDecimal("15"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -119,10 +120,10 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("300"),new BigDecimal("63"),new BigDecimal("363"), new BigDecimal("40"));
                     break;
                 case 2:
-                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25F);
+                    assertEqualsStatistiche(s, "azienda1", new BigDecimal("200"),new BigDecimal("42"),new BigDecimal("242"), new BigDecimal("25"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -132,7 +133,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("100"),new BigDecimal("21"),new BigDecimal("121"), new BigDecimal("15"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -145,7 +146,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 400F,84F,484F, 0F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("400"),new BigDecimal("84"),new BigDecimal("484"), new BigDecimal("0"));
                     break;
                 default:
                     fail("Unexpected id");
@@ -170,10 +171,10 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 300F,63F,363F, 40F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("300"),new BigDecimal("63"),new BigDecimal("363"), new BigDecimal("40"));
                     break;
                 case 2:
-                    assertEqualsStatistiche(s, "azienda1", 200F,42F,242F, 25F);
+                    assertEqualsStatistiche(s, "azienda1", new BigDecimal("200"),new BigDecimal("42"),new BigDecimal("242"), new BigDecimal("25"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -183,7 +184,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 3:
-                    assertEqualsStatistiche(s, "azienda2", 100F,21F,121F, 15F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("100"),new BigDecimal("21"),new BigDecimal("121"), new BigDecimal("15"));
                     break;
                 default:
                     fail("Unexpected id: "+id);
@@ -196,7 +197,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
             Integer id = s.getId();
             switch (id){
                 case 1:
-                    assertEqualsStatistiche(s, "azienda2", 400F,84F,484F, 0F);
+                    assertEqualsStatistiche(s, "azienda2", new BigDecimal("400"),new BigDecimal("84"),new BigDecimal("484"), new BigDecimal("0"));
                     break;
                 default:
                     fail("Unexpected id");
@@ -216,7 +217,7 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
         return this;
     }
 
-    private void assertEqualsStatistiche(StatisticheFattura s, String nome, Float netto, Float iva, Float totale, Float capiTagliati){
+    private void assertEqualsStatistiche(StatisticheFattura s, String nome, BigDecimal netto, BigDecimal iva, BigDecimal totale, BigDecimal capiTagliati){
         assertEquals(nome, s.getCliente().getNome());
         assertEquals(netto, s.getNetto());
         assertEquals(iva, s.getIva());

@@ -5,12 +5,24 @@
 
 package progettotlp.facilities;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author vincenzo
  */
 public class NumberUtils {
 
+	public static BigDecimal floatToBigDecimal(Float x) {
+		String string = Float.toString(x);
+		return new BigDecimal(string);
+	}
+	
+	public static BigDecimal doubleToBigDecimal(Double x) {
+		String string = Double.toString(x);
+		return new BigDecimal(string);
+	}
+	
     public static Float roundNumber(Float x){
         if (x==null)
             return null;

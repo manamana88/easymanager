@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Float qtaB1 = 15F;
+        BigDecimal qtaB1 = new BigDecimal("15");
         Boolean protB1 = Boolean.FALSE;
         Boolean piazzB1 = Boolean.FALSE;
         Boolean pcB1 = Boolean.FALSE;
@@ -49,7 +50,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Float qtaB2 = 25F;
+        BigDecimal qtaB2 = new BigDecimal("25");
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -81,7 +82,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB3 = "0003";
         String commessaB3 = "C0003";
         String descrizioneB3 = "Abito";
-        Float qtaB3 = 35F;
+        BigDecimal qtaB3 = new BigDecimal("35");
         Boolean protB3 = Boolean.TRUE;
         Boolean piazzB3 = Boolean.TRUE;
         Boolean pcB3 = Boolean.TRUE;
@@ -91,7 +92,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB4 = "0004";
         String commessaB4 = "C0004";
         String descrizioneB4 = "Abito";
-        Float qtaB4 = 45F;
+        BigDecimal qtaB4 = new BigDecimal("45");
         Boolean protB4 = Boolean.TRUE;
         Boolean piazzB4 = Boolean.TRUE;
         Boolean pcB4 = Boolean.FALSE;
@@ -148,7 +149,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB1 = "0001";
         String commessaB1 = "C0001";
         String descrizioneB1 = "Abito";
-        Float qtaB1 = 15F;
+        BigDecimal qtaB1 = new BigDecimal("15");
         Boolean protB1 = Boolean.FALSE;
         Boolean piazzB1 = Boolean.FALSE;
         Boolean pcB1 = Boolean.FALSE;
@@ -158,7 +159,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB2 = "0002";
         String commessaB2 = "C0002";
         String descrizioneB2 = "Abito";
-        Float qtaB2 = 25F;
+        BigDecimal qtaB2 = new BigDecimal("25");
         Boolean protB2 = Boolean.TRUE;
         Boolean piazzB2 = Boolean.TRUE;
         Boolean pcB2 = Boolean.FALSE;
@@ -190,7 +191,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB3 = "0003";
         String commessaB3 = "C0003";
         String descrizioneB3 = "Abito";
-        Float qtaB3 = 35F;
+        BigDecimal qtaB3 = new BigDecimal("35");
         Boolean protB3 = Boolean.TRUE;
         Boolean piazzB3 = Boolean.TRUE;
         Boolean pcB3 = Boolean.TRUE;
@@ -200,7 +201,7 @@ public class DdTManagerImplTest extends AnnualTest{
         String codiceB4 = "0004";
         String commessaB4 = "C0004";
         String descrizioneB4 = "Abito";
-        Float qtaB4 = 45F;
+        BigDecimal qtaB4 = new BigDecimal("45");
         Boolean protB4 = Boolean.TRUE;
         Boolean piazzB4 = Boolean.TRUE;
         Boolean pcB4 = Boolean.FALSE;

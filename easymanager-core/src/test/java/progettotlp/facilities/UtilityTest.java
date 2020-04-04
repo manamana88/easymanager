@@ -4,6 +4,7 @@
  */
 package progettotlp.facilities;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -109,16 +110,16 @@ public class UtilityTest {
     @Test
     public void getTotCapiTest(){
         BeneInterface b1=new Bene();
-        b1.setQta(1F);
+        b1.setQta(new BigDecimal("1"));
         BeneInterface b2=new Bene();
-        b2.setQta(3F);
+        b2.setQta(new BigDecimal("3"));
         BeneInterface b3=new Bene();
-        b3.setQta(15F);
+        b3.setQta(new BigDecimal("15"));
         DdTInterface d1=new DdT();
         d1.setBeni(Arrays.asList(b1));
         DdTInterface d2=new DdT();
         d2.setBeni(Arrays.asList(b2,b3));
-        Assert.assertEquals(new Float(19),Utility.getTotCapi(Arrays.asList(d1,d2)));
+        Assert.assertEquals(new BigDecimal("19"),Utility.getTotCapi(Arrays.asList(d1,d2)));
     }
     @Test
     public void mapDdTTest(){

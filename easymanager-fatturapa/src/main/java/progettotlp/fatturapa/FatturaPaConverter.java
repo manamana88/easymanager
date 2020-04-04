@@ -135,7 +135,7 @@ public class FatturaPaConverter {
 		dettaglioPagamento.setDataScadenzaPagamento(DateUtils.toXmlGregorianCalendar(scadenza));
 		Integer giorni = DateUtils.getTimeFrame(emissione, scadenza);
 		dettaglioPagamento.setGiorniTerminiPagamento(giorni);
-		dettaglioPagamento.setImportoPagamento(new BigDecimal(fattura.getTotale()));
+		dettaglioPagamento.setImportoPagamento(fattura.getTotale());
 		dettaglioPagamento.setIstitutoFinanziario(BONIFICO_ISTITUTO_FINANZIARIO);
 		dettaglioPagamento.setIBAN(BONIFICO_IBAN);
 		return Arrays.asList(dettaglioPagamento);
@@ -193,7 +193,7 @@ public class FatturaPaConverter {
 		result.setDatiBollo(createDatiBollo(fattura)); //TODO confermare applicabile
 		//result.setDatiCassaPrevidenziale //TODO aggiungere metodo e confermare non applicabile
 		//result.setScontoMaggiorazione //TODO aggiungere metodo e confermare non applicabile
-		result.setImportoTotaleDocumento(new BigDecimal(fattura.getTotale()));
+		result.setImportoTotaleDocumento(fattura.getTotale());
 		//result.setArrotondamento //TODO aggiungere metodo e confermare non applicabile
 		//result.setCausale //TODO aggiungere metodo e confermare non applicabile
 		//result.getArt73(Art73Type.SI); //TODO confermare esente
@@ -225,7 +225,7 @@ public class FatturaPaConverter {
 			for (BeneInterface bene : ddt.getBeni()) {
 				DettaglioLineeType createDettaglioLinea = createDettaglioLinea(ddt, bene);
 				createDettaglioLinea.setNumeroLinea(linea++);
-				createDettaglioLinea.setAliquotaIVA(new BigDecimal(fattura.getIvaPerc()));
+				createDettaglioLinea.setAliquotaIVA(fattura.getIvaPerc());
 				result.add(createDettaglioLinea);
 			}
 		}
@@ -237,20 +237,22 @@ public class FatturaPaConverter {
 		//dettaglioLinea.setTipoCessionePrestazione(); //TODO confermare esente
 		dettaglioLinea.setCodiceArticolo(createCodiceArticolo(bene));
 		dettaglioLinea.setDescrizione(bene.getDescrizione());
-		dettaglioLinea.setQuantita(new BigDecimal(bene.getQta()));
+		dettaglioLinea.setQuantita(bene.getQta());
 		//TODO handle metri vs capi
 		//dettaglioLinea.setUnitaMisura(null);
 		//dettaglioLinea.setDataInizioPeriodo(null);
 		//dettaglioLinea.setDataFinePeriodo(null);
-		Float prezzo = bene.getPrezzo();
+		BigDecimal prezzo = bene.getPrezzo();
 		if (prezzo == null) {
-			prezzo = bene.getTot()/bene.getQta();
-			prezzo = NumberUtils.roundNumber(prezzo);
+			BigDecimal tot = bene.getTot();
+			BigDecimal qta = bene.getQta();
+			BigDecimal divide = tot.divide(qta);
+			prezzo = divide.setScale(2);
 		}
-		dettaglioLinea.setPrezzoUnitario(new BigDecimal(prezzo));
+		dettaglioLinea.setPrezzoUnitario(prezzo);
 		List<ScontoMaggiorazioneType> scontoMaggiorazioneList = createScontoMaggiorazione(bene, prezzo);
 		dettaglioLinea.setScontoMaggiorazione(scontoMaggiorazioneList);
-		dettaglioLinea.setPrezzoTotale(new BigDecimal(bene.getTot()));
+		dettaglioLinea.setPrezzoTotale(bene.getTot());
 		//dettaglioLinea.setRitenuta(null); //TODO confermare esente
 		if (!ddt.getCliente().isTassabile()) {
 			dettaglioLinea.setNatura(ESENZIONE_IVA);
@@ -260,18 +262,17 @@ public class FatturaPaConverter {
 		return dettaglioLinea;
 	}
 
-	protected static List<ScontoMaggiorazioneType> createScontoMaggiorazione(BeneInterface bene, Float prezzo) {
+	protected static List<ScontoMaggiorazioneType> createScontoMaggiorazione(BeneInterface bene, BigDecimal prezzo) {
 		List<ScontoMaggiorazioneType> result = new ArrayList<>();
-		BigDecimal tot = new BigDecimal(Float.toString(bene.getTot()));
-		BigDecimal qta = new BigDecimal(Float.toString(bene.getQta()));
-		BigDecimal prezzoBD = new BigDecimal(Float.toString(prezzo));
+		BigDecimal tot = bene.getTot();
+		BigDecimal qta = bene.getQta();
 		
-		BigDecimal roundDifference = tot.subtract(prezzoBD.multiply(qta));
-		int compareTo = roundDifference.compareTo(new BigDecimal("0"));
-		if (compareTo!=0) {
+		BigDecimal roundDifference = tot.subtract(prezzo.multiply(qta));
+		int signum = roundDifference.signum();
+		if (signum!=0) {
 			ScontoMaggiorazioneType scontoMaggiorazione = new ScontoMaggiorazioneType();
 			TipoScontoMaggiorazioneType tipo;
-			if (compareTo>0) {
+			if (signum>0) {
 				tipo = TipoScontoMaggiorazioneType.MG;
 			} else {
 				tipo = TipoScontoMaggiorazioneType.SC;
@@ -337,7 +338,7 @@ public class FatturaPaConverter {
 	private static List<DatiRiepilogoType> createDatiRiepilogo(FatturaInterface fattura) {
 		DatiRiepilogoType datiRiepilogoType = new DatiRiepilogoType();
 		//TODO handle esente iva
-		datiRiepilogoType.setAliquotaIVA(new BigDecimal(fattura.getIvaPerc()));
+		datiRiepilogoType.setAliquotaIVA(fattura.getIvaPerc());
 		AziendaInterface cliente = fattura.getCliente();
 		if (!cliente.isTassabile()) {
 			datiRiepilogoType.setNatura(ESENZIONE_IVA); //TODO verificare natura esenzione
@@ -346,8 +347,8 @@ public class FatturaPaConverter {
 		}
 		//datiRiepilogoType.setSpeseAccessorie(null);
 		//datiRiepilogoType.setArrotondamento(null);
-		datiRiepilogoType.setImponibileImporto(new BigDecimal(fattura.getNetto()));
-		datiRiepilogoType.setImposta(new BigDecimal(fattura.getIva()));
+		datiRiepilogoType.setImponibileImporto(fattura.getNetto());
+		datiRiepilogoType.setImposta(fattura.getIva());
 		//datiRiepilogoType.setEsigibilitaIVA(); //TODO verificare esigibilita' IVA
 		return Arrays.asList(datiRiepilogoType);
 	}

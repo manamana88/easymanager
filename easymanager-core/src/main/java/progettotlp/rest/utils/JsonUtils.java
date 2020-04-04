@@ -1,9 +1,11 @@
 package progettotlp.rest.utils;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 
 import progettotlp.facilities.DateUtils;
+import progettotlp.facilities.NumberUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -12,6 +14,11 @@ public class JsonUtils {
 	public static Date getDateValue(ObjectNode ddt, String fieldName) throws ParseException {
 		String textValue = getTextValue(ddt, fieldName);
 		return textValue != null ? DateUtils.parseDate(textValue) : null; 
+	}
+	
+	public static BigDecimal getBigDecimalValue(ObjectNode ddt, String fieldName) {
+		Number numberValue = getNumberValue(ddt, fieldName);
+		return numberValue != null ? NumberUtils.floatToBigDecimal(numberValue.floatValue()) : null;
 	}
 	
 	public static Float getFloatValue(ObjectNode ddt, String fieldName) {
