@@ -14,6 +14,10 @@
 			<artifactId>easymanager-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+		</dependency>
 		<!-- LOG -->
 		<dependency>
 			<groupId>log4j</groupId>
