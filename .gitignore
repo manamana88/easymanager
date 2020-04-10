@@ -3,3 +3,4 @@
 /easymanager-fatturapa.zip
 /.idea/
 /**/*.iml
+/**/target/
