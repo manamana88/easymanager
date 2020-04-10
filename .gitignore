@@ -1,3 +1,5 @@
 /.settings/
 /.project
 /easymanager-fatturapa.zip
+/.idea/
+/**/*.iml
