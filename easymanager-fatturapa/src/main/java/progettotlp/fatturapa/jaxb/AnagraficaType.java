@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * 
- * 				Il campo Denominazione è in alternativa ai campi Nome e Cognome
- * 			
+ * 				Il campo Denominazione e' in alternativa ai campi Nome e Cognome
+ *
  * 
  * <p>Java class for AnagraficaType complex type.
  * 

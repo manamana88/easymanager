@@ -153,7 +153,7 @@ public enum ModalitaPagamentoType {
     MP_14("MP14"),
 
     /**
-     * giroconto su conti di contabilità speciale
+     * giroconto su conti di contabilita' speciale
      * 
      */
     @XmlEnumValue("MP15")
@@ -202,7 +202,7 @@ public enum ModalitaPagamentoType {
     MP_21("MP21"),
 
     /**
-     * Trattenuta su somme già riscosse
+     * Trattenuta su somme gia' riscosse
      * 
      */
     @XmlEnumValue("MP22")
