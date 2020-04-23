@@ -65,7 +65,7 @@ public enum RegimeFiscaleType {
     RF_02("RF02"),
 
     /**
-     * Agricoltura e attività connesse e pesca (artt. 34 e 34-bis, D.P.R. 633/1972)
+     * Agricoltura e attivita' connesse e pesca (artt. 34 e 34-bis, D.P.R. 633/1972)
      * 
      */
     @XmlEnumValue("RF04")
@@ -107,7 +107,7 @@ public enum RegimeFiscaleType {
     RF_09("RF09"),
 
     /**
-     * Intrattenimenti, giochi e altre attività	di cui alla tariffa allegata al D.P.R. 640/72 (art. 74, c.6, D.P.R. 633/1972)
+     * Intrattenimenti, giochi e altre attivita'	di cui alla tariffa allegata al D.P.R. 640/72 (art. 74, c.6, D.P.R. 633/1972)
      * 					
      * 
      */
@@ -136,14 +136,14 @@ public enum RegimeFiscaleType {
     RF_13("RF13"),
 
     /**
-     * Rivendita di beni usati, di oggetti	d’arte, d’antiquariato o da collezione (art.	36, D.L. 41/1995)
+     * Rivendita di beni usati, di oggetti	d'arte, d'antiquariato o da collezione (art.	36, D.L. 41/1995)
      * 
      */
     @XmlEnumValue("RF14")
     RF_14("RF14"),
 
     /**
-     * Agenzie di vendite all’asta di oggetti d’arte, antiquariato o da collezione (art. 40-bis, D.L. 41/1995)
+     * Agenzie di vendite all'asta di oggetti d'arte, antiquariato o da collezione (art. 40-bis, D.L. 41/1995)
      * 
      */
     @XmlEnumValue("RF15")

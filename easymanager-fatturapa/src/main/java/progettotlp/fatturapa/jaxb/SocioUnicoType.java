@@ -39,7 +39,7 @@ public enum SocioUnicoType {
     SU,
 
     /**
-     * più soci
+     * piu' soci
      * 
      */
     SM;

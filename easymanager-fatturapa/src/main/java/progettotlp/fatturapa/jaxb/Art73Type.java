@@ -34,7 +34,7 @@ public enum Art73Type {
 
     /**
      * 
-     * 						SI = Documento emesso secondo modalità e termini stabiliti con DM ai sensi dell'art. 73 DPR 633/72
+     * 						SI = Documento emesso secondo modalita' e termini stabiliti con DM ai sensi dell'art. 73 DPR 633/72
      * 					
      * 
      */

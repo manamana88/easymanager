@@ -36,13 +36,13 @@ public enum EsigibilitaIVAType {
 
 
     /**
-     * esigibilità differita
+     * esigibilita' differita
      * 
      */
     D,
 
     /**
-     * esigibilità immediata
+     * esigibilita' immediata
      * 
      */
     I,
