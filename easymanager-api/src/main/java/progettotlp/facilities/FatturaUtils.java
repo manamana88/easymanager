@@ -14,7 +14,7 @@ public class FatturaUtils {
 			Boolean tassabile = f.getCliente().isTassabile();
 			BigDecimal netto = f.getNetto();
 			BigDecimal bolloLimit = ConfigurationManager.getBolloLimit();
-			return !tassabile && netto.compareTo(bolloLimit)==1;
+			return !tassabile && netto.compareTo(bolloLimit) > 0;
 		}
 	}
 }

@@ -247,7 +247,7 @@ public class FatturaPaConverter {
 		if (prezzo == null) {
 			BigDecimal tot = bene.getTot();
 			BigDecimal qta = bene.getQta();
-			prezzo = tot.divide(qta, 2, RoundingMode.HALF_DOWN);
+			prezzo = NumberUtils.scale(tot.divide(qta));
 		}
 		dettaglioLinea.setPrezzoUnitario(prezzo);
 		List<ScontoMaggiorazioneType> scontoMaggiorazioneList = createScontoMaggiorazione(bene, prezzo);
