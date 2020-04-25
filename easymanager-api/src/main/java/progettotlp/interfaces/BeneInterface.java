@@ -1,5 +1,7 @@
 package progettotlp.interfaces;
 
+import java.math.BigDecimal;
+
 public interface BeneInterface {
 
 	Boolean getCampionario();
@@ -30,9 +32,9 @@ public interface BeneInterface {
 
 	void setPiazzato(Boolean piazzato);
 
-	Float getPrezzo();
+	BigDecimal getPrezzo();
 
-	void setPrezzo(Float prezzo);
+	void setPrezzo(BigDecimal prezzo);
 
 	Boolean getPrimoCapo();
 
@@ -42,12 +44,12 @@ public interface BeneInterface {
 
 	void setPrototipo(Boolean prototipo);
 
-	Float getQta();
+	BigDecimal getQta();
 
-	void setQta(Float qta);
+	void setQta(BigDecimal qta);
 
-	Float getTot();
+	BigDecimal getTot();
 
-	void setTot(Float tot);
+	void setTot(BigDecimal tot);
 
 }

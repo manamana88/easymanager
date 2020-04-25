@@ -3,6 +3,7 @@ package progettotlp.print;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
@@ -39,13 +40,13 @@ public class DdtPrinterTest {
         b1.setCommessa("com");
         b1.setDescrizione("descr");
         b1.setPiazzato(true);
-        b1.setQta(1F);
+        b1.setQta(new BigDecimal("1"));
         BeneInterface b2 = new Bene();
         b2.setCodice("cod2");
         b2.setCommessa("com2");
         b2.setDescrizione("descr2");
         b2.setInteramenteAdesivato(true);
-        b2.setQta(2F);
+        b2.setQta(new BigDecimal("2"));
         ddt.setBeni(Arrays.asList(b1, b2));
         Date data = DateUtils.parseDate("01/01/2012");
         ddt.setData(data);

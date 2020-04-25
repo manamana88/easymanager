@@ -5,6 +5,7 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,9 +34,9 @@ public class Bene implements Serializable, BeneInterface{
     private String commessa;
     private String descrizione;
     @Column(name="quantita")
-    private Float qta;
-    private Float prezzo;
-    private Float tot;
+    private BigDecimal qta;
+    private BigDecimal prezzo;
+    private BigDecimal tot;
     @Type(type="yes_no")
     private Boolean prototipo=false;
     @Type(type="yes_no")
@@ -50,7 +51,7 @@ public class Bene implements Serializable, BeneInterface{
     private Boolean interamenteAdesivato=false;
 
     public Bene(){}
-    public Bene(String codice, String commessa, String descrizione, Float qta, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
+    public Bene(String codice, String commessa, String descrizione, BigDecimal qta, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
         this.codice = codice;
         this.commessa = commessa;
         this.descrizione = descrizione;
@@ -62,7 +63,7 @@ public class Bene implements Serializable, BeneInterface{
         this.interamenteAdesivato = interamenteAdesivato;
     }
 
-    public Bene(String codice, String commessa, String descrizione, Float qta, Float prezzo, Float tot, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
+    public Bene(String codice, String commessa, String descrizione, BigDecimal qta, BigDecimal prezzo, BigDecimal tot, boolean prototipo, boolean campionario, boolean primoCapo, boolean piazzato, boolean interamenteAdesivato) {
         this.codice = codice;
         this.commessa = commessa;
         this.descrizione = descrizione;
@@ -147,12 +148,12 @@ public class Bene implements Serializable, BeneInterface{
     }
 
     @Override
-	public Float getPrezzo() {
+	public BigDecimal getPrezzo() {
         return prezzo;
     }
 
     @Override
-	public void setPrezzo(Float prezzo) {
+	public void setPrezzo(BigDecimal prezzo) {
         this.prezzo = prezzo;
     }
 
@@ -177,22 +178,22 @@ public class Bene implements Serializable, BeneInterface{
     }
 
     @Override
-	public Float getQta() {
+	public BigDecimal getQta() {
         return qta;
     }
 
     @Override
-	public void setQta(Float qta) {
+	public void setQta(BigDecimal qta) {
         this.qta = qta;
     }
 
     @Override
-	public Float getTot() {
+	public BigDecimal getTot() {
         return tot;
     }
 
     @Override
-	public void setTot(Float tot) {
+	public void setTot(BigDecimal tot) {
         this.tot = tot;
     }
 

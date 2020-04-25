@@ -5,6 +5,7 @@
 
 package progettotlp.statistiche;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import progettotlp.interfaces.AziendaInterface;
@@ -18,12 +19,12 @@ public class StatisticheFattura {
     private Integer id;
     private AziendaInterface cliente;
     private Date emissione;
-    private Float netto;
-    private Float iva;
-    private Float totale;
-    private Float capiTagliati;
+    private BigDecimal netto;
+    private BigDecimal iva;
+    private BigDecimal totale;
+    private BigDecimal capiTagliati;
 
-    public StatisticheFattura(FatturaInterface fattura, Float capiTagliati) {
+    public StatisticheFattura(FatturaInterface fattura, BigDecimal capiTagliati) {
         this.id = fattura.getId();
         this.cliente = fattura.getCliente();
         this.netto = fattura.getNetto();
@@ -35,11 +36,11 @@ public class StatisticheFattura {
     public StatisticheFattura() {
     }
 
-    public Float getCapiTagliati() {
+    public BigDecimal getCapiTagliati() {
         return capiTagliati;
     }
 
-    public void setCapiTagliati(Float capiTagliati) {
+    public void setCapiTagliati(BigDecimal capiTagliati) {
         this.capiTagliati = capiTagliati;
     }
 
@@ -67,27 +68,27 @@ public class StatisticheFattura {
         this.id = id;
     }
 
-    public Float getIva() {
+    public BigDecimal getIva() {
         return iva;
     }
 
-    public void setIva(Float iva) {
+    public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
 
-    public Float getNetto() {
+    public BigDecimal getNetto() {
         return netto;
     }
 
-    public void setNetto(Float netto) {
+    public void setNetto(BigDecimal netto) {
         this.netto = netto;
     }
 
-    public Float getTotale() {
+    public BigDecimal getTotale() {
         return totale;
     }
 
-    public void setTotale(Float totale) {
+    public void setTotale(BigDecimal totale) {
         this.totale = totale;
     }
     

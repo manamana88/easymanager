@@ -6,6 +6,7 @@ package progettotlp.facilities;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -17,8 +18,6 @@ import java.util.Map;
 import javax.swing.JTable;
 
 import progettotlp.Constants;
-import progettotlp.classes.Bene;
-import progettotlp.classes.DdT;
 import progettotlp.exceptions.NotSameClassException;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
@@ -133,14 +132,14 @@ public class Utility {
         return res;
     }
     
-    public static Float getTotCapi(List<DdTInterface> list){
-        float tot=0;
+    public static BigDecimal getTotCapi(List<DdTInterface> list){
+    	BigDecimal tot=new BigDecimal("0");
         Iterator<DdTInterface> itDdT=list.iterator();
         while(itDdT.hasNext()){
             DdTInterface curr=itDdT.next();
             Iterator<BeneInterface> itBeni=curr.getBeni().iterator();
             while (itBeni.hasNext()){
-                tot+=itBeni.next().getQta();
+                tot = tot.add(itBeni.next().getQta());
             }
         }
         return tot;

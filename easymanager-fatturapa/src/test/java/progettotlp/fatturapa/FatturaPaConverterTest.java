@@ -70,17 +70,17 @@ public class FatturaPaConverterTest {
 
 	@Test
 	public void testScontoMaggiorazione() throws Exception {
-		Float prezzo = 1.19F;
+		BigDecimal prezzo = new BigDecimal("1.19");
 
 		BeneInterface bene = mock(BeneInterface.class);
-		when(bene.getTot()).thenReturn(608.09F);
-		when(bene.getQta()).thenReturn(511F);
+		when(bene.getTot()).thenReturn(new BigDecimal("608.09"));
+		when(bene.getQta()).thenReturn(new BigDecimal("511"));
 		List<ScontoMaggiorazioneType> scontoMaggiorazioneList = FatturaPaConverter.createScontoMaggiorazione(bene, prezzo);
 		assertTrue(scontoMaggiorazioneList.isEmpty());
 
 		bene = mock(BeneInterface.class);
-		when(bene.getTot()).thenReturn(609F);
-		when(bene.getQta()).thenReturn(511F);
+		when(bene.getTot()).thenReturn(new BigDecimal("609"));
+		when(bene.getQta()).thenReturn(new BigDecimal("511"));
 		scontoMaggiorazioneList = FatturaPaConverter.createScontoMaggiorazione(bene, prezzo);
 		assertEquals(1, scontoMaggiorazioneList.size());
 		ScontoMaggiorazioneType scontoMaggiorazione = scontoMaggiorazioneList.get(0);
@@ -89,8 +89,8 @@ public class FatturaPaConverterTest {
 		assertNull(scontoMaggiorazione.getPercentuale());
 		
 		bene = mock(BeneInterface.class);
-		when(bene.getTot()).thenReturn(607F);
-		when(bene.getQta()).thenReturn(511F);
+		when(bene.getTot()).thenReturn(new BigDecimal("607"));
+		when(bene.getQta()).thenReturn(new BigDecimal("511"));
 		scontoMaggiorazioneList = FatturaPaConverter.createScontoMaggiorazione(bene, prezzo);
 		assertEquals(1, scontoMaggiorazioneList.size());
 		scontoMaggiorazione = scontoMaggiorazioneList.get(0);

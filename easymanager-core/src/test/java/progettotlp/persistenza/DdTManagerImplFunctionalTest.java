@@ -8,6 +8,7 @@ package progettotlp.persistenza;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -42,12 +43,12 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         b1.setCodice("cod");
         b1.setCommessa("com");
         b1.setDescrizione("descr");
-        b1.setQta(1F);
+        b1.setQta(new BigDecimal("1"));
         BeneInterface b2 = new Bene();
         b2.setCodice("cod2");
         b2.setCommessa("com2");
         b2.setDescrizione("descr2");
-        b2.setQta(2F);
+        b2.setQta(new BigDecimal("2"));
         DdTInterface toSave = new DdT();
         toSave.setBeni(Arrays.asList(b1, b2));
         Date data = DateUtils.parseDate("01-01-2012");
@@ -68,12 +69,12 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         assertEquals("cod", b1.getCodice());
         assertEquals("com", b1.getCommessa());
         assertEquals("descr", b1.getDescrizione());
-        assertEquals(new Float(1), b1.getQta());
+        assertEquals(new BigDecimal("1"), b1.getQta());
         b2 = beni.get(1);
         assertEquals("cod2", b2.getCodice());
         assertEquals("com2", b2.getCommessa());
         assertEquals("descr2", b2.getDescrizione());
-        assertEquals(new Float(2), b2.getQta());
+        assertEquals(new BigDecimal("2"), b2.getQta());
         assertEquals(data, retrieved.getData());
         assertEquals(cliente, retrieved.getCliente());
         assertEquals("Cessionario", retrieved.getMezzo());
@@ -93,7 +94,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
             BeneInterface b=beni.get(i);
             Long id = b.getId();
             if (id.equals(1L)) {
-                b.setQta(1F);
+                b.setQta(new BigDecimal("1"));
                 b.setCampionario(Boolean.TRUE);
                 b.setPiazzato(Boolean.TRUE);
                 b.setPrimoCapo(Boolean.TRUE);
@@ -104,7 +105,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
                 fail();
             }
         }
-        Bene beneToAdd = new Bene("cod3", "com3", "descr3", 30F, true, true, true, true,true);
+        Bene beneToAdd = new Bene("cod3", "com3", "descr3", new BigDecimal("30"), true, true, true, true,true);
         beni.add(beneToAdd);
 
         ddTManager.modificaDdT(toModify);
@@ -114,8 +115,8 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         assertEquals(2, beni.size());
         for (BeneInterface b : beni) {
             if (b.getId().equals(1L)) {
-                assertEquals(new Float(1), b.getQta());
-                assertEquals(new Float(21), b.getPrezzo());
+                assertEquals(new BigDecimal("1"), b.getQta());
+                assertEquals(new BigDecimal("21"), b.getPrezzo());
                 assertTrue(b.getCampionario());
                 assertTrue(b.getPiazzato());
                 assertTrue(b.getPrimoCapo());

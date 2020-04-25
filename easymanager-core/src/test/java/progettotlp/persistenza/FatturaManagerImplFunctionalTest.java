@@ -16,6 +16,7 @@ import progettotlp.classes.Bene;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,10 +51,10 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
                 new Date(),
                 1,
                 ddt2.getCliente(),
-                10F,
+                new BigDecimal("10"),
                 ConfigurationManager.getIvaDefault(),
-                2.1F,
-                12.1F,
+                new BigDecimal("2.1"),
+                new BigDecimal("12.1"),
                 null);
         ddt2.setFattura(newFattura);
         try{
@@ -72,7 +73,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         executeSQL(file);
         FatturaInterface retrieved = retrieveObject(Fattura.class, 1L,fatturaManager);
         assertNotNull(retrieved);
-        Float newNetto = new Float(154);
+        BigDecimal newNetto = new BigDecimal("154");
         Integer newId = new Integer(15);
         retrieved.setNetto(newNetto);
         retrieved.setId(newId);
@@ -174,10 +175,10 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         assertEquals("0001",b1.getCodice());
         assertEquals("C0001",b1.getCommessa());
         assertEquals("Abito",b1.getDescrizione());
-        assertEquals(new Float(15),b1.getQta());
-        assertEquals(new Float(3),b1.getPrezzo());
-        assertEquals(new Float(45),b1.getTot());
-        assertEquals(new Float(3),b1.getPrezzo());
+        assertEquals(new BigDecimal("15"),b1.getQta());
+        assertEquals(new BigDecimal("3"),b1.getPrezzo());
+        assertEquals(new BigDecimal("45"),b1.getTot());
+        assertEquals(new BigDecimal("3"),b1.getPrezzo());
         assertTrue(b1.getCampionario());
         assertTrue(b1.getPiazzato());
         assertTrue(b1.getPrimoCapo());

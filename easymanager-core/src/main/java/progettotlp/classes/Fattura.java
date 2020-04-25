@@ -2,6 +2,7 @@
 package progettotlp.classes;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -51,11 +52,11 @@ public class Fattura implements Serializable, FatturaInterface {
     @JsonDeserialize(using=DateDeserializer.class)
     private Date scadenza;
     private Integer id;
-    private Float netto=0F;
+    private BigDecimal netto=new BigDecimal("0");
     @Column(name="iva_perc")
-    private Float ivaPerc=0F;
-    private Float iva=0F;
-    private Float totale=0F;
+    private BigDecimal ivaPerc=new BigDecimal("0");
+    private BigDecimal iva=new BigDecimal("0");
+    private BigDecimal totale=new BigDecimal("0");
     private String bollo;
 
     @ManyToOne(fetch=FetchType.EAGER,optional=false, targetEntity=Azienda.class)
@@ -68,7 +69,7 @@ public class Fattura implements Serializable, FatturaInterface {
     private List<DdTInterface> ddt;
 
     public Fattura(){}
-    public Fattura(List<DdTInterface> ddt, Date emissione, Date scadenza, int id, AziendaInterface cliente, float netto, float ivaPerc, float iva, float totale, String bollo) {
+    public Fattura(List<DdTInterface> ddt, Date emissione, Date scadenza, int id, AziendaInterface cliente, BigDecimal netto, BigDecimal ivaPerc, BigDecimal iva, BigDecimal totale, String bollo) {
         this.ddt = ddt; //OK
         this.emissione = emissione;
         this.scadenza = scadenza;
@@ -132,32 +133,32 @@ public class Fattura implements Serializable, FatturaInterface {
     }
 
     @Override
-	public Float getIvaPerc() {
+	public BigDecimal getIvaPerc() {
         return ivaPerc;
     }
 
     @Override
-	public void setIvaPerc(Float ivaPerc) {
+	public void setIvaPerc(BigDecimal ivaPerc) {
         this.ivaPerc = ivaPerc;
     }
 
     @Override
-	public Float getIva() {
+	public BigDecimal getIva() {
         return iva;
     }
 
     @Override
-	public void setIva(Float iva) {
+	public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
 
     @Override
-	public Float getNetto() {
+	public BigDecimal getNetto() {
         return netto;
     }
 
     @Override
-	public void setNetto(Float netto) {
+	public void setNetto(BigDecimal netto) {
         this.netto = netto;
     }
 
@@ -172,12 +173,12 @@ public class Fattura implements Serializable, FatturaInterface {
     }
 
     @Override
-	public Float getTotale() {
+	public BigDecimal getTotale() {
         return totale;
     }
 
     @Override
-	public void setTotale(Float totale) {
+	public void setTotale(BigDecimal totale) {
         this.totale = totale;
     }
    

@@ -6,6 +6,7 @@ package progettotlp.facilities;
 
 import java.io.File;
 import java.io.FileReader;
+import java.math.BigDecimal;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -42,12 +43,12 @@ public class ConfigurationManager {
         }
     }
     
-    public static Float getIvaDefault(){
-        return Float.parseFloat(properties.getProperty(Property.IVA_DEFAULT.value));
+    public static BigDecimal getIvaDefault(){
+        return new BigDecimal(properties.getProperty(Property.IVA_DEFAULT.value));
     }
     
-    public static Float getBolloLimit(){
-    	return Float.parseFloat(properties.getProperty(Property.BOLLO_LIMIT.value));
+    public static BigDecimal getBolloLimit(){
+    	return new BigDecimal(properties.getProperty(Property.BOLLO_LIMIT.value));
     }
 
     public static String getProperty(String propertyName){
