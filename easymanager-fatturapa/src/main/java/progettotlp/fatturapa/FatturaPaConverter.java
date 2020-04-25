@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtils;
+import progettotlp.facilities.NumberUtils;
 import progettotlp.fatturapa.jaxb.AnagraficaType;
 import progettotlp.fatturapa.jaxb.BolloVirtualeType;
 import progettotlp.fatturapa.jaxb.CedentePrestatoreType;
@@ -277,7 +278,7 @@ public class FatturaPaConverter {
 				tipo = TipoScontoMaggiorazioneType.SC;
 			}
 			scontoMaggiorazione.setTipo(tipo);
-			scontoMaggiorazione.setImporto(roundDifference.abs().setScale(2, RoundingMode.HALF_DOWN));
+			scontoMaggiorazione.setImporto(NumberUtils.scale(roundDifference.abs()));
 			result.add(scontoMaggiorazione);
 		}
 		return result;

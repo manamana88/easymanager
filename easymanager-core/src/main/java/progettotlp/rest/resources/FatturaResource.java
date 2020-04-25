@@ -52,12 +52,8 @@ import progettotlp.classes.Fattura;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.exceptions.toprint.GenericExceptionToPrint;
 import progettotlp.exceptions.toprint.YetExistException;
-import progettotlp.facilities.BeanUtils;
-import progettotlp.facilities.ConfigurationManager;
+import progettotlp.facilities.*;
 import progettotlp.facilities.ConfigurationManager.Property;
-import progettotlp.facilities.DateUtils;
-import progettotlp.facilities.FatturaUtilities;
-import progettotlp.facilities.Utility;
 import progettotlp.fatturapa.FatturaPaConverter;
 import progettotlp.fatturapa.jaxb.FatturaElettronicaType;
 import progettotlp.interfaces.AziendaInterface;
@@ -166,7 +162,7 @@ public class FatturaResource {
                     FatturaUtilities.getFileName(toPrint), false);
             return Response.ok(BeanUtils.createResponseBean(printPage.getAbsolutePath()), MediaType.APPLICATION_JSON_TYPE).build();
         } catch (Exception ex) {
-            throw new GenericExceptionToPrint("Errore", "Siamo spiacenti, si è verificato un errore."+'\n'+"Impossibile stampare la fattura",ex);
+            throw new GenericExceptionToPrint("Errore", "Siamo spiacenti, si ï¿½ verificato un errore."+'\n'+"Impossibile stampare la fattura",ex);
         }
 	}
 	
@@ -252,10 +248,10 @@ public class FatturaResource {
                 fatturaManager.registraFattura(fattura);
                 return Response.ok(fattura, MediaType.APPLICATION_JSON_TYPE).build();
             } catch (Exception e){
-                throw new GenericExceptionToPrint("Errore", "Errore nella registrazione della fattura n° "+f.getId()+".",e);
+                throw new GenericExceptionToPrint("Errore", "Errore nella registrazione della fattura nï¿½ "+f.getId()+".",e);
             }
         } else {
-            throw new YetExistException("Errore","Esiste già una fattura con lo stesso numero.");
+            throw new YetExistException("Errore","Esiste giï¿½ una fattura con lo stesso numero.");
         }
 	}
 	
@@ -268,7 +264,7 @@ public class FatturaResource {
             fatturaManager.modificaFattura(fattura);
             return Response.ok(fattura, MediaType.APPLICATION_JSON_TYPE).build();
         } catch (Exception e){
-            throw new GenericExceptionToPrint("Errore", "Errore nella registrazione della fattura n° "+fattura.getId()+".",e);
+            throw new GenericExceptionToPrint("Errore", "Errore nella registrazione della fattura nï¿½ "+fattura.getId()+".",e);
         }
 	}
 
@@ -288,9 +284,9 @@ public class FatturaResource {
 	            }
 	            BigDecimal prezzo = bene.getPrezzo();
 	            if (prezzo!=null) {	            	
-	            	riga.setPrezzo(prezzo.setScale(2, RoundingMode.HALF_DOWN));
+	            	riga.setPrezzo(NumberUtils.scale(prezzo));
 	            }
-	            riga.setTot(bene.getTot().setScale(2, RoundingMode.HALF_DOWN));
+	            riga.setTot(NumberUtils.scale(bene.getTot()));
 	            checkConsistency(riga);
         	}
         	for (DdTInterface ddt : listaDdT) {
@@ -300,14 +296,14 @@ public class FatturaResource {
 			}
         }
         Boolean tassabile = clienteAzienda.isTassabile();
-        BigDecimal netto = f.getNetto().setScale(2, RoundingMode.HALF_DOWN);
+        BigDecimal netto = NumberUtils.scale(f.getNetto());
         BigDecimal ivaPerc;
         BigDecimal ivaTotale;
         BigDecimal totale;
 		if (tassabile){
 			ivaPerc = f.getIvaPerc();
-			ivaTotale = f.getIva().setScale(2, RoundingMode.HALF_DOWN);
-			totale = f.getTotale().setScale(2, RoundingMode.HALF_DOWN);
+			ivaTotale = NumberUtils.scale(f.getIva());
+			totale = NumberUtils.scale(f.getTotale());
         } else {
         	ivaPerc = new BigDecimal("0");
         	ivaTotale = new BigDecimal("0");
@@ -330,7 +326,7 @@ public class FatturaResource {
 				netto = netto.add(bene.getTot());
 			}
 		}
-		BigDecimal roundedNetto = netto.setScale(2, RoundingMode.HALF_DOWN);
+		BigDecimal roundedNetto = NumberUtils.scale(netto);
 		if (!fattura.getNetto().equals(roundedNetto)){
 			throw new Exception("Netto inconsistente: "+fattura.getNetto()+" contro "+roundedNetto);
 		}
@@ -338,11 +334,11 @@ public class FatturaResource {
 		if (tassabile){
 			BigDecimal netto2 = fattura.getNetto();
 			BigDecimal multiply = netto2.multiply(fattura.getIvaPerc());
-			BigDecimal ivaTot = multiply.divide(new BigDecimal("100"), 2, RoundingMode.HALF_DOWN);
+			BigDecimal ivaTot = multiply.divide(NumberUtils.scale(new BigDecimal("100")));
 			if (!fattura.getIva().equals(ivaTot)){
 				throw new Exception("Iva inconsistente: "+fattura.getIva()+" contro "+ivaTot);
 			}
-			BigDecimal totale = roundedNetto.add(ivaTot).setScale(2, RoundingMode.HALF_DOWN);
+			BigDecimal totale = NumberUtils.scale(roundedNetto.add(ivaTot));
 			if (!fattura.getTotale().equals(totale)){
 				throw new Exception("Totale inconsistente: "+fattura.getTotale()+" contro "+totale);
 			}
@@ -363,8 +359,8 @@ public class FatturaResource {
 			throw new Exception("Prezzo non trovato: "+riga.toString());
 		} else if (prezzo!=null){
 			BigDecimal checkTot = riga.getQta().multiply(prezzo);
-			if (!checkTot.setScale(2, RoundingMode.HALF_DOWN).equals(riga.getTot())){
-				throw new Exception("Datin inconsistenti: "+riga);
+			if (!NumberUtils.scale(checkTot).equals(riga.getTot())){
+				throw new Exception("Dati inconsistenti: "+riga);
 			}
 		}
 	}

@@ -5,7 +5,10 @@
 
 package progettotlp.facilities;
 
+import progettotlp.Constants;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  *
@@ -23,21 +26,8 @@ public class NumberUtils {
 		return new BigDecimal(string);
 	}
 	
-    public static Float roundNumber(Float x){
-        if (x==null)
-            return null;
-        x*=100;
-        int rounded = Math.round(x);
-        return new Float(rounded)/100F;
-    }
-
-    public static Double roundNumber(Double x){
-        if (x==null){
-            return null;
-        }
-        x*=100;
-        long rounded = Math.round(x);
-        return new Double(rounded)/100D;
+    public static BigDecimal scale(BigDecimal bigDecimal){
+	    return bigDecimal.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_DOWN);
     }
 
 }

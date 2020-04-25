@@ -5,10 +5,12 @@
 
 package progettotlp.facilities;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.math.BigDecimal;
+
 import static org.junit.Assert.*;
+import static progettotlp.facilities.NumberUtils.scale;
 
 /**
  *
@@ -17,21 +19,12 @@ import static org.junit.Assert.*;
 public class NumberUtilsTest {
 
     @Test
-    public void testRoundNumber_Float() {
-        assertEquals(new Float(3.5), NumberUtils.roundNumber(3.5F));
-        assertEquals(new Float(3), NumberUtils.roundNumber(3F));
-        assertEquals(new Float(3.55), NumberUtils.roundNumber(3.55F));
-        assertEquals(new Float(3.56), NumberUtils.roundNumber(3.555F));
-        assertEquals(new Float(3.55), NumberUtils.roundNumber(3.554F));
+    public void scaleTest() {
+        assertEquals(new BigDecimal("1.23"), scale(new BigDecimal("1.230")));
+        assertEquals(new BigDecimal("1.23"), scale(new BigDecimal("1.231")));
+        assertEquals(new BigDecimal("1.23"), scale(new BigDecimal("1.234")));
+        assertEquals(new BigDecimal("1.23"), scale(new BigDecimal("1.235")));
+        assertEquals(new BigDecimal("1.24"), scale(new BigDecimal("1.236")));
+        assertEquals(new BigDecimal("1.24"), scale(new BigDecimal("1.239")));
     }
-
-    @Test
-    public void testRoundNumber_Double() {
-        assertEquals(new Double(3.5), NumberUtils.roundNumber(3.5D));
-        assertEquals(new Double(3), NumberUtils.roundNumber(3D));
-        assertEquals(new Double(3.55), NumberUtils.roundNumber(3.55D));
-        assertEquals(new Double(3.56), NumberUtils.roundNumber(3.555D));
-        assertEquals(new Double(3.55), NumberUtils.roundNumber(3.554D));
-    }
-
 }
