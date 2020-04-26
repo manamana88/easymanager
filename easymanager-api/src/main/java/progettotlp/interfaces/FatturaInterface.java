@@ -1,5 +1,6 @@
 package progettotlp.interfaces;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -27,25 +28,25 @@ public interface FatturaInterface {
 
 	void setId(Integer id);
 
-	Float getIvaPerc();
+	BigDecimal getIvaPerc();
 
-	void setIvaPerc(Float ivaPerc);
+	void setIvaPerc(BigDecimal ivaPerc);
 
-	Float getIva();
+	BigDecimal getIva();
 
-	void setIva(Float iva);
+	void setIva(BigDecimal iva);
 
-	Float getNetto();
+	BigDecimal getNetto();
 
-	void setNetto(Float netto);
+	void setNetto(BigDecimal netto);
 
 	Date getScadenza();
 
 	void setScadenza(Date scadenza);
 
-	Float getTotale();
+	BigDecimal getTotale();
 
-	void setTotale(Float totale);
+	void setTotale(BigDecimal totale);
 
 	String getBollo();
 

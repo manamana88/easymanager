@@ -60,7 +60,6 @@ public abstract class AbstractTest extends AnnualTest{
             AbstractPersistenza manager = initializeManager(clazz);
             assignManager(manager);
         }
-        Properties props = new Properties();
         properties.put(Property.IVA_DEFAULT.getValue(), "21");
         ConfigurationManager.setProperties(properties);
     }
@@ -78,7 +77,7 @@ public abstract class AbstractTest extends AnnualTest{
         }
     }
 
-    private boolean isInList(List<Class<? extends AbstractPersistenza>> list, Class contains){
+    private boolean isInList(List<Class<? extends AbstractPersistenza>> list, Class<?> contains){
         for(Class<? extends AbstractPersistenza> toAnalyze : list){
             if (toAnalyze.equals(contains) || contains.isAssignableFrom(toAnalyze))
                 return true;
@@ -89,7 +88,7 @@ public abstract class AbstractTest extends AnnualTest{
     protected abstract Object getObjectToInitialize();
     protected void assignManager(AbstractPersistenza manager)throws Exception{
         Object objectToInitialize = getObjectToInitialize();
-        Class clazz = objectToInitialize.getClass();
+        Class<?> clazz = objectToInitialize.getClass();
         for (Field f : clazz.getDeclaredFields()){
             if (manager.getClass().equals(f.getType()) || f.getType().isInstance(manager)){
                 f.setAccessible(true);

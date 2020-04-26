@@ -1,5 +1,7 @@
 package progettotlp.facilities;
 
+import java.math.BigDecimal;
+
 import progettotlp.interfaces.FatturaInterface;
 
 public class FatturaUtils {
@@ -10,9 +12,9 @@ public class FatturaUtils {
 			return true;
 		} else {
 			Boolean tassabile = f.getCliente().isTassabile();
-			Float netto = f.getNetto();
-			Float bolloLimit = ConfigurationManager.getBolloLimit();
-			return !tassabile && netto>bolloLimit;
+			BigDecimal netto = f.getNetto();
+			BigDecimal bolloLimit = ConfigurationManager.getBolloLimit();
+			return !tassabile && netto.compareTo(bolloLimit) > 0;
 		}
 	}
 }

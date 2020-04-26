@@ -1,5 +1,6 @@
 package progettotlp.persistenza;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -78,13 +79,13 @@ public class StatisticheManagerImpl extends AbstractPersistenza implements Stati
         Map<Date, List<StatisticheFattura>> result = new HashMap<Date, List<StatisticheFattura>>();
         if (list != null) {
             for (FatturaInterface f : list) {
-                Double sumBeni = (Double) sessione.createQuery("select sum(b.qta) from Fattura as f join f.ddt as d join d.beni as b where f.realId=" + f.getRealId()).uniqueResult();
+            	BigDecimal sumBeni = (BigDecimal) sessione.createQuery("select sum(b.qta) from Fattura as f join f.ddt as d join d.beni as b where f.realId=" + f.getRealId()).uniqueResult();
                 List<StatisticheFattura> get = result.get(f.getEmissione());
                 if (get == null) {
                     get = new ArrayList<StatisticheFattura>();
                     result.put(f.getEmissione(), get);
                 }
-                get.add(new StatisticheFattura(f, sumBeni == null ? 0F : sumBeni.floatValue()));
+                get.add(new StatisticheFattura(f, sumBeni == null ? new BigDecimal("0") : sumBeni));
             }
         }
         return result;

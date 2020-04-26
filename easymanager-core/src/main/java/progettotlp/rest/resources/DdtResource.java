@@ -3,12 +3,13 @@ package progettotlp.rest.resources;
 import static progettotlp.rest.utils.JsonUtils.getBooleanValue;
 import static progettotlp.rest.utils.JsonUtils.getDateValue;
 import static progettotlp.rest.utils.JsonUtils.getDoubleValue;
-import static progettotlp.rest.utils.JsonUtils.getFloatValue;
+import static progettotlp.rest.utils.JsonUtils.getBigDecimalValue;
 import static progettotlp.rest.utils.JsonUtils.getIntValue;
 import static progettotlp.rest.utils.JsonUtils.getLongValue;
 import static progettotlp.rest.utils.JsonUtils.getTextValue;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -178,11 +179,11 @@ public class DdtResource {
 			bene.setId(getLongValue(node, "id"));
 			bene.setInteramenteAdesivato(getBooleanValue(node, "interamenteAdesivato"));
 			bene.setPiazzato(getBooleanValue(node, "piazzato"));
-			bene.setPrezzo(getFloatValue(node, "prezzo"));
+			bene.setPrezzo(getBigDecimalValue(node, "prezzo"));
 			bene.setPrimoCapo(getBooleanValue(node, "primoCapo"));
 			bene.setPrototipo(getBooleanValue(node, "prototipo"));
-			bene.setQta(getFloatValue(node, "qta"));
-			bene.setTot(getFloatValue(node, "totale"));
+			bene.setQta(getBigDecimalValue(node, "qta"));
+			bene.setTot(getBigDecimalValue(node, "totale"));
 			validateBene(bene);
 			result.add(bene);
 		}
@@ -196,8 +197,8 @@ public class DdtResource {
         String descrizione = bene.getDescrizione();
         if (descrizione==null || descrizione.trim().isEmpty())
             throw new ValidationException("Dati errati", "Descrizione vuota");
-        Float qta = bene.getQta();
-        if (qta==null || qta<=0)
+        BigDecimal qta = bene.getQta();
+        if (qta==null || qta.signum()<=0)
             throw new ValidationException("Dati errati", "Quantit\u00E1 vuota");
     }
 }
