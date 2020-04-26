@@ -7,9 +7,7 @@ package progettotlp.persistenza;
 
 import java.util.ArrayList;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 import org.junit.Test;
 import progettotlp.classes.Azienda;
@@ -66,7 +64,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testModificaAzienda() throws IOException, SQLException, PersistenzaException {
+    public void testModificaAzienda() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -80,7 +78,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testCancellaAzienda() throws IOException, SQLException, PersistenzaException {
+    public void testCancellaAzienda() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -92,7 +90,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testNumAziende() throws IOException, SQLException {
+    public void testNumAziende() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -100,7 +98,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAziende() throws IOException, SQLException {
+    public void testGetAziende() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -112,7 +110,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAziendaPerNome() throws IOException, SQLException {
+    public void testGetAziendaPerNome() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -124,11 +122,11 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAziendePerNome() throws SQLException, IOException{
+    public void testGetAziendePerNome() throws Exception{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        List<String> nomi = new ArrayList<String>();
+        List<String> nomi = new ArrayList<>();
         nomi.add("ABTaglio");
         nomi.add("CDTaglio");
         List<Azienda> aziendePerNome = aziendaManager.getAziendePerNome(nomi);
@@ -139,7 +137,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAziendaPrincipale() throws IOException, SQLException {
+    public void testGetAziendaPrincipale() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -149,7 +147,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAziendeNonPrincipali() throws IOException, SQLException {
+    public void testGetAziendeNonPrincipali() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -160,7 +158,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testIsAziendaTassabileByName() throws SQLException, IOException {
+    public void testIsAziendaTassabileByName() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareAziendaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -170,7 +168,7 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
 
     @Override
     protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<Class<? extends AbstractPersistenza>>();
+        List<Class<? extends AbstractPersistenza>> res = new ArrayList<>();
         res.add(AziendaManagerImpl.class);
         return res;
     }

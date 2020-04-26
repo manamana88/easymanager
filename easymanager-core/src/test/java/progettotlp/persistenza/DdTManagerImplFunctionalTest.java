@@ -1,21 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package progettotlp.persistenza;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import progettotlp.exceptions.PersistenzaException;
+
 import org.junit.Test;
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
@@ -35,7 +24,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     protected DdTManagerImpl ddTManager;
 
     @Test
-    public void testRegistraDdT() throws IOException, SQLException, ParseException, PersistenzaException{
+    public void testRegistraDdT() throws Exception{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -54,14 +43,14 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         Date data = DateUtils.parseDate("01-01-2012");
         toSave.setData(data);
         toSave.setId(1);
-        Azienda cliente = retrieveObject(Azienda.class,new Long(2),ddTManager);
+        Azienda cliente = retrieveObject(Azienda.class, 2L,ddTManager);
         toSave.setCliente(cliente);
         toSave.setMezzo("Cessionario");
         toSave.setCausale("Reso c/adesivazione");
         ddTManager.registraDdT(toSave);
 
 
-        DdTInterface retrieved = retrieveObject(DdT.class, toSave.getRealId(),ddTManager,Arrays.asList("beni"));
+        DdTInterface retrieved = retrieveObject(DdT.class, toSave.getRealId(),ddTManager, Collections.singletonList("beni"));
         assertNotNull(retrieved);
         List<BeneInterface> beni = retrieved.getBeni();
         assertEquals(2, beni.size());
@@ -82,11 +71,11 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testModificaDdT() throws SQLException, IOException, PersistenzaException {
+    public void testModificaDdT() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        DdTInterface toModify = retrieveObject(DdT.class, 1L,ddTManager,Arrays.asList("beni"));
+        DdTInterface toModify = retrieveObject(DdT.class, 1L,ddTManager, Collections.singletonList("beni"));
         toModify.setId(234);
 
         List<BeneInterface> beni = toModify.getBeni();
@@ -109,7 +98,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         beni.add(beneToAdd);
 
         ddTManager.modificaDdT(toModify);
-        DdTInterface modified = retrieveObject(DdT.class, 1L,ddTManager,Arrays.asList("beni"));
+        DdTInterface modified = retrieveObject(DdT.class, 1L,ddTManager, Collections.singletonList("beni"));
         assertEquals(new Integer(234), modified.getId());
         beni = modified.getBeni();
         assertEquals(2, beni.size());
@@ -131,7 +120,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testCancellaDdT() throws IOException, SQLException, PersistenzaException {
+    public void testCancellaDdT() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -144,7 +133,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetLastDdT() throws SQLException, IOException {
+    public void testGetLastDdT() throws Exception {
         assertEquals(0, ddTManager.getLastDdT());
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
@@ -155,7 +144,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAllDdT_0args() throws SQLException, IOException {
+    public void testGetAllDdT_0args() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -163,7 +152,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAllDdT_Azienda_int() throws SQLException, IOException {
+    public void testGetAllDdT_Azienda_int() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -180,7 +169,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAllDdTWithoutFattura() throws SQLException, IOException {
+    public void testGetAllDdTWithoutFattura() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -188,7 +177,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetDdT() throws SQLException, IOException {
+    public void testGetDdT() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -197,7 +186,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetDdTById() throws SQLException, IOException {
+    public void testGetDdTById() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -206,19 +195,18 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetBeniDdT() throws SQLException, IOException, PersistenzaException {
+    public void testGetBeniDdT() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        List<Bene> beniDdT = null;
-        beniDdT = ddTManager.getBeniDdT(106);
+        List<Bene> beniDdT = ddTManager.getBeniDdT(106);
         assertNotNull(beniDdT);
         assertEquals(2, beniDdT.size());
         assertTrue(ddTManager.getBeniDdT(120).isEmpty());
     }
 
     @Test
-    public void testIsEmptyDdTListMese() throws SQLException, IOException {
+    public void testIsEmptyDdTListMese() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -235,7 +223,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testExistsDdT() throws SQLException, IOException {
+    public void testExistsDdT() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -246,7 +234,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testExistsDdTById() throws SQLException, IOException {
+    public void testExistsDdTById() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -258,7 +246,7 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
 
     @Override
     protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<Class<? extends AbstractPersistenza>>();
+        List<Class<? extends AbstractPersistenza>> res = new ArrayList<>();
         res.add(DdTManagerImpl.class);
         return res;
     }

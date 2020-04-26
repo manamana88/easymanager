@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package progettotlp.persistenza;
 
 import java.util.List;
@@ -15,10 +10,8 @@ import progettotlp.interfaces.FatturaInterface;
 import progettotlp.classes.Bene;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,7 +33,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     protected FatturaManagerImpl fatturaManager;
 
     @Test
-    public void testRegistraFattura() throws SQLException, IOException, PersistenzaException {
+    public void testRegistraFattura() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -67,14 +60,14 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testModificaFattura() throws SQLException, IOException, PersistenzaException {
+    public void testModificaFattura() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
         FatturaInterface retrieved = retrieveObject(Fattura.class, 1L,fatturaManager);
         assertNotNull(retrieved);
         BigDecimal newNetto = new BigDecimal("154");
-        Integer newId = new Integer(15);
+        Integer newId = 15;
         retrieved.setNetto(newNetto);
         retrieved.setId(newId);
         fatturaManager.modificaFattura(retrieved);
@@ -84,7 +77,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testCancellaFatturaById() throws SQLException, IOException, PersistenzaException {
+    public void testCancellaFatturaById() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -94,7 +87,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetAllFatture() throws SQLException, IOException {
+    public void testGetAllFatture() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -102,7 +95,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetFattureByAziendaName() throws SQLException, IOException {
+    public void testGetFattureByAziendaName() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -111,7 +104,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetFattura() throws SQLException, IOException {
+    public void testGetFattura() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -120,7 +113,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetLastFattura() throws SQLException, IOException {
+    public void testGetLastFattura() throws Exception {
         assertEquals(0, fatturaManager.getLastFattura());
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
@@ -132,7 +125,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testExistsFattura_int_Azienda() throws SQLException, IOException {
+    public void testExistsFattura_int_Azienda() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -147,7 +140,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testExistsFatturaById_int() throws SQLException, IOException {
+    public void testExistsFatturaById_int() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareFatturaTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -156,7 +149,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
     }
 
     @Test
-    public void testGetLastSameBene() throws SQLException, IOException, Exception {
+    public void testGetLastSameBene() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareLastBeneTest.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
@@ -190,7 +183,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
 
     @Override
     protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<Class<? extends AbstractPersistenza>>();
+        List<Class<? extends AbstractPersistenza>> res = new ArrayList<>();
         res.add(FatturaManagerImpl.class);
         return res;
     }

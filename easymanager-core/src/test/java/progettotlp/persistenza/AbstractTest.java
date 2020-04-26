@@ -9,13 +9,11 @@ package progettotlp.persistenza;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
@@ -23,6 +21,7 @@ import java.util.regex.Pattern;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -113,7 +112,7 @@ public abstract class AbstractTest extends AnnualTest{
         sessionFactory=null;
     }
 
-    protected void executeSQL(File f) throws SQLException, IOException{
+    protected void executeSQL(File f) throws Exception{
         BufferedReader b=null;
         try{
             buildSessionFactory();
@@ -134,16 +133,15 @@ public abstract class AbstractTest extends AnnualTest{
             closeSessionFactory();
             if (b!=null){
                 b.close();
-                b=null;
             }
         }
     }
     
-    protected void executeSQL(String query) throws SQLException, IOException{
-        Session retrieveSession=null;
+    protected void executeSQL(String query) throws Exception {
+        StatelessSession retrieveSession=null;
         Statement statement = null;
         try{
-            retrieveSession = sessionFactory.openSession();
+            retrieveSession = sessionFactory.openStatelessSession();
             statement=retrieveSession.connection().createStatement();
             System.out.println(query);
             statement.execute(query);
@@ -151,7 +149,6 @@ public abstract class AbstractTest extends AnnualTest{
             if (statement!=null)
                 statement.close();
             if (retrieveSession!=null){
-                retrieveSession.flush();
                 retrieveSession.close();
             }
         }
@@ -181,7 +178,7 @@ public abstract class AbstractTest extends AnnualTest{
         }
     }
     private void initializeField(String fieldName, Object o){
-        Class<? extends Object> clazz = o.getClass();
+        Class<?> clazz = o.getClass();
         try {
             Method declaredMethod = clazz.getDeclaredMethod("get" + StringUtils.capitalise(fieldName));
             Object invoke = declaredMethod.invoke(o);
