@@ -173,7 +173,7 @@ public class FatturaResource {
                     FatturaUtilities.getFileName(toPrint), false);
             return Response.ok(BeanUtils.createResponseBean(printPage.getAbsolutePath()), MediaType.APPLICATION_JSON_TYPE).build();
         } catch (Exception ex) {
-            throw new GenericExceptionToPrint("Errore", "Siamo spiacenti, si è verificato un errore."+'\n'+"Impossibile stampare la fattura",ex);
+            throw new GenericExceptionToPrint("Errore", "Siamo spiacenti, si ï¿½ verificato un errore."+'\n'+"Impossibile stampare la fattura",ex);
         }
 	}
 	
@@ -259,10 +259,10 @@ public class FatturaResource {
                 fatturaManager.registraFattura(fattura);
                 return Response.ok(fattura, MediaType.APPLICATION_JSON_TYPE).build();
             } catch (Exception e){
-                throw new GenericExceptionToPrint("Errore", "Errore nella registrazione della fattura n° "+f.getId()+".",e);
+                throw new GenericExceptionToPrint("Errore", "Errore nella registrazione della fattura nï¿½ "+f.getId()+".",e);
             }
         } else {
-            throw new YetExistException("Errore","Esiste già una fattura con lo stesso numero.");
+            throw new YetExistException("Errore","Esiste giï¿½ una fattura con lo stesso numero.");
         }
 	}
 	
@@ -275,7 +275,7 @@ public class FatturaResource {
             fatturaManager.modificaFattura(fattura);
             return Response.ok(fattura, MediaType.APPLICATION_JSON_TYPE).build();
         } catch (Exception e){
-            throw new GenericExceptionToPrint("Errore", "Errore nella registrazione della fattura n° "+fattura.getId()+".",e);
+            throw new GenericExceptionToPrint("Errore", String.format("Errore nella registrazione della fattura numero %d.", fattura.getId()),e);
         }
 	}
 

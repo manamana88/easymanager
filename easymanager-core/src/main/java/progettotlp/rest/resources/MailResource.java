@@ -160,7 +160,7 @@ public class MailResource {
             }
             return message;
         } catch (Exception e) {
-            throw new MailException("Errore", "Siamo spiacenti si è verificato un errore.", e);
+            throw new MailException("Errore", "Siamo spiacenti si \u00E8 verificato un errore.", e);
         }
 	}
 }

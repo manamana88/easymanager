@@ -70,7 +70,7 @@ public class AziendaResource {
 			@Context HttpServletResponse response,
 			Azienda res) throws ValidationException, PersistenzaException, GenericExceptionToPrint{
 		if (res.getId()==null){
-			throw new GenericExceptionToPrint("Dati errati", "Siamo spiacenti, questa azienda non è registrata.");
+			throw new GenericExceptionToPrint("Dati errati", "Siamo spiacenti, questa azienda non \u00E8 registrata.");
 		}
 		checkAzienda(res);
         try{
@@ -93,7 +93,7 @@ public class AziendaResource {
     protected void checkAzienda(AziendaInterface a) throws ValidationException{
         String nome = a.getNome();
         if (nome==null || nome.trim().isEmpty()) {
-            throw new ValidationException("Campo vuoto", "Il nome dell'azienda è necessario");
+            throw new ValidationException("Campo vuoto", "Il nome dell'azienda \u00E8 necessario");
         }
         if (!Controlli.checkIva(a.getPIva(), true)) {
             throw new ValidationException("Dati errati", "Partita IVA errata");

@@ -82,10 +82,10 @@ public class DdtResource {
                 File file = DdtPrinter.printPage(aziendaManager.getAziendaPrincipale(), toPrint, false);
                 return Response.ok(BeanUtils.createResponseBean(file.getAbsolutePath()), MediaType.APPLICATION_JSON_TYPE).build();
             } catch (Exception ex) {
-                throw new GenericExceptionToPrint("Errore","Siamo spiacenti si è verificato un errore."+'\n'+"Impossibile stampare il DdT",ex);
+                throw new GenericExceptionToPrint("Errore","Siamo spiacenti si \u00E8 verificato un errore.\nImpossibile stampare il DdT",ex);
             }
         } else{
-            throw new CantRetrieveException("Errore","Siamo spiacenti si è verificato un errore."+'\n'+"Impossibile recuperare il DdT");
+            throw new CantRetrieveException("Errore","Siamo spiacenti si \u00E8 verificato un errore.\nImpossibile recuperare il DdT");
         }
 	}
 	
@@ -198,6 +198,6 @@ public class DdtResource {
             throw new ValidationException("Dati errati", "Descrizione vuota");
         Float qta = bene.getQta();
         if (qta==null || qta<=0)
-            throw new ValidationException("Dati errati", "QuantitÃ  vuota");
+            throw new ValidationException("Dati errati", "Quantit\u00E1 vuota");
     }
 }

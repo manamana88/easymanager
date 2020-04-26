@@ -18,9 +18,9 @@ import org.hibernate.annotations.Type;
 import progettotlp.interfaces.BeneInterface;
 
 /**
- * Bene è una classe che rappresenta un servizio fornito dall'Azienda, da inserire
- * in un Documento di Trasporto. è caratterizzato da un codice, una commessa, una
- * descrizione, una quantità, un prezzo, un totale e degli attributi supplementari.
+ * Bene \u00E8 una classe che rappresenta un servizio fornito dall'Azienda, da inserire
+ * in un Documento di Trasporto. \u00C8 caratterizzato da un codice, una commessa, una
+ * descrizione, una quantit\u00E1, un prezzo, un totale e degli attributi supplementari.
  * @author Vincenzo Barrea, Alessio Felicioni
  */
 @Entity

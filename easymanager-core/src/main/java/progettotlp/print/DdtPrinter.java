@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.List;
 
-import progettotlp.classes.Bene;
 import progettotlp.exceptions.PrintException;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.ConfigurationManager.Property;
@@ -263,7 +262,7 @@ public class DdtPrinter extends PdfPrinter {
 		pdfPCell.setColspan(3);
 		table.addCell(pdfPCell);
 		
-		pdfPCell = generateSimpleCellWithFieldset("Vs ordine n°: ", ddt.getVostroOrdine());
+		pdfPCell = generateSimpleCellWithFieldset("Vs ordine n\u00BA: ", ddt.getVostroOrdine());
 		table.addCell(pdfPCell);
 		
 		pdfPCell = generateSimpleCellWithFieldset("Del: ", ddt.getVostroOrdineDel());

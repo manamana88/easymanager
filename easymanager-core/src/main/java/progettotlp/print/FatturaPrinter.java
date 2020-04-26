@@ -214,7 +214,7 @@ public class FatturaPrinter extends PdfPrinter
         table.setSpacingAfter(0.0F);
         table.addCell(createPdfPCell("Partita Iva", createNormalBoldFont()));
         table.addCell(createPdfPCell("Codice Fiscale", createNormalBoldFont()));
-        table.addCell(createPdfPCell("Fattura n°", createNormalBoldFont()));
+        table.addCell(createPdfPCell("Fattura n\u00BA", createNormalBoldFont()));
         table.addCell(createPdfPCell("Emissione", createNormalBoldFont()));
         table.addCell(createPdfPCell("Regolamento", createNormalBoldFont()));
         table.addCell(createPdfPCell("Pagina", createNormalBoldFont()));
