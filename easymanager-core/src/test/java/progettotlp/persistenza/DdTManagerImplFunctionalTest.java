@@ -58,12 +58,12 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         assertEquals("cod", b1.getCodice());
         assertEquals("com", b1.getCommessa());
         assertEquals("descr", b1.getDescrizione());
-        assertEquals(new BigDecimal("1"), b1.getQta());
+        assertTrue(new BigDecimal("1").compareTo(b1.getQta()) == 0);
         b2 = beni.get(1);
         assertEquals("cod2", b2.getCodice());
         assertEquals("com2", b2.getCommessa());
         assertEquals("descr2", b2.getDescrizione());
-        assertEquals(new BigDecimal("2"), b2.getQta());
+        assertTrue(new BigDecimal("2").compareTo(b2.getQta()) == 0);
         assertEquals(data, retrieved.getData());
         assertEquals(cliente, retrieved.getCliente());
         assertEquals("Cessionario", retrieved.getMezzo());
@@ -104,8 +104,8 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         assertEquals(2, beni.size());
         for (BeneInterface b : beni) {
             if (b.getId().equals(1L)) {
-                assertEquals(new BigDecimal("1"), b.getQta());
-                assertEquals(new BigDecimal("21"), b.getPrezzo());
+                assertTrue(new BigDecimal("1").compareTo(b.getQta()) == 0);
+                assertTrue(new BigDecimal("21").compareTo(b.getPrezzo()) == 0);
                 assertTrue(b.getCampionario());
                 assertTrue(b.getPiazzato());
                 assertTrue(b.getPrimoCapo());

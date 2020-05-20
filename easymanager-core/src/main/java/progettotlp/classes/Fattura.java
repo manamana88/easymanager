@@ -236,16 +236,16 @@ public class Fattura implements Serializable, FatturaInterface {
         if (this.cliente != other.cliente && (this.cliente == null || !this.cliente.equals(other.cliente))) {
             return false;
         }
-        if (this.netto != other.netto && (this.netto == null || !this.netto.equals(other.netto))) {
+        if (this.netto != other.netto && (this.netto == null || this.netto.compareTo(other.netto) != 0)) {
             return false;
         }
-        if (this.ivaPerc != other.ivaPerc && (this.ivaPerc == null || !this.ivaPerc.equals(other.ivaPerc))) {
+        if (this.ivaPerc != other.ivaPerc && (this.ivaPerc == null || this.ivaPerc.compareTo(other.ivaPerc) != 0)) {
             return false;
         }
-        if (this.iva != other.iva && (this.iva == null || !this.iva.equals(other.iva))) {
+        if (this.iva != other.iva && (this.iva == null || this.iva.compareTo(other.iva) != 0)) {
             return false;
         }
-        if (this.totale != other.totale && (this.totale == null || !this.totale.equals(other.totale))) {
+        if (this.totale != other.totale && (this.totale == null || this.totale.compareTo(other.totale) != 0)) {
             return false;
         }
         if (this.bollo != other.bollo && (this.bollo == null || !this.bollo.equals(other.bollo))) {

@@ -42,14 +42,15 @@ public abstract class AbstractTest extends AnnualTest{
     private SessionFactory sessionFactory = null;
 
     {
-            properties = new Properties();
-            properties.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-            properties.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/easymanager_test");
-            properties.setProperty("hibernate.connection.username", "root");
-            properties.setProperty("hibernate.connection.password", "root");
-            properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-            properties.setProperty("hibernate.show_sql", "true");
+        properties = new Properties();
+        properties.setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+        properties.setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:easymanager");
+        properties.setProperty("hibernate.connection.username", "sa");
+        properties.setProperty("hibernate.connection.password", "");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+        properties.setProperty("hibernate.show_sql", "true");
     }
+
     @Before
     public void setUp() throws Exception {
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/clearDB.sql");
@@ -156,6 +157,8 @@ public abstract class AbstractTest extends AnnualTest{
     protected <T> T retrieveObject(Class<?> clazz, Serializable id, AbstractPersistenza a) {
         return retrieveObject(clazz, id,a,null);
     }
+
+    @SuppressWarnings("unchecked")
     protected <T> T retrieveObject(Class<?> clazz, Serializable id,AbstractPersistenza a, List<String> toRetrieve) {
         Session retrieveSession = null;
         try {

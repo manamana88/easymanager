@@ -218,13 +218,13 @@ public class Bene implements Serializable, BeneInterface{
         if ((this.descrizione == null) ? (other.descrizione != null) : !this.descrizione.equals(other.descrizione)) {
             return false;
         }
-        if (this.qta != other.qta && (this.qta == null || !this.qta.equals(other.qta))) {
+        if (this.qta != other.qta && (this.qta == null || this.qta.compareTo(other.qta) != 0)) {
             return false;
         }
-        if (this.prezzo != other.prezzo && (this.prezzo == null || !this.prezzo.equals(other.prezzo))) {
+        if (this.prezzo != other.prezzo && (this.prezzo == null || this.prezzo.compareTo(other.prezzo) != 0)) {
             return false;
         }
-        if (this.tot != other.tot && (this.tot == null || !this.tot.equals(other.tot))) {
+        if (this.tot != other.tot && (this.tot == null || this.tot.compareTo(other.tot) != 0)) {
             return false;
         }
         if (this.prototipo != other.prototipo && (this.prototipo == null || !this.prototipo.equals(other.prototipo))) {

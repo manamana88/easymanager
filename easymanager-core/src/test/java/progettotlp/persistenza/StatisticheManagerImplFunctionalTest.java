@@ -219,9 +219,9 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
 
     private void assertEqualsStatistiche(StatisticheFattura s, String nome, BigDecimal netto, BigDecimal iva, BigDecimal totale, BigDecimal capiTagliati){
         assertEquals(nome, s.getCliente().getNome());
-        assertEquals(netto, s.getNetto());
-        assertEquals(iva, s.getIva());
-        assertEquals(totale, s.getTotale());
-        assertEquals(capiTagliati, s.getCapiTagliati());
+        assertTrue(netto.compareTo(s.getNetto()) == 0);
+        assertTrue(iva.compareTo(s.getIva()) == 0);
+        assertTrue(totale.compareTo(s.getTotale()) == 0);
+        assertTrue(capiTagliati.compareTo(s.getCapiTagliati()) == 0);
     }
 }

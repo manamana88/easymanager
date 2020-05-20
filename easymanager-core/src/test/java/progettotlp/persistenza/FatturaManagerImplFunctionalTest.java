@@ -72,7 +72,7 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         retrieved.setId(newId);
         fatturaManager.modificaFattura(retrieved);
         retrieved = retrieveObject(Fattura.class, 1L,fatturaManager);
-        assertEquals(newNetto, retrieved.getNetto());
+        assertTrue(newNetto.compareTo(retrieved.getNetto()) == 0);
         assertEquals(newId, retrieved.getId());
     }
 
@@ -168,10 +168,10 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
         assertEquals("0001",b1.getCodice());
         assertEquals("C0001",b1.getCommessa());
         assertEquals("Abito",b1.getDescrizione());
-        assertEquals(new BigDecimal("15"),b1.getQta());
-        assertEquals(new BigDecimal("3"),b1.getPrezzo());
-        assertEquals(new BigDecimal("45"),b1.getTot());
-        assertEquals(new BigDecimal("3"),b1.getPrezzo());
+        assertTrue(new BigDecimal("15").compareTo(b1.getQta()) == 0);
+        assertTrue(new BigDecimal("3").compareTo(b1.getPrezzo()) == 0);
+        assertTrue(new BigDecimal("45").compareTo(b1.getTot()) == 0);
+        assertTrue(new BigDecimal("3").compareTo(b1.getPrezzo()) == 0);
         assertTrue(b1.getCampionario());
         assertTrue(b1.getPiazzato());
         assertTrue(b1.getPrimoCapo());
