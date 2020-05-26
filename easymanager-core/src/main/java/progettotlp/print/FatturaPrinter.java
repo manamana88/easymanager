@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtilities;
 import progettotlp.facilities.StringUtils;
-import progettotlp.facilities.ConfigurationManager.Property;
 import progettotlp.interfaces.AziendaInterface;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
@@ -58,19 +56,33 @@ public class FatturaPrinter extends PdfPrinter
                                        String filePrefix,
                                        boolean deleteOnExit) throws PrintException {
         try {
+            File file;
+            if ((folder == null) || (filePrefix == null))
+                file = File.createTempFile("emem", "emem");
+            else {
+                file = new File(folder + File.separator + filePrefix + ".pdf");
+            }
+            if ((!(file.exists())) && (!(file.createNewFile()))) {
+                throw new PrintException("Impossibile creare il file");
+            }
+            if (deleteOnExit) {
+                file.deleteOnExit();
+            }
+            printPage(f, principale, file);
+            return file;
+        } catch (Exception e){
+            throw new PrintException("Impossibile stampare la fattura", e);
+        }
+    }
+
+    public static void printPage(FatturaInterface f,
+                                       AziendaInterface principale,
+                                       File targetFile) throws PrintException {
+        try {
         	System.out.println("Start"+System.currentTimeMillis());
             List<PdfPTable> tableBodies = getTableBodies(f.getDdt());
             System.out.println("After Bodies"+System.currentTimeMillis());
-            File file;
-            if ((folder == null) || (filePrefix == null))
-            	file = File.createTempFile("emem", "emem");
-            else {
-            	file = new File(folder + File.separator + filePrefix + ".pdf");
-            }
-            if ((!(file.exists())) && (!(file.createNewFile()))) {
-            	throw new PrintException("Impossibile creare il file");
-            }
-            FileOutputStream outputStream = new FileOutputStream(file);
+            FileOutputStream outputStream = new FileOutputStream(targetFile);
             Document document = new Document(PageSize.A4);
             PdfWriter.getInstance(document, outputStream);
             document.addAuthor("C.R.Taglio");
@@ -92,11 +104,7 @@ public class FatturaPrinter extends PdfPrinter
             document.close();
             outputStream.flush();
             outputStream.close();
-            if (deleteOnExit) {
-            	file.deleteOnExit();
-            }
             System.out.println("End"+System.currentTimeMillis());
-            return file;
         } catch (Exception ex) {
             throw new PrintException("Impossibile stampare la fattura", ex);
         }
@@ -137,9 +145,9 @@ public class FatturaPrinter extends PdfPrinter
 		return result;
 	}
 
-	private static Image getImageInstance() throws BadElementException, MalformedURLException, IOException {
+	private static Image getImageInstance() throws BadElementException, IOException {
 		if (imageInstance==null) {			
-			imageInstance = Image.getInstance(ConfigurationManager.getProperty(Property.EXTERNAL_RESOURCES)+"/img/ok2.png");
+			imageInstance = Image.getInstance(FatturaPrinter.class.getClassLoader().getResource("ok2.png"));
 			imageInstance.scaleAbsolute(7.0F, 7.0F);
 		}
 		return imageInstance;
@@ -291,23 +299,23 @@ public class FatturaPrinter extends PdfPrinter
             color = new BaseColor(237, 237, 237);
         else
             color = BaseColor.WHITE;
-        table.addCell(createPdfPCell(b.getBene().getCodice(), createSmallFont(), color, borders));
-        table.addCell(createPdfPCell(b.getBene().getCommessa(), createSmallFont(), color, borders));
-        table.addCell(createPdfPCell(b.getBene().getDescrizione(), createSmallFont(), color, borders));
+        BeneInterface bene = b.getBene();
+        table.addCell(createPdfPCell(bene.getCodice(), createSmallFont(), color, borders));
+        table.addCell(createPdfPCell(bene.getCommessa(), createSmallFont(), color, borders));
+        table.addCell(createPdfPCell(bene.getDescrizione(), createSmallFont(), color, borders));
         table.addCell(createPdfPCell(b.generateRif(), createSmallFont(), color, borders));
-        table.addCell(createImage(color, bordersImage, b.getBene().getPrototipo().booleanValue()));
-        table.addCell(createImage(color, bordersImage, b.getBene().getCampionario().booleanValue()));
-        table.addCell(createImage(color, bordersImage, b.getBene().getPrimoCapo().booleanValue()));
-        table.addCell(createImage(color, bordersImage, b.getBene().getPiazzato().booleanValue()));
-        table.addCell(createImage(color, bordersImage, b.getBene().getInteramenteAdesivato().booleanValue()));
-        table.addCell(createPdfPCell(b.getBene().getQta().toString(), createSmallFont(), color, borders));
-        BigDecimal prezzo = b.getBene().getPrezzo();
-        if (prezzo == null)
-            table.addCell(createPdfPCell("", createSmallFont(), color, borders));
-        else {
-            table.addCell(createPdfPCell(StringUtils.formatNumber(prezzo), createSmallFont(), color, borders));
-        }
-        table.addCell(createPdfPCell(StringUtils.formatNumber(b.getBene().getTot()), createSmallFont(), color, borders));
+        table.addCell(createImage(color, bordersImage, bene.getPrototipo().booleanValue()));
+        table.addCell(createImage(color, bordersImage, bene.getCampionario().booleanValue()));
+        table.addCell(createImage(color, bordersImage, bene.getPrimoCapo().booleanValue()));
+        table.addCell(createImage(color, bordersImage, bene.getPiazzato().booleanValue()));
+        table.addCell(createImage(color, bordersImage, bene.getInteramenteAdesivato().booleanValue()));
+        table.addCell(createPdfPCell(bene.getQta().toString(), createSmallFont(), color, borders));
+        BigDecimal prezzo = bene.getPrezzo();
+        String prezzoString = prezzo == null ? "" : StringUtils.formatNumber(prezzo);
+        table.addCell(createPdfPCell(prezzoString, createSmallFont(), color, borders));
+        BigDecimal tot = bene.getTot();
+        String totString = tot == null ? "" : StringUtils.formatNumber(tot);
+        table.addCell(createPdfPCell(totString, createSmallFont(), color, borders));
     }
 
     private static void addDdT(DdTInterface d, PdfPTable table, int startingRow) throws Exception {

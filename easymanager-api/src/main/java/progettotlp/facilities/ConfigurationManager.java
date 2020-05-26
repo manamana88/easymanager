@@ -39,7 +39,7 @@ public class ConfigurationManager {
             }
         } catch (Exception ex) {
             logger.error("Unable to initialize ConfigurationManager: ", ex);
-            throw new IllegalArgumentException("Unable to initialize ConfigurationManager: ", ex);
+            throw new RuntimeException("Unable to initialize ConfigurationManager: ", ex);
         }
     }
     
@@ -67,12 +67,12 @@ public class ConfigurationManager {
     	IVA_DEFAULT("iva_default"), 
     	FATTURE_FOLDER_PATH("fatture_folder"),
     	DDT_FOLDER_PATH("ddt_folder"),
-    	BOLLO_LIMIT("bollo_limit"),
-    	EXTERNAL_RESOURCES("external_resources");
+    	BOLLO_LIMIT("bollo_limit");
+        //,EXTERNAL_RESOURCES("external_resources");
     	
     	private String value;
 
-		private Property(String value) {
+		Property(String value) {
 			this.value = value;
 		}
 

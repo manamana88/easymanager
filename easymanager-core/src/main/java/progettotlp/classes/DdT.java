@@ -76,10 +76,10 @@ public class DdT implements Serializable, DdTInterface {
     @JoinColumn(name="cliente")
     private AziendaInterface cliente;
 
-    @OneToMany(fetch=FetchType.LAZY, targetEntity=Bene.class)
+    @OneToMany(fetch=FetchType.LAZY, targetEntity=Bene.class, orphanRemoval = true)
     @IndexColumn(name="idx",nullable=false)
     @JoinColumn(name="ddt",nullable=false)
-    @Cascade(value={CascadeType.SAVE_UPDATE,CascadeType.DELETE_ORPHAN})
+    @Cascade(value={CascadeType.SAVE_UPDATE})
     private List<BeneInterface> beni;
 
     @ManyToOne(fetch=FetchType.LAZY, targetEntity=Fattura.class)
@@ -94,7 +94,7 @@ public class DdT implements Serializable, DdTInterface {
      * @param cliente 
      */
     public DdT(Azienda cliente) {
-        this.beni = new ArrayList();
+        this.beni = new ArrayList<>();
         this.data = new Date();
         this.cliente = cliente;
     }
