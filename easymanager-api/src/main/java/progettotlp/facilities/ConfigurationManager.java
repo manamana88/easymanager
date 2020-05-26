@@ -4,8 +4,7 @@
  */
 package progettotlp.facilities;
 
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.Properties;
 
@@ -25,18 +24,27 @@ public class ConfigurationManager {
     public static void init() {
         try {
         	String property = System.getProperty(PROPERTIES_PATH);
-        	if (property==null || property.trim().isEmpty()){
-        		property = "easymanager.properties";
-        	}
-            File propertiesFile = new File(property);
-            if (!propertiesFile.exists()) {
-                throw new IllegalArgumentException(propertiesFile.getAbsolutePath() + " file not found");
-            } else {
-                if (properties == null){
-                    properties = new Properties();
+            InputStream propertiesStream;
+            if (property!=null && !property.trim().isEmpty()){
+                File propertiesFile = new File(property);
+                if (!propertiesFile.exists()) {
+                    throw new IllegalArgumentException(propertiesFile.getAbsolutePath() + " file not found");
                 }
-                properties.load(new FileReader(propertiesFile));
+                propertiesStream = new FileInputStream(propertiesFile);
+            }  else {
+                InputStream resource = ConfigurationManager.class.getClassLoader().getResourceAsStream("easymanager.properties");
+                if (resource!=null){
+                    propertiesStream = resource;
+                } else {
+                    String exception = String.format("Properties file not found or environment variable [%s] not set"
+                            , PROPERTIES_PATH);
+                    throw new IllegalArgumentException(exception);
+                }
             }
+            if (properties == null){
+                properties = new Properties();
+            }
+            properties.load(propertiesStream);
         } catch (Exception ex) {
             logger.error("Unable to initialize ConfigurationManager: ", ex);
             throw new RuntimeException("Unable to initialize ConfigurationManager: ", ex);
