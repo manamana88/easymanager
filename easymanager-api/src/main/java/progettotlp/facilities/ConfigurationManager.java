@@ -68,8 +68,7 @@ public class ConfigurationManager {
     	FATTURE_FOLDER_PATH("fatture_folder"),
     	DDT_FOLDER_PATH("ddt_folder"),
     	BOLLO_LIMIT("bollo_limit");
-        //,EXTERNAL_RESOURCES("external_resources");
-    	
+
     	private String value;
 
 		Property(String value) {
