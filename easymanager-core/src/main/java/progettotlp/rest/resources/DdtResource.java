@@ -9,6 +9,7 @@ import static progettotlp.rest.utils.JsonUtils.getLongValue;
 import static progettotlp.rest.utils.JsonUtils.getTextValue;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -38,6 +40,7 @@ import progettotlp.exceptions.toprint.GenericExceptionToPrint;
 import progettotlp.exceptions.toprint.ValidationException;
 import progettotlp.facilities.BeanUtils;
 import progettotlp.facilities.DateUtils;
+import progettotlp.facilities.DdTUtilities;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
 import progettotlp.persistenza.AziendaManager;
@@ -80,8 +83,10 @@ public class DdtResource {
 		DdTInterface toPrint=ddtManager.getDdT(id, true, false);
         if (toPrint!=null){
             try {
-                File file = DdtPrinter.printPage(aziendaManager.getAziendaPrincipale(), toPrint, false);
-                return Response.ok(BeanUtils.createResponseBean(file.getAbsolutePath()), MediaType.APPLICATION_JSON_TYPE).build();
+                File file = DdtPrinter.printPage(aziendaManager.getAziendaPrincipale(), toPrint, true);
+				String fileName = "Ddt - " + DdTUtilities.getFileName(toPrint);
+				return Response.ok(new FileInputStream(file), "application/pdf")
+						.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""+fileName+"\"").build();
             } catch (Exception ex) {
                 throw new GenericExceptionToPrint("Errore","Siamo spiacenti si \u00E8 verificato un errore.\nImpossibile stampare il DdT",ex);
             }

@@ -6,8 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import progettotlp.exceptions.PrintException;
-import progettotlp.facilities.ConfigurationManager;
-import progettotlp.facilities.ConfigurationManager.Property;
+import progettotlp.facilities.DdTUtilities;
 import progettotlp.interfaces.AziendaInterface;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
@@ -34,26 +33,30 @@ public class DdtPrinter extends PdfPrinter {
 	
 	public static File printPage(AziendaInterface principale, DdTInterface ddt, boolean tempFile)
 			throws PrintException {
-		return printPage(principale, ddt, tempFile, false);
+		return printPage(principale, ddt, null, null, tempFile);
 	}
 	
-	protected static File printPage(AziendaInterface principale, DdTInterface ddt, boolean tempFile, boolean deleteOnExit)
+	protected static File printPage(AziendaInterface principale, DdTInterface ddt, String folder,
+									String filename, boolean deleteOnExit)
 			throws PrintException {
 		try {
-			String folder = ConfigurationManager.getProperty(Property.DDT_FOLDER_PATH);
 			File file;
-			if (folder == null || tempFile){
+			if (folder == null || filename == null){
 				file = File.createTempFile("emem", ".pdf");
 				if (deleteOnExit){
 					file.deleteOnExit();
 				}
 			} else {
 				Date data = ddt.getData();
-				String directoryPath = folder+File.separator+DateUtils.getYear(data)+File.separator+DateUtils.getMonthString(data);
+				String directoryPath = folder
+						+ File.separator
+						+ DateUtils.getYear(data)
+						+ File.separator
+						+ DateUtils.getMonthString(data);
 				File directory=new File(directoryPath);
                 directory.mkdirs();
-                String filepath=directoryPath+File.separator+ddt.getId()+" - "+ddt.getCliente().getNome()+".pdf";
-                file=new File(filepath);
+                String filepath=directoryPath+File.separator+ DdTUtilities.getFileName(ddt);
+                file = new File(filepath);
 			}
 			if ((!(file.exists())) && (!(file.createNewFile()))) {
 				throw new PrintException("Impossibile creare il file");
@@ -85,7 +88,7 @@ public class DdtPrinter extends PdfPrinter {
 			
 			return file;
 		} catch (Exception ex) {
-			throw new PrintException("Impossibile stampare la fattura", ex);
+			throw new PrintException("Impossibile stampare il DdT", ex);
 		}
 	}
 

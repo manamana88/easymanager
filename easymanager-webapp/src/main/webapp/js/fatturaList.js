@@ -24,15 +24,7 @@ function fillTable(fatture){
 }
 
 function stampaFattura(id){
-	
-	var targetUrl=getWebappUrl() + "/resources/fattura/print?id="+encodeURIComponent(id);
-	var urlString = "";
-	doCall('GET', targetUrl, {}, urlString, function (responseData){
-		notifyModal("Successo", "Fattura stampata con successo"); 
-		_.delay(function(){
-			window.open(getWebappUrl() + "/resources/filesystem"+responseData.items[0],'_blank');
-		}, 2000);
-	});
+	window.open(getWebappUrl() + "/resources/fattura/print?id="+encodeURIComponent(id), "_blank");
 }
 
 function generaFatturaElettronica(id){

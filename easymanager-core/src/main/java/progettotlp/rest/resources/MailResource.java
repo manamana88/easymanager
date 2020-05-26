@@ -34,6 +34,7 @@ import progettotlp.classes.Azienda;
 import progettotlp.classes.Fattura;
 import progettotlp.exceptions.toprint.MailException;
 import progettotlp.facilities.Controlli;
+import progettotlp.facilities.DdTUtilities;
 import progettotlp.facilities.FatturaUtilities;
 import progettotlp.interfaces.AccountEmailInterface;
 import progettotlp.interfaces.AziendaInterface;
@@ -78,11 +79,11 @@ public class MailResource {
 					FatturaInterface fattura = fatturaManager.get(Fattura.class, attachmentId);
 					fattura = fatturaManager.getFattura(fattura.getId(), true, true);
 					File printPage = FatturaPrinter.printPage(fattura, aziendaPrincipale, true);
-					attachment = createAttachment(printPage, FatturaUtilities.getFileName(fattura) + ".pdf");
+					attachment = createAttachment(printPage, FatturaUtilities.getFileName(fattura));
 				} else {
 					DdTInterface ddt = ddtManager.getDdT(attachmentId, true, true);
 					File printPage = DdtPrinter.printPage(aziendaPrincipale, ddt, true);
-					attachment = createAttachment(printPage, ddt.getId()+" - "+ddt.getCliente().getNome()+".pdf");
+					attachment = createAttachment(printPage, DdTUtilities.getFileName(ddt));
 				}
 			}
 		}

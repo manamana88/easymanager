@@ -1,4 +1,3 @@
-/*** Eclipse Class Decompiler plugin, copyright (c) 2012 Chao Chen (cnfree2000@hotmail.com) ***/
 package progettotlp.facilities;
 
 import java.io.File;
@@ -38,6 +37,6 @@ public class FatturaUtilities
     }
 
     public static String getFileName(FatturaInterface fattura) {
-        return fattura.getId() + " - " + fattura.getCliente().getNome();
+        return String.format("%d - %s.pdf", fattura.getId(), fattura.getCliente().getNome());
     }
 }

@@ -24,14 +24,7 @@ function fillTable(ddts){
 }
 
 function stampaDdt(id){
-	var targetUrl=getWebappUrl() + "/resources/ddt/print?id="+encodeURIComponent(id);
-	var urlString = "";
-	doCall('GET', targetUrl, {}, urlString, function (responseData){
-		notifyModal("Successo", "Ddt stampato con successo"); 
-		_.delay(function(){
-			window.open(getWebappUrl() + "/resources/filesystem"+responseData.items[0],'_blank');
-		}, 2000);
-	});
+	window.open(getWebappUrl() + "/resources/ddt/print?id="+encodeURIComponent(id),'_blank');
 }
 
 function deleteDdt(id){

@@ -1,11 +1,7 @@
 package progettotlp.rest.resources;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -153,16 +149,15 @@ public class FatturaResource {
             FatturaInterface toPrint = fatturaManager.get(Fattura.class, id);
             toPrint = fatturaManager.getFattura(toPrint.getId(), true, true);
             System.out.println("Retrieved"+System.currentTimeMillis());
-            File directory = new File(FatturaUtilities.getDirectoryPath(toPrint,
-                    ConfigurationManager.getProperty(Property.FATTURE_FOLDER_PATH)));
-            directory.mkdirs();
-            File printPage = FatturaPrinter.printPage(toPrint,
+			String fileName = "Fattura - " + FatturaUtilities.getFileName(toPrint);
+			File printPage = FatturaPrinter.printPage(toPrint,
                     aziendaManager.getAziendaPrincipale(),
-                    directory.getAbsolutePath(),
-                    FatturaUtilities.getFileName(toPrint), false);
-            return Response.ok(BeanUtils.createResponseBean(printPage.getAbsolutePath()), MediaType.APPLICATION_JSON_TYPE).build();
+                    null,
+					fileName, false);
+            return Response.ok(new FileInputStream(printPage), "application/pdf")
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""+fileName+"\"").build();
         } catch (Exception ex) {
-            throw new GenericExceptionToPrint("Errore", "Siamo spiacenti, si � verificato un errore."+'\n'+"Impossibile stampare la fattura",ex);
+            throw new GenericExceptionToPrint("Errore", "Siamo spiacenti, si e' verificato un errore."+'\n'+"Impossibile stampare la fattura",ex);
         }
 	}
 	

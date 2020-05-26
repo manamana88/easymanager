@@ -73,8 +73,6 @@ public class ConfigurationManager {
     
     public enum Property {
     	IVA_DEFAULT("iva_default"), 
-    	FATTURE_FOLDER_PATH("fatture_folder"),
-    	DDT_FOLDER_PATH("ddt_folder"),
     	BOLLO_LIMIT("bollo_limit");
 
     	private String value;

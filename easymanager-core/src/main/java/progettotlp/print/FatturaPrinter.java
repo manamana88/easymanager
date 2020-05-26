@@ -53,14 +53,14 @@ public class FatturaPrinter extends PdfPrinter
     public static File printPage(FatturaInterface f,
                                        AziendaInterface principale,
                                        String folder,
-                                       String filePrefix,
+                                       String filename,
                                        boolean deleteOnExit) throws PrintException {
         try {
             File file;
-            if ((folder == null) || (filePrefix == null))
-                file = File.createTempFile("emem", "emem");
-            else {
-                file = new File(folder + File.separator + filePrefix + ".pdf");
+            if ((folder == null) || (filename == null)) {
+                file = File.createTempFile("emem", ".pdf");
+            } else {
+                file = new File(folder + File.separator + filename);
             }
             if ((!(file.exists())) && (!(file.createNewFile()))) {
                 throw new PrintException("Impossibile creare il file");

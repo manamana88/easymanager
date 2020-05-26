@@ -72,7 +72,7 @@ public class DdtPrinterTest {
         a.setTassabile(false);
         ddt.setCliente(a);
 		
-		File printPage = DdtPrinter.printPage(a, ddt, true, false);
+		File printPage = DdtPrinter.printPage(a, ddt, false);
 		System.out.println(printPage.getAbsolutePath());
 	}
 }
