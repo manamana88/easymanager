@@ -48,7 +48,7 @@ public abstract class AbstractPersistenza implements BaseManager{
     public static final String HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 
     protected static SessionFactory sessionFactory = null;
-    protected enum CONJUNCTION_TYPE {AND,OR};
+    protected enum CONJUNCTION_TYPE {AND,OR}
 
     protected AbstractPersistenza() {
         Properties properties = new Properties();
@@ -97,7 +97,7 @@ public abstract class AbstractPersistenza implements BaseManager{
                     .buildSessionFactory();
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
-            System.err.println("Initial SessionFactory creation failed." + ex);
+            logger.error("Initial SessionFactory creation failed.", ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
@@ -114,7 +114,9 @@ public abstract class AbstractPersistenza implements BaseManager{
     }
 
     protected void closeSession(Session session) {
-        session.close();
+        if (session != null) {
+            session.close();
+        }
     }
 
     private void closeWork(boolean res, Transaction trx, Session sessione) throws HibernateException {
@@ -122,9 +124,7 @@ public abstract class AbstractPersistenza implements BaseManager{
             trx.commit();
             sessione.flush();
         }
-        if (sessione != null) {
-            sessione.close();
-        }
+        closeSession(sessione);
     }
 
     public <T> T get(Class<T> clazz, Serializable id){
@@ -134,7 +134,7 @@ public abstract class AbstractPersistenza implements BaseManager{
     		Object obj = sessione.get(clazz, id);
     		return obj!=null? clazz.cast(obj) : null;
     	} finally {
-    		sessione.close();
+    		closeSession(sessione);
     	}
     	
     }
@@ -218,13 +218,13 @@ public abstract class AbstractPersistenza implements BaseManager{
         }
     }
 
-    protected Criterion createCriterionFromList(String propertyName, List<String> values, CONJUNCTION_TYPE conjunctionTipe){
+    protected Criterion createCriterionFromList(String propertyName, List<String> values, CONJUNCTION_TYPE conjunctionType){
         if (values==null || values.isEmpty()){
             return null;
         }
         Criterion restrictions=Restrictions.eq(propertyName, values.get(0));
         for(int i=1; i<values.size(); i++){
-            switch (conjunctionTipe){
+            switch (conjunctionType){
                 case AND:
                     restrictions=Restrictions.and(restrictions, Restrictions.eq(propertyName, values.get(i)));
                     break;
@@ -248,12 +248,12 @@ public abstract class AbstractPersistenza implements BaseManager{
             List<DdTInterface> ddtList = f.getDdt();
             if (ddtList!=null){
                 ddtList.size();
-            }
-            for (DdTInterface d:ddtList){
-                if (initializeBeni){
-                    List<BeneInterface> beni = d.getBeni();
-                    if (beni!=null){
-                        beni.size();
+                for (DdTInterface d:ddtList){
+                    if (initializeBeni){
+                        List<BeneInterface> beni = d.getBeni();
+                        if (beni!=null){
+                            beni.size();
+                        }
                     }
                 }
             }

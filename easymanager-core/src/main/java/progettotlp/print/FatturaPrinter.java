@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,9 +81,7 @@ public class FatturaPrinter extends PdfPrinter
                                        AziendaInterface principale,
                                        File targetFile) throws PrintException {
         try {
-        	System.out.println("Start"+System.currentTimeMillis());
             List<PdfPTable> tableBodies = getTableBodies(f.getDdt());
-            System.out.println("After Bodies"+System.currentTimeMillis());
             FileOutputStream outputStream = new FileOutputStream(targetFile);
             Document document = new Document(PageSize.A4);
             PdfWriter.getInstance(document, outputStream);
@@ -104,7 +104,6 @@ public class FatturaPrinter extends PdfPrinter
             document.close();
             outputStream.flush();
             outputStream.close();
-            System.out.println("End"+System.currentTimeMillis());
         } catch (Exception ex) {
             throw new PrintException("Impossibile stampare la fattura", ex);
         }
@@ -146,8 +145,9 @@ public class FatturaPrinter extends PdfPrinter
 	}
 
 	private static Image getImageInstance() throws BadElementException, IOException {
-		if (imageInstance==null) {			
-			imageInstance = Image.getInstance(FatturaPrinter.class.getClassLoader().getResource("ok2.png"));
+		if (imageInstance==null) {
+            URL url = Objects.requireNonNull(FatturaPrinter.class.getClassLoader().getResource("ok2.png"));
+            imageInstance = Image.getInstance(url);
 			imageInstance.scaleAbsolute(7.0F, 7.0F);
 		}
 		return imageInstance;
@@ -304,11 +304,11 @@ public class FatturaPrinter extends PdfPrinter
         table.addCell(createPdfPCell(bene.getCommessa(), createSmallFont(), color, borders));
         table.addCell(createPdfPCell(bene.getDescrizione(), createSmallFont(), color, borders));
         table.addCell(createPdfPCell(b.generateRif(), createSmallFont(), color, borders));
-        table.addCell(createImage(color, bordersImage, bene.getPrototipo().booleanValue()));
-        table.addCell(createImage(color, bordersImage, bene.getCampionario().booleanValue()));
-        table.addCell(createImage(color, bordersImage, bene.getPrimoCapo().booleanValue()));
-        table.addCell(createImage(color, bordersImage, bene.getPiazzato().booleanValue()));
-        table.addCell(createImage(color, bordersImage, bene.getInteramenteAdesivato().booleanValue()));
+        table.addCell(createImage(color, bordersImage, bene.getPrototipo()));
+        table.addCell(createImage(color, bordersImage, bene.getCampionario()));
+        table.addCell(createImage(color, bordersImage, bene.getPrimoCapo()));
+        table.addCell(createImage(color, bordersImage, bene.getPiazzato()));
+        table.addCell(createImage(color, bordersImage, bene.getInteramenteAdesivato()));
         table.addCell(createPdfPCell(bene.getQta().toString(), createSmallFont(), color, borders));
         BigDecimal prezzo = bene.getPrezzo();
         String prezzoString = prezzo == null ? "" : StringUtils.formatNumber(prezzo);
@@ -320,18 +320,16 @@ public class FatturaPrinter extends PdfPrinter
 
     private static void addDdT(DdTInterface d, PdfPTable table, int startingRow) throws Exception {
         List<BeneInterface> beni = d.getBeni();
-        for (int i = 0; i < beni.size(); ++i)
-            addRow(new BeneFattura(beni.get(i), d.getData(), d.getId()), table, startingRow++, false);
+        for (BeneInterface bene: beni)
+            addRow(new BeneFattura(bene, d.getData(), d.getId()), table, startingRow++, false);
     }
 
     private static List<PdfPTable> getTableBodies(List<DdTInterface> list) throws Exception {
-        List<PdfPTable> result = new ArrayList<PdfPTable>();
+        List<PdfPTable> result = new ArrayList<>();
         PdfPTable t = retrieveTableBodyWithHeader();
         int currentRow = 0;
 //        boolean insertFattura = false;
-        for (int i = 0; i < list.size(); ++i) {
-        	System.out.println("StartFor"+System.currentTimeMillis());
-            DdTInterface get = (DdTInterface) list.get(i);
+        for (DdTInterface get : list) {
             int beniSize = get.getBeni().size();
 			if (currentRow+beniSize<=MAX_ROWS){
                 addDdT(get, t, currentRow);

@@ -145,10 +145,8 @@ public class FatturaResource {
 	public Response print(
 			@QueryParam("id") Long id) throws GenericExceptionToPrint {
         try {
-        	System.out.println("ResourceStart"+System.currentTimeMillis());
             FatturaInterface toPrint = fatturaManager.get(Fattura.class, id);
             toPrint = fatturaManager.getFattura(toPrint.getId(), true, true);
-            System.out.println("Retrieved"+System.currentTimeMillis());
 			String fileName = "Fattura - " + FatturaUtilities.getFileName(toPrint);
 			File printPage = FatturaPrinter.printPage(toPrint,
                     aziendaManager.getAziendaPrincipale(),
