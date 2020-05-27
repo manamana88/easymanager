@@ -114,10 +114,14 @@ public class CloudNativeUtils {
     }
 
     public static String getEnvOrProperty(String envProperty, String defaultValue) {
+        return getEnvOrProperty(envProperty, defaultValue, false);
+    }
+
+    public static String getEnvOrProperty(String envProperty, String defaultValue, boolean allowEmpty) {
         String propertyStringValue = System.getenv(envProperty);
-        if (propertyStringValue == null){
+        if (propertyStringValue == null || (propertyStringValue.trim().isEmpty() && !allowEmpty)){
             propertyStringValue = System.getProperty(envProperty);
         }
-        return propertyStringValue != null ? propertyStringValue : defaultValue;
+        return propertyStringValue == null || (propertyStringValue.trim().isEmpty() && !allowEmpty) ? defaultValue : propertyStringValue;
     }
 }

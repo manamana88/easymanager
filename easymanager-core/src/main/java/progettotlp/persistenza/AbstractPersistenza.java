@@ -40,35 +40,40 @@ public abstract class AbstractPersistenza implements BaseManager{
 
     protected static Logger logger = LoggerFactory.getLogger(AbstractPersistenza.class);
 
-    public static final String HIBERNATE_CONNECTION_DRIVER_CLASS = "hibernate.connection.driver_class";
-    public static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
-    public static final String HIBERNATE_CONNECTION_USERNAME = "hibernate.connection.username";
-    public static final String HIBERNATE_CONNECTION_PASSWORD = "hibernate.connection.password";
-    public static final String HIBERNATE_DIALECT = "hibernate.dialect";
-    public static final String HIBERNATE_SHOW_SQL = "hibernate.show_sql";
+    public static final String CONNECTION_DRIVER_CLASS = "connection_driver_class";
+    public static final String CONNECTION_URL = "connection_url";
+    public static final String CONNECTION_USERNAME = "connection_username";
+    public static final String CONNECTION_PASSWORD = "connection_password";
+    public static final String CONNECTION_DIALECT = "connection_dialect";
+    public static final String CONNECTION_SHOW_SQL = "connection_show_sql";
 
     protected static SessionFactory sessionFactory = null;
     protected enum CONJUNCTION_TYPE {AND,OR}
 
     protected AbstractPersistenza() {
         Properties properties = new Properties();
-        String driverClass = CloudNativeUtils.getEnvOrProperty(HIBERNATE_CONNECTION_DRIVER_CLASS, "com.mysql.jdbc.Driver");
-        properties.setProperty(HIBERNATE_CONNECTION_DRIVER_CLASS, driverClass);
+        String driverClass = CloudNativeUtils.getEnvOrProperty(CONNECTION_DRIVER_CLASS, "com.mysql.jdbc.Driver");
+        logger.info("[{}]:[{}]", CONNECTION_DRIVER_CLASS, driverClass);
+        properties.setProperty("hibernate.connection.driver_class", driverClass);
 
-        String connectionUrl = CloudNativeUtils.getEnvOrProperty(HIBERNATE_CONNECTION_URL, "jdbc:mysql://localhost:3306/easymanager");
-        properties.setProperty(HIBERNATE_CONNECTION_URL, connectionUrl);
+        String connectionUrl = CloudNativeUtils.getEnvOrProperty(CONNECTION_URL, "jdbc:mysql://localhost:3306/easymanager");
+        logger.info("[{}]:[{}]", CONNECTION_URL, connectionUrl);
+        properties.setProperty("hibernate.connection.url", connectionUrl);
 
-        String connectionUsername = CloudNativeUtils.getEnvOrProperty(HIBERNATE_CONNECTION_USERNAME, "root");
-        properties.setProperty(HIBERNATE_CONNECTION_USERNAME, connectionUsername);
+        String connectionUsername = CloudNativeUtils.getEnvOrProperty(CONNECTION_USERNAME, "root");
+        logger.info("[{}]:[{}]", CONNECTION_USERNAME, connectionUsername);
+        properties.setProperty("hibernate.connection.username", connectionUsername);
 
-        String connectionPassword = CloudNativeUtils.getEnvOrProperty(HIBERNATE_CONNECTION_PASSWORD, "root");
-        properties.setProperty(HIBERNATE_CONNECTION_PASSWORD, connectionPassword);
+        String connectionPassword = CloudNativeUtils.getEnvOrProperty(CONNECTION_PASSWORD, "root");
+        properties.setProperty("hibernate.connection.password", connectionPassword);
 
-        String dialect = CloudNativeUtils.getEnvOrProperty(HIBERNATE_DIALECT, "org.hibernate.dialect.MySQLDialect");
-        properties.setProperty(HIBERNATE_DIALECT, dialect);
+        String dialect = CloudNativeUtils.getEnvOrProperty(CONNECTION_DIALECT, "org.hibernate.dialect.MySQLDialect");
+        logger.info("[{}]:[{}]", CONNECTION_DIALECT, dialect);
+        properties.setProperty("hibernate.dialect", dialect);
 
-        String showSql = CloudNativeUtils.getEnvOrProperty(HIBERNATE_SHOW_SQL, "false");
-        properties.setProperty(HIBERNATE_SHOW_SQL, showSql);
+        String showSql = CloudNativeUtils.getEnvOrProperty(CONNECTION_SHOW_SQL, "false");
+        logger.info("[{}]:[{}]", CONNECTION_SHOW_SQL, showSql);
+        properties.setProperty("hibernate.show_sql", showSql);
         
         if (sessionFactory == null) {
             sessionFactory = buildSessionFactory(properties);

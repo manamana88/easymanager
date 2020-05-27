@@ -25,4 +25,7 @@
 			<artifactId>jstl</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>easymanager</finalName>
+	</build>
 </project>
