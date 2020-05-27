@@ -64,7 +64,7 @@ public class StatisticheManagerImpl extends AbstractPersistenza implements Stati
             query.addOrder(Order.asc("emissione"));
             query.add(Restrictions.ge("emissione", startDateValue));
             query.add(Restrictions.le("emissione", endDateValue));
-            Criterion aziende = createCriterionFromList("c.nome", nomiAziendeSelezionate, CONJUNCTION_TIPE.OR);
+            Criterion aziende = createCriterionFromList("c.nome", nomiAziendeSelezionate, CONJUNCTION_TYPE.OR);
             if (aziende!=null){
                 query.createAlias("cliente", "c").add(aziende);
             }

@@ -88,7 +88,7 @@ public class AziendaManagerImpl extends AbstractPersistenza implements AziendaMa
         try{
             sessione=sessionFactory.openSession();
             Criteria query= sessione.createCriteria(Azienda.class);
-            query.add(createCriterionFromList("nome", nomi, CONJUNCTION_TIPE.OR));
+            query.add(createCriterionFromList("nome", nomi, CONJUNCTION_TYPE.OR));
             List<Azienda> list = query.list();
             return list==null?new ArrayList<Azienda>():list;
         } finally {
