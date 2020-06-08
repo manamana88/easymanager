@@ -1,24 +1,22 @@
 $( document ).ready(function() {
-	
+	var mode = getParameterByName("action");
+
 	var companyId = getParameterByName("company");
-	var currentCompany;
 	if (companyId){
 		var targetUrl=getWebappUrl() + "/resources/azienda?id="+encodeURIComponent(companyId);
 		doCall('GET', targetUrl, {}, "", function (responseData){
 			var currentCompany = responseData.items[0];
 			fillPage(currentCompany);
+			if (mode!=="show"){
+				tassabileChangeHandler();
+			}
 		});
 	}
-	
-	var mode = getParameterByName("action");
+
 	if (mode==="insert"){
 		$("#button").bind("click", registraAzienda);
 	}
 	$("#tassabile").change(tassabileChangeHandler);
-	if (mode!=="show"){
-		addDatepickers(true);
-		tassabileChangeHandler();
-	}
 	$("#giuridica").change(toggleReadOnly);
 	$("#piva").change(function(){
 		if ($("#giuridica").prop("checked")){
@@ -29,21 +27,10 @@ $( document ).ready(function() {
 
 function tassabileChangeHandler(){
 	if ($("#tassabile").prop("checked")){
-		$("#numAut").prop("readonly", "readonly");
-		$("#numAut").val("");
-		$("#dataAut").prop("readonly", "readonly");
-		$("#dataAut").val("");
-		$("#numReg").prop("readonly", "readonly");
-		$("#numReg").val("");
-		$("#dataReg").prop("readonly", "readonly");
-		$("#dataReg").val("");
-		removeDatepickers();
+		$("#numProt").prop("readonly", "readonly");
+		$("#numProt").val("");
 	} else {
-		$("#numAut").removeAttr("readonly");
-		$("#dataAut").removeAttr("readonly");
-		$("#numReg").removeAttr("readonly");
-		$("#dataReg").removeAttr("readonly");
-		addDatepickers(true);
+		$("#numProt").removeAttr("readonly");
 	}
 }
 
@@ -71,11 +58,8 @@ function fillForm(currentCompany){
 	$('#giuridica').prop('checked', currentCompany.piva === currentCompany.codFis);
 	$('#tassabile').prop('checked', currentCompany.tassabile);
 	$("#piva").val(currentCompany.piva);
-	$("#numAut").val(currentCompany.numeroAutorizzazione); 
-	$("#dataAut").val(currentCompany.dataAutorizzazione); 
 	$("#codfis").val(currentCompany.codFis);
-	$("#numReg").val(currentCompany.numeroRegistrazione); 
-	$("#dataReg").val(currentCompany.dataRegistrazione); 
+	$("#numProt").val(currentCompany.numeroProtocollo);
 	$("#via").val(currentCompany.via);
 	$("#numero").val(currentCompany.civico);
 	$("#cap").val(currentCompany.cap);
@@ -85,10 +69,6 @@ function fillForm(currentCompany){
 	$("#telefono").val(currentCompany.telefono);
 	$("#fax").val(currentCompany.fax);
 	$("#email").val(currentCompany.mail);
-	$("#numAut").val(currentCompany.numeroAutorizzazione);
-	$("#dataAut").val(currentCompany.dataAutorizzazione);
-	$("#numReg").val(currentCompany.numeroRegistrazione);
-	$("#dataReg").val(currentCompany.dataRegistrazione);
 	$("#pec").val(currentCompany.pec);
 	$("#codiceFatturaPa").val(currentCompany.codiceFatturaPa);
 }
@@ -156,10 +136,7 @@ function loadAzienda(){
     if (!azienda.principale) {
     	azienda.principale = false;
     }
-    azienda.numeroAutorizzazione = $("#numAut").val();
-    azienda.dataAutorizzazione = $("#dataAut").val();
-    azienda.numeroRegistrazione = $("#numReg").val();
-    azienda.dataRegistrazione = $("#dataReg").val();
+    azienda.numeroProtocollo = $("#numProt").val();
     azienda.pec = $("#pec").val();
     azienda.codiceFatturaPa = $("#codiceFatturaPa").val();
     return azienda;

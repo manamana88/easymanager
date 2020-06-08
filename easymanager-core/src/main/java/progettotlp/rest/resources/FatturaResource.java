@@ -336,7 +336,7 @@ public class FatturaResource {
 				throw new Exception("Totale inconsistente: "+fattura.getTotale()+" contro "+totale);
 			}
 		} else {
-			if (!fattura.getIva().equals(0F)){
+			if (fattura.getIva().compareTo(new BigDecimal(0)) != 0){
 				throw new Exception("Iva inconsistente: "+fattura.getIva()+" contro "+0);
 			}
 			if (!fattura.getTotale().equals(roundedNetto)){

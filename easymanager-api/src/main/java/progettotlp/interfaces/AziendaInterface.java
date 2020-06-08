@@ -162,22 +162,10 @@ public interface AziendaInterface {
 
 	void setTassabile(Boolean tassabile);
 
-	String getNumeroAutorizzazione();
+	String getNumeroProtocollo();
 
-	void setNumeroAutorizzazione(String numeroAutorizzazione);
+	void setNumeroProtocollo(String numeroProtocollo);
 
-	Date getDataAutorizzazione();
-
-	void setDataAutorizzazione(Date dataAutorizzazione);
-
-	String getNumeroRegistrazione();
-
-	void setNumeroRegistrazione(String numeroRegistrazione);
-
-	Date getDataRegistrazione();
-
-	void setDataRegistrazione(Date dataRegistrazione);
-	
 	String getCodiceFatturaPa();
 	
 	void setCodiceFatturaPa(String codiceFatturaPa);

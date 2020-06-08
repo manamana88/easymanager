@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import progettotlp.classes.Azienda;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.exceptions.toprint.GenericExceptionToPrint;
@@ -68,7 +69,7 @@ public class AziendaResource {
 	public Response editAzienda(
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response,
-			Azienda res) throws ValidationException, PersistenzaException, GenericExceptionToPrint{
+			Azienda res) throws ValidationException, GenericExceptionToPrint {
 		if (res.getId()==null){
 			throw new GenericExceptionToPrint("Dati errati", "Siamo spiacenti, questa azienda non \u00E8 registrata.");
 		}
@@ -115,26 +116,13 @@ public class AziendaResource {
         if (!Controlli.checkCodFIS(a.getCodFis(), true)){
             throw new ValidationException("Dati errati", "Il campo Codice Fiscale contiene dei dati errati");
         }
-        boolean registrazioneEmpty = isRegistrazioneEmpty(a);
-		if (a.getTassabile() && !registrazioneEmpty){
-			throw new ValidationException("Dati errati", "I campi relativi ad autorizzazione e registrazione non sono vuoti");
+        boolean isProtocolloBlank = StringUtils.isBlank(a.getNumeroProtocollo());
+		if (a.getTassabile() && !isProtocolloBlank){
+			throw new ValidationException("Dati errati", "Il campo numero protocollo non e' vuoto");
         }
-		if (!a.getTassabile() && registrazioneEmpty){
-			throw new ValidationException("Dati errati", "I campi relativi ad autorizzazione e registrazione sono vuoti");
+		if (!a.getTassabile() && isProtocolloBlank){
+			throw new ValidationException("Dati errati", "Il campo numero protocollo e' vuoto");
 		}
     }
 
-	private boolean isRegistrazioneEmpty(AziendaInterface a) {
-		String numeroAutorizzazione = a.getNumeroAutorizzazione();
-		if (numeroAutorizzazione!=null && !numeroAutorizzazione.trim().isEmpty()){
-			return false;
-		} else {
-			String numeroRegistrazione = a.getNumeroRegistrazione();
-			if (numeroRegistrazione !=null && !numeroRegistrazione.trim().isEmpty()){
-				return false;
-			} else {
-				return a.getDataAutorizzazione() == null && a.getDataRegistrazione()==null;
-			}
-		}
-	}
 }

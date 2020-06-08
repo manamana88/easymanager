@@ -363,14 +363,8 @@ public class FatturaPaConverter {
 		} else {
 			sb.append("Art.7/ter co.1 DPR 633/1972");
 		}
-		sb.append(" come da vs.aut n.");
-		sb.append(cliente.getNumeroAutorizzazione());
-		sb.append(" del ");
-		sb.append(DateUtils.formatDate(cliente.getDataAutorizzazione()));
-		sb.append(" da noi reg al n.");
-		sb.append(cliente.getNumeroRegistrazione());
-		sb.append(" del ");
-		sb.append(DateUtils.formatDate(cliente.getDataRegistrazione()));
+		sb.append(" come da vs. dichiarazione protocollo n. ");
+		sb.append(cliente.getNumeroProtocollo());
 //            String bollo = f.getBollo();
 //			if (ConfigurationManager.getBolloLimit() < f.getTotale() && bollo != null && !bollo.trim().isEmpty()){
 //            	rifBollo = "Imposta di bollo assolta sull'originale ID="+bollo;

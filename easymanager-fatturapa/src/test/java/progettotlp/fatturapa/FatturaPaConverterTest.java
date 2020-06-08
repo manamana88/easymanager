@@ -47,25 +47,23 @@ public class FatturaPaConverterTest {
 	public void riferimentoNormativo() throws Exception {
 		AziendaInterface mock = Mockito.mock(AziendaInterface.class);
 		when(mock.getNazione()).thenReturn("it");
-		when(mock.getNumeroAutorizzazione()).thenReturn("111");
-		when(mock.getNumeroRegistrazione()).thenReturn("111");
-		when(mock.getDataAutorizzazione()).thenReturn(new Date());
-		when(mock.getDataRegistrazione()).thenReturn(new Date());
+		when(mock.getNumeroProtocollo()).thenReturn("20060511484914079 - 000001");
 		String createRiferimentoNormativo = FatturaPaConverter.createRiferimentoNormativo(mock);
 		System.out.println(createRiferimentoNormativo);
 		System.out.println(createRiferimentoNormativo.length());
 		assertTrue(createRiferimentoNormativo.length()<=100);
-		
+		String expected = "Art.8 co.1 lett.C DPR 633/72 come da vs. dichiarazione protocollo n. 20060511484914079 - 000001";
+		assertEquals(expected, createRiferimentoNormativo);
+
 		mock = Mockito.mock(AziendaInterface.class);
 		when(mock.getNazione()).thenReturn("uk");
-		when(mock.getNumeroAutorizzazione()).thenReturn("111");
-		when(mock.getNumeroRegistrazione()).thenReturn("111");
-		when(mock.getDataAutorizzazione()).thenReturn(new Date());
-		when(mock.getDataRegistrazione()).thenReturn(new Date());
+		when(mock.getNumeroProtocollo()).thenReturn("20060511484914079 - 000001");
 		String createRiferimentoNormativo2 = FatturaPaConverter.createRiferimentoNormativo(mock);
 		System.out.println(createRiferimentoNormativo2);
 		System.out.println(createRiferimentoNormativo2.length());
 		assertTrue(createRiferimentoNormativo2.length()<=100);
+		String expected2 = "Art.7/ter co.1 DPR 633/1972 come da vs. dichiarazione protocollo n. 20060511484914079 - 000001";
+		assertEquals(expected2, createRiferimentoNormativo2);
 	}
 
 	@Test
