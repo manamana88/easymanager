@@ -187,7 +187,7 @@ public class FatturaPrinter extends PdfPrinter
         d.add(p2);
         p2 = new Paragraph();
         p2.setFont(createNormalFont());
-        p2.setIndentationLeft(320.0F);
+        p2.setIndentationLeft(280.0F);
         p2.setLeading(12.0F);
         p2.setSpacingBefore(-48.0F);
         p2.add("Cliente");
@@ -400,8 +400,7 @@ public class FatturaPrinter extends PdfPrinter
             } else {
                 law = "Operazione non imponibile IVA ai sensi dell'art. 7/ter comma 1 del DPR 633/1972";
             }
-            law+="\n Come da vs. autorizzazione n. "+azienda.getNumeroAutorizzazione()+" del "+DateUtils.formatDate(azienda.getDataAutorizzazione());
-            law+=" da noi registrata al n. "+azienda.getNumeroRegistrazione()+" del "+DateUtils.formatDate(azienda.getDataRegistrazione());
+            law+="\n Come da vs. dichiarazione protocollo n. " + azienda.getNumeroProtocollo();
 			if (ConfigurationManager.getBolloLimit().compareTo(f.getTotale())<0){
             	rifBollo = "Bollo assolto ai sensi del decreto MEF 17 giugno 2014 (art. 6)";
             }

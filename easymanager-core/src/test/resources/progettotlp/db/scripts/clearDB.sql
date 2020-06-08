@@ -20,10 +20,7 @@ CREATE TABLE azienda (
   email varchar(50) DEFAULT NULL,
   principale varchar(1) DEFAULT 'N' NOT NULL,
   tassabile varchar(1) DEFAULT 'Y' NOT NULL,
-  num_aut varchar(45) DEFAULT NULL,
-  data_aut date DEFAULT NULL,
-  num_reg varchar(45) DEFAULT NULL,
-  data_reg date DEFAULT NULL,
+  num_prot varchar(45) DEFAULT NULL,
   pec varchar(50) DEFAULT NULL,
   codice_fattura_pa varchar(7) DEFAULT NULL
 );

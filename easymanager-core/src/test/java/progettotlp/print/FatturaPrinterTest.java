@@ -77,10 +77,7 @@ public class FatturaPrinterTest {
         a.setTelefono("328/9784864");
         a.setVia("Salara Vecchia");
         a.setTassabile(false);
-        a.setDataAutorizzazione(new Date());
-        a.setDataRegistrazione(new Date());
-        a.setNumeroAutorizzazione("1");
-        a.setNumeroRegistrazione("2");
+        a.setNumeroProtocollo("20060511484914079 - 000001");
         ddt.setCliente(a);
 
         FatturaInterface f = new Fattura();

@@ -98,8 +98,7 @@ public class DdtResource {
 	@GET
 	@Path("all")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAll(
-			@QueryParam("company") Long id) throws ParseException {
+	public Response getAll(@QueryParam("company") Long id) {
 		List<DdT> allDdT;
 		if (id!=null){
 			allDdT = ddtManager.getAllDdT(id);
@@ -129,7 +128,7 @@ public class DdtResource {
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response,
 			ObjectNode ddt
-			) throws ValidationException, PersistenzaException, GenericExceptionToPrint, ParseException{
+			) throws ValidationException, PersistenzaException, ParseException{
 		DdTInterface parsed = parseDdT(ddt);
 		ddtManager.modificaDdT(parsed);
 		return Response.ok().build();
