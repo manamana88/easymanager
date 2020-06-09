@@ -2,6 +2,7 @@ package progettotlp.persistenza;
 
 import java.util.List;
 
+import org.junit.Before;
 import progettotlp.facilities.DateUtils;
 import progettotlp.interfaces.AziendaInterface;
 import progettotlp.interfaces.BeneInterface;
@@ -31,6 +32,14 @@ import static org.junit.Assert.*;
  */
 public class FatturaManagerImplFunctionalTest extends AbstractTest{
     protected FatturaManagerImpl fatturaManager;
+
+    @Before
+    public void setup(){
+        if (fatturaManager!=null){
+            fatturaManager.close();
+        }
+        fatturaManager=new FatturaManagerImpl(properties);
+    }
 
     @Test
     public void testRegistraFattura() throws Exception {
@@ -179,18 +188,6 @@ public class FatturaManagerImplFunctionalTest extends AbstractTest{
 
         b.setPrimoCapo(Boolean.FALSE);
         assertNull(fatturaManager.getLastSameBeneFatturatoInfos(b));
-    }
-
-    @Override
-    protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<>();
-        res.add(FatturaManagerImpl.class);
-        return res;
-    }
-
-    @Override
-    protected Object getObjectToInitialize() {
-        return this;
     }
 
 }

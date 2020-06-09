@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 import progettotlp.facilities.DateUtils;
 import progettotlp.statistiche.StatisticheConfronto;
@@ -25,6 +27,14 @@ import static org.junit.Assert.*;
  */
 public class StatisticheManagerImplFunctionalTest extends AbstractTest{
     protected StatisticheManagerImpl statisticheManagerImpl;
+
+    @Before
+    public void setup(){
+        if (statisticheManagerImpl!=null){
+            statisticheManagerImpl.close();
+        }
+        statisticheManagerImpl=new StatisticheManagerImpl(properties);
+    }
 
     @Test
     public void simpleSearchTest() throws Exception{
@@ -203,18 +213,6 @@ public class StatisticheManagerImplFunctionalTest extends AbstractTest{
                     fail("Unexpected id");
             }
         }
-    }
-
-    @Override
-    protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<Class<? extends AbstractPersistenza>>();
-        res.add(StatisticheManagerImpl.class);
-        return res;
-    }
-
-    @Override
-    protected Object getObjectToInitialize() {
-        return this;
     }
 
     private void assertEqualsStatistiche(StatisticheFattura s, String nome, BigDecimal netto, BigDecimal iva, BigDecimal totale, BigDecimal capiTagliati){

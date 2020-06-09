@@ -5,6 +5,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.net.URL;
 
+import org.junit.Before;
 import org.junit.Test;
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
@@ -22,6 +23,14 @@ import static org.junit.Assert.*;
  */
 public class DdTManagerImplFunctionalTest extends AbstractTest{
     protected DdTManagerImpl ddTManager;
+
+    @Before
+    public void setup(){
+        if (ddTManager!=null){
+            ddTManager.close();
+        }
+        ddTManager=new DdTManagerImpl(properties);
+    }
 
     @Test
     public void testRegistraDdT() throws Exception{
@@ -138,8 +147,6 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/prepareDdTTests.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        ddTManager.close();
-        ddTManager=new DdTManagerImpl(properties);
         assertEquals(108, ddTManager.getLastDdT());
     }
 
@@ -242,18 +249,6 @@ public class DdTManagerImplFunctionalTest extends AbstractTest{
         assertTrue(ddTManager.existsDdTById(107));
         assertTrue(ddTManager.existsDdTById(108));
         assertFalse(ddTManager.existsDdTById(110));
-    }
-
-    @Override
-    protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<>();
-        res.add(DdTManagerImpl.class);
-        return res;
-    }
-
-    @Override
-    protected Object getObjectToInitialize() {
-        return this;
     }
 
 }

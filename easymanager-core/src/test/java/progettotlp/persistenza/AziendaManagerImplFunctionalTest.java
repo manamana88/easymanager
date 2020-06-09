@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 import progettotlp.classes.Azienda;
 import progettotlp.exceptions.PersistenzaException;
@@ -22,6 +24,14 @@ import static org.junit.Assert.*;
  */
 public class AziendaManagerImplFunctionalTest extends AbstractTest{
     protected AziendaManagerImpl aziendaManager;
+
+    @Before
+    public void setup(){
+        if (aziendaManager!=null){
+            aziendaManager.close();
+        }
+        aziendaManager=new AziendaManagerImpl(properties);
+    }
 
     @Test
     public void testRegistraAzienda() throws PersistenzaException{
@@ -164,18 +174,6 @@ public class AziendaManagerImplFunctionalTest extends AbstractTest{
         executeSQL(file);
         assertTrue(aziendaManager.isAziendaTassabileByName("CDTaglio"));
         assertFalse(aziendaManager.isAziendaTassabileByName("ABTaglio"));
-    }
-
-    @Override
-    protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<>();
-        res.add(AziendaManagerImpl.class);
-        return res;
-    }
-
-    @Override
-    protected Object getObjectToInitialize() {
-        return this;
     }
 
 }

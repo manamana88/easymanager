@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package progettotlp.persistenza;
 
-import java.util.ArrayList;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 import progettotlp.classes.AccountEmail;
 import progettotlp.exceptions.PersistenzaException;
@@ -22,6 +18,14 @@ import static org.junit.Assert.*;
  */
 public class AccountManagerImplFunctionalTest extends AbstractTest{
     protected AccountManagerImpl accountManagerImpl;
+
+    @Before
+    public void setup(){
+        if (accountManagerImpl!=null){
+            accountManagerImpl.close();
+        }
+        accountManagerImpl=new AccountManagerImpl(properties);
+    }
 
     @Test
     public void testRegistraAzienda() throws PersistenzaException{
@@ -141,18 +145,5 @@ public class AccountManagerImplFunctionalTest extends AbstractTest{
         assertNull(daCancellare);
 
     }
-
-    @Override
-    protected List<Class<? extends AbstractPersistenza>> getManagersClass() {
-        List<Class<? extends AbstractPersistenza>> res = new ArrayList<Class<? extends AbstractPersistenza>>();
-        res.add(AccountManagerImpl.class);
-        return res;
-    }
-
-    @Override
-    protected Object getObjectToInitialize() {
-        return this;
-    }
-
 
 }

@@ -10,8 +10,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.sql.Statement;
@@ -22,7 +20,6 @@ import java.util.regex.Pattern;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 
@@ -56,56 +53,15 @@ public abstract class AbstractTest extends AnnualTest{
         URL systemResource = ClassLoader.getSystemResource("progettotlp/db/scripts/clearDB.sql");
         File file = new File(systemResource.getFile());
         executeSQL(file);
-        for (Class<? extends AbstractPersistenza> clazz : getManagersClass()){
-            AbstractPersistenza manager = initializeManager(clazz);
-            assignManager(manager);
-        }
         properties.put(Property.IVA_DEFAULT.getValue(), "21");
         ConfigurationManager.setProperties(properties);
     }
-    @After
-    public void tearDown() throws Exception{
-        List<Class<? extends AbstractPersistenza>> managersClass = getManagersClass();
-        Object objectToInitialize = getObjectToInitialize();
-        for (Field f : objectToInitialize.getClass().getDeclaredFields()){
-            if (isInList(managersClass, f.getType())){
-                f.setAccessible(true);
-                AbstractPersistenza get = (AbstractPersistenza)f.get(objectToInitialize);
-                get.close();
-                f.set(objectToInitialize, null);
-            }
-        }
-    }
-
-    private boolean isInList(List<Class<? extends AbstractPersistenza>> list, Class<?> contains){
-        for(Class<? extends AbstractPersistenza> toAnalyze : list){
-            if (toAnalyze.equals(contains) || contains.isAssignableFrom(toAnalyze))
-                return true;
-        }
-        return false;
-    }
-    protected abstract List<Class<? extends AbstractPersistenza>> getManagersClass();
-    protected abstract Object getObjectToInitialize();
-    protected void assignManager(AbstractPersistenza manager)throws Exception{
-        Object objectToInitialize = getObjectToInitialize();
-        Class<?> clazz = objectToInitialize.getClass();
-        for (Field f : clazz.getDeclaredFields()){
-            if (manager.getClass().equals(f.getType()) || f.getType().isInstance(manager)){
-                f.setAccessible(true);
-                f.set(objectToInitialize, manager);
-            }
-        }
-    }
-
-    private AbstractPersistenza initializeManager(Class<? extends AbstractPersistenza> clazz) throws Exception{
-        Constructor<? extends AbstractPersistenza> constructor = clazz.getConstructor(Properties.class);
-        return constructor.newInstance(properties);
-    }
 
     protected void buildSessionFactory(){
-        if (sessionFactory == null){
-            sessionFactory=AbstractPersistenza.buildSessionFactory(properties);
+        if (sessionFactory!=null){
+            sessionFactory.close();
         }
+        sessionFactory=AbstractPersistenza.buildSessionFactory(properties);
     }
 
     protected void closeSessionFactory(){
