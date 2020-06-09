@@ -8,9 +8,12 @@ package progettotlp.persistenza;
 import java.util.List;
 import java.util.Properties;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import progettotlp.classes.AccountEmail;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.interfaces.AccountEmailInterface;
@@ -20,6 +23,8 @@ import progettotlp.interfaces.AccountEmailInterface;
  * @author vincenzo
  */
 public class AccountManagerImpl extends AbstractPersistenza implements AccountManager{
+
+    private static Logger logger = LoggerFactory.getLogger(AccountManagerImpl.class);
 
     public AccountManagerImpl(Properties properties) {
         super(properties);
@@ -43,29 +48,41 @@ public class AccountManagerImpl extends AbstractPersistenza implements AccountMa
 
     public AccountEmailInterface getAccount(Long id) {
         Session sessione=null;
-        try{
-            sessione=sessionFactory.openSession();
-            Criteria query= sessione.createCriteria(AccountEmail.class);
+        try {
+            sessione = retrieveSession();
+            Criteria query = sessione.createCriteria(AccountEmail.class);
             query.add(Restrictions.eq("id", id));
-            Object result=query.uniqueResult();
-            return result==null?null:(AccountEmail)result;
+            Object result = query.uniqueResult();
+            return result == null ? null : (AccountEmail) result;
+        } catch (HibernateException e){
+            logger.error("error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.flush();
-            sessione.close();
+            if (sessione!=null){
+                sessione.flush();
+                sessione.close();
+            }
         }
     }
 
     public AccountEmailInterface getAccountByUsername(String username){
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             Criteria query= sessione.createCriteria(AccountEmail.class);
             query.add(Restrictions.eq("username", username));
             Object result=query.uniqueResult();
             return result==null?null:(AccountEmail)result;
+        } catch (HibernateException e){
+            logger.error("error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.flush();
-            sessione.close();
+            if (sessione != null) {
+                sessione.flush();
+                sessione.close();
+            }
         }
 
     }
@@ -73,13 +90,19 @@ public class AccountManagerImpl extends AbstractPersistenza implements AccountMa
     public List<AccountEmail> getAccounts() {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             Criteria query = sessione.createCriteria(AccountEmail.class);
             query.addOrder(Order.asc("username"));
             return query.list();
+        } catch (HibernateException e){
+            logger.error("error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.flush();
-            sessione.close();
+            if (sessione != null){
+                sessione.flush();
+                sessione.close();
+            }
         }
     }
 

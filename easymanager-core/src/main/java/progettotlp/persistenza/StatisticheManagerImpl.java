@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
@@ -20,6 +21,8 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.Type;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import progettotlp.classes.DdT;
 import progettotlp.classes.Fattura;
 import progettotlp.interfaces.FatturaInterface;
@@ -31,6 +34,8 @@ import progettotlp.statistiche.StatisticheFattura;
  * @author vincenzo
  */
 public class StatisticheManagerImpl extends AbstractPersistenza implements StatisticheManager{
+
+    private static Logger logger = LoggerFactory.getLogger(StatisticheManagerImpl.class);
 
     public StatisticheManagerImpl(Properties properties) {
         super(properties);
@@ -44,22 +49,28 @@ public class StatisticheManagerImpl extends AbstractPersistenza implements Stati
     public Set<Integer> getAvailableYears() {
     	Session sessione=null;
     	try{
-    		sessione=sessionFactory.openSession();
+    		sessione=retrieveSession();
     		Criteria query= sessione.createCriteria(DdT.class);
     		query.setProjection(Projections.distinct(Projections.sqlProjection("year(data) as year", new String[] {"year"}, new Type[] {new IntegerType()})));
     		List<Integer> list = query.list();
     		Set<Integer> result = new TreeSet<>(Collections.reverseOrder());
     		result.addAll(list);
     		return result;
-    	} finally {
-    		sessione.close();
+    	} catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
+        } finally {
+    	    if(sessione!=null) {
+                sessione.close();
+            }
     	}
     }
 
     public Map<Date,List<StatisticheFattura>> simpleSearch(Date startDateValue, Date endDateValue, List<String> nomiAziendeSelezionate) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             Criteria query= sessione.createCriteria(Fattura.class);
             query.addOrder(Order.asc("emissione"));
             query.add(Restrictions.ge("emissione", startDateValue));
@@ -70,8 +81,14 @@ public class StatisticheManagerImpl extends AbstractPersistenza implements Stati
             }
             List<Fattura> list = query.list();
             return adaptResult(list,sessione);
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if(sessione!=null) {
+                sessione.close();
+            }
         }
     }
 

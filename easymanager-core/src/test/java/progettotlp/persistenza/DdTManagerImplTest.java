@@ -27,7 +27,7 @@ import progettotlp.test.AnnualTest;
  */
 public class DdTManagerImplTest extends AnnualTest{
 
-    DdTManagerImpl d=new DdTManagerImpl(null);
+    DdTManagerImpl d=new DdTManagerImpl();
 
     public DdTManagerImplTest() {
     }

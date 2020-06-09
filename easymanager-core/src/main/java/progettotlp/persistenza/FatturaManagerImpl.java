@@ -11,9 +11,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import progettotlp.classes.Fattura;
 import progettotlp.exceptions.PersistenzaException;
 import progettotlp.facilities.DateUtils;
@@ -28,6 +31,8 @@ import progettotlp.interfaces.FatturaInterface;
  */
 public class FatturaManagerImpl extends AbstractPersistenza implements FatturaManager {
 
+    private static Logger logger = LoggerFactory.getLogger(FatturaManagerImpl.class);
+
     public FatturaManagerImpl(Properties properties) {
         super(properties);
     }
@@ -39,28 +44,40 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
     public boolean existsFattura(int mese, AziendaInterface a) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             List<Fattura> fatture= sessione.createQuery("from Fattura f where "
                     + "year(f.emissione)=" + selectedAnno+" and month(f.emissione)="+mese+" and f.cliente.id="+a.getId()).list();
             return !fatture.isEmpty();
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally{
-            sessione.close();
+            if (sessione!=null){
+                sessione.close();
+            }
         }
     }
 
     public List<Fattura> getAllFatture(boolean initializeDdT, boolean initializeBeni) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Query query = sessione.createQuery("from Fattura f where "
                     + "year(f.emissione)=" + selectedAnno+" order by f.id desc");
             List<Fattura> list= query.list();
             initializeFattura(list, initializeDdT, initializeBeni);
             return list;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
@@ -80,7 +97,7 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
     public Fattura getFattura(int id,boolean initializeDdT, boolean initializeBeni) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Object result = sessione.createQuery("from Fattura f "
                     + "where f.id="+id+" and year(f.emissione)=" + selectedAnno+" order by f.id desc").uniqueResult();
@@ -90,20 +107,32 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
             Fattura toReturn = (Fattura)result;
             initializeFattura(toReturn, initializeDdT, initializeBeni);
             return toReturn;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
     public int getLastFattura() {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Object result=sessione.createQuery("select max(f.id) from Fattura f where year(f.emissione)=" + selectedAnno).uniqueResult();
             return result==null?0:(Integer)result;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally{
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
@@ -114,6 +143,10 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
                 throw new PersistenzaException("Fattura with id: "+f.getId()+" yet exists in year: "+DateUtils.getYear(f.getEmissione()));
             }
             save(f);
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } catch (Exception e){
             throw new PersistenzaException("Unable to registraFattura: ",e);
         }
@@ -122,7 +155,7 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
     public LastSameBeneFatturatoInfos getLastSameBeneFatturatoInfos(BeneInterface b) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             List<Object[]> results= sessione.createQuery("select f.id,f.emissione,b from Fattura as f join f.ddt as d join d.beni as b where "
                     + "b.codice='"+b.getCodice()+"'"
                     + " and b.campionario='"+boolToYN(b.getCampionario())+"'"
@@ -135,8 +168,14 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
             }
             Object[] first = results.get(0);
             return new LastSameBeneFatturatoInfos((Integer)first[0], (Date)first[1], (BeneInterface)first[2]);
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally{
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
     
@@ -144,15 +183,21 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
     	Session sessione=null;
     	try{
     		int selectedAnno = Utility.getSelectedAnno();
-    		sessione=sessionFactory.openSession();
+    		sessione=retrieveSession();
     		List<Fattura> list = sessione.createQuery("select f from Fattura as f join f.cliente as c where "
     				+ "c.id='"+aziendaId+"' "
     				+ " and year(f.emissione)=" + selectedAnno
     				+ " order by f.emissione desc").list();
     		initializeFattura(list, initializeDdT, initializeBeni);
     		return list==null?new ArrayList<Fattura>():list;
-    	} finally {
-    		sessione.close();
+    	} catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
+        } finally {
+            if (sessione!=null) {
+                sessione.close();
+            }
     	}
     }
 
@@ -160,14 +205,20 @@ public class FatturaManagerImpl extends AbstractPersistenza implements FatturaMa
         Session sessione=null;
         try{
             int selectedAnno = Utility.getSelectedAnno();
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             List<Fattura> list = sessione.createQuery("select f from Fattura as f join f.cliente as c where "
                     + "c.nome='"+aziendaName+"' "
                     + " and year(f.emissione)=" + selectedAnno
                     + " order by f.emissione desc").list();
             return list==null?new ArrayList<Fattura>():list;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 

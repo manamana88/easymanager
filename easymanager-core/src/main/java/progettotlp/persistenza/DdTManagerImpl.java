@@ -13,9 +13,12 @@ import java.util.Properties;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import progettotlp.classes.Bene;
 import progettotlp.classes.DdT;
 import progettotlp.exceptions.PersistenzaException;
@@ -33,6 +36,8 @@ import progettotlp.interfaces.DdTInterface;
 @ApplicationScoped
 public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 
+    private static Logger logger = LoggerFactory.getLogger(DdTManagerImpl.class);
+
     public DdTManagerImpl(Properties properties) {
         super(properties);
     }
@@ -44,23 +49,35 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
     public int getLastDdT() {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Object result=sessione.createQuery("select max(d.id) from DdT d where year(d.data)="+selectedAnno).uniqueResult();
             return result==null?0:(Integer)result;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally{
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
     public List<Bene> getBeniDdT(Long realId){
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             return sessione.createQuery("select b from DdT as d join d.beni as b where year(d.data)=" + selectedAnno+" and d.realId="+realId).list();
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
@@ -89,7 +106,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
     public DdT getDdT(Long id,boolean initializeBeni, boolean initializeFattura){
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Object result = sessione.createQuery("from DdT d where year(d.data)=" + selectedAnno+" and d.realId="+id).uniqueResult();
             if (result==null){
@@ -98,15 +115,21 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             DdT toReturn = (DdT)result;
             initializeDdT(toReturn, initializeBeni, initializeFattura);
             return toReturn;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
     public DdTInterface getDdTById(int id,boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Object result = sessione.createQuery("from DdT d where year(d.data)=" + selectedAnno+" and d.id="+id).uniqueResult();
             if (result==null){
@@ -115,44 +138,62 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             DdTInterface toReturn = (DdTInterface)result;
             initializeDdT(toReturn, initializeBeni, initializeFattura);
             return toReturn;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
     public List<DdT> getAllDdT(boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Query query = sessione.createQuery("from DdT d where year(d.data)=" + selectedAnno+" order by d.id desc");
             List<DdT> list = query.list();
             initializeDdT(list, initializeBeni, initializeFattura);
             return list;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally{
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
     
     public List<DdT> getAllDdT(Long aziendaId) {
     	Session sessione=null;
     	try{
-    		sessione=sessionFactory.openSession();
+    		sessione=retrieveSession();
     		int selectedAnno = Utility.getSelectedAnno();
     		Query query = sessione.createQuery("from DdT d where "
     				+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+aziendaId
     				+" order by d.id desc");
     		List<DdT> list = query.list();
     		return list;
-    	} finally{
-    		sessione.close();
+    	} catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
+        } finally{
+            if (sessione!=null) {
+                sessione.close();
+            }
     	}
     }
 
     public List<DdTInterface> getAllDdT(AziendaInterface a, int mese,boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Query query = sessione.createQuery("from DdT d where "
                     + "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and month(d.data)="+mese
@@ -160,8 +201,14 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             List<DdTInterface> list = query.list();
             initializeDdT(list, initializeBeni, initializeFattura);
             return list;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally{
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 
@@ -169,7 +216,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 	public List<DdT> getAllDdT(AziendaInterface a, Date startDate, Date endDate) {
 		Session sessione=null;
 		try{
-			sessione=sessionFactory.openSession();
+			sessione=retrieveSession();
 			int selectedAnno = Utility.getSelectedAnno();
 			Query query = sessione.createQuery("from DdT d where "
 					+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and d.data between :start and :end"
@@ -179,8 +226,14 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 			List<DdT> list = query.list();
 			initializeDdT(list, true, false);
 			return list;
-		} finally{
-			sessione.close();
+		} catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
+        } finally{
+            if (sessione!=null) {
+                sessione.close();
+            }
 		}
 	}
 	
@@ -188,7 +241,7 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 	public List<DdTInterface> getAllDdTWithoutFattura(AziendaInterface a, Date startDate, Date endDate) {
 		Session sessione=null;
 		try{
-			sessione=sessionFactory.openSession();
+			sessione=retrieveSession();
 			int selectedAnno = Utility.getSelectedAnno();
 			Query query = sessione.createQuery("from DdT d where "
 					+ "year(d.data)=" + selectedAnno+" and d.cliente.id="+a.getId()+" and d.data between :start and :end and d.fattura=null and d.fatturabile=true"
@@ -198,15 +251,21 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
 			List<DdTInterface> list = query.list();
 			initializeDdT(list, true, false);
 			return list;
-		} finally{
-			sessione.close();
+		} catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
+        } finally{
+            if (sessione!=null) {
+                sessione.close();
+            }
 		}
 	}
 
     public List<DdT> getAllDdTWithoutFattura(boolean initializeBeni, boolean initializeFattura) {
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             Query query = sessione.createQuery("from DdT d where "
                     + "year(d.data)=" + selectedAnno+" and d.fattura=null and d.fatturabile=true"
@@ -214,8 +273,14 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             List<DdT> list = query.list();
             initializeDdT(list, initializeBeni, initializeFattura);
             return list;
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally{
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
     
@@ -231,6 +296,10 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
             List<BeneInterface> beniModificati = toModify.getBeni();
             mergeBeni(retrievedBeni, beniModificati);
             update(retrieved);
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } catch (Exception e){
             throw new PersistenzaException("Unable to modificaDdT", e);
         }
@@ -275,11 +344,17 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
     public List<Bene> getBeniDdT(int id){
         Session sessione=null;
         try{
-            sessione=sessionFactory.openSession();
+            sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
             return sessione.createQuery("select b from DdT as d join d.beni as b where year(d.data)=" + selectedAnno+" and d.id="+id).list();
+        } catch (HibernateException e){
+            logger.error("Error", e);
+            corruptedSessionFactory = true;
+            throw e;
         } finally {
-            sessione.close();
+            if (sessione!=null) {
+                sessione.close();
+            }
         }
     }
 

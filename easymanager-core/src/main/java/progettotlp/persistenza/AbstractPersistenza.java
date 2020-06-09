@@ -38,7 +38,7 @@ import progettotlp.classes.Fattura;
  */
 public abstract class AbstractPersistenza implements BaseManager{
 
-    protected static Logger logger = LoggerFactory.getLogger(AbstractPersistenza.class);
+    private static Logger logger = LoggerFactory.getLogger(AbstractPersistenza.class);
 
     public static final String CONNECTION_DRIVER_CLASS = "connection_driver_class";
     public static final String CONNECTION_URL = "connection_url";
@@ -47,10 +47,24 @@ public abstract class AbstractPersistenza implements BaseManager{
     public static final String CONNECTION_DIALECT = "connection_dialect";
     public static final String CONNECTION_SHOW_SQL = "connection_show_sql";
 
-    protected static SessionFactory sessionFactory = null;
+    private static SessionFactory sessionFactory = null;
     protected enum CONJUNCTION_TYPE {AND,OR}
 
+    protected boolean corruptedSessionFactory = false;
+
     protected AbstractPersistenza() {
+        if (sessionFactory == null || corruptedSessionFactory) {
+            resetConnector();
+        }
+    }
+
+    protected AbstractPersistenza(Properties properties) {
+        if (sessionFactory == null || corruptedSessionFactory) {
+            resetConnector(properties);
+        }
+    }
+
+    private void resetConnector() {
         Properties properties = new Properties();
         String driverClass = CloudNativeUtils.getEnvOrProperty(CONNECTION_DRIVER_CLASS, "com.mysql.jdbc.Driver");
         logger.info("[{}]:[{}]", CONNECTION_DRIVER_CLASS, driverClass);
@@ -74,18 +88,13 @@ public abstract class AbstractPersistenza implements BaseManager{
         String showSql = CloudNativeUtils.getEnvOrProperty(CONNECTION_SHOW_SQL, "false");
         logger.info("[{}]:[{}]", CONNECTION_SHOW_SQL, showSql);
         properties.setProperty("hibernate.show_sql", showSql);
-        
-        if (sessionFactory == null) {
-            sessionFactory = buildSessionFactory(properties);
-        }
+
+        resetConnector(properties);
     }
 
-    protected AbstractPersistenza(Properties properties) {
-        if (sessionFactory == null) {
-            if (properties!=null){
-                sessionFactory = buildSessionFactory(properties);
-            }
-        }
+    private void resetConnector(Properties properties){
+        close();
+        sessionFactory = buildSessionFactory(properties);
     }
 
     public static SessionFactory buildSessionFactory(Properties properties) {
@@ -108,6 +117,9 @@ public abstract class AbstractPersistenza implements BaseManager{
     }
 
     protected Session retrieveSession() {
+        if (sessionFactory == null || corruptedSessionFactory){
+            resetConnector();
+        }
         return sessionFactory.openSession();
     }
 
@@ -138,10 +150,12 @@ public abstract class AbstractPersistenza implements BaseManager{
     		sessione=sessionFactory.openSession();
     		Object obj = sessione.get(clazz, id);
     		return obj!=null? clazz.cast(obj) : null;
+    	} catch (HibernateException e){
+            corruptedSessionFactory=true;
+            throw e;
     	} finally {
     		closeSession(sessione);
     	}
-    	
     }
 
     protected void save(Object o) throws PersistenzaException {
@@ -156,6 +170,7 @@ public abstract class AbstractPersistenza implements BaseManager{
                 trx.rollback();
             }
         } catch (Exception e) {
+            corruptedSessionFactory=true;
             res = false;
             if (trx != null && trx.isActive()) {
                 trx.rollback();
@@ -175,6 +190,7 @@ public abstract class AbstractPersistenza implements BaseManager{
             trx = sessione.beginTransaction();
             sessione.saveOrUpdate(o);
         } catch (Exception e) {
+            corruptedSessionFactory=true;
             res = false;
             if (trx != null && trx.isActive()) {
                 trx.rollback();
@@ -194,6 +210,7 @@ public abstract class AbstractPersistenza implements BaseManager{
             trx = sessione.beginTransaction();
             sessione.update(o);
         } catch (Exception e) {
+            corruptedSessionFactory=true;
             res = false;
             if (trx != null && trx.isActive()) {
                 trx.rollback();
@@ -213,6 +230,7 @@ public abstract class AbstractPersistenza implements BaseManager{
             trx = sessione.beginTransaction();
             sessione.delete(o);
         } catch (Exception e) {
+            corruptedSessionFactory=true;
             res = false;
             if (trx != null && trx.isActive()) {
                 trx.rollback();
