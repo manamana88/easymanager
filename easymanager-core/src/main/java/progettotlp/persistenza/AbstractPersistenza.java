@@ -64,7 +64,7 @@ public abstract class AbstractPersistenza implements BaseManager{
         }
     }
 
-    private void resetConnector() {
+    public static void resetConnector() {
         Properties properties = new Properties();
         String driverClass = CloudNativeUtils.getEnvOrProperty(CONNECTION_DRIVER_CLASS, "com.mysql.jdbc.Driver");
         logger.info("[{}]:[{}]", CONNECTION_DRIVER_CLASS, driverClass);
@@ -92,7 +92,7 @@ public abstract class AbstractPersistenza implements BaseManager{
         resetConnector(properties);
     }
 
-    private void resetConnector(Properties properties){
+    public static void resetConnector(Properties properties){
         close();
         sessionFactory = buildSessionFactory(properties);
     }
@@ -123,7 +123,7 @@ public abstract class AbstractPersistenza implements BaseManager{
         return sessionFactory.openSession();
     }
 
-    public void close() {
+    public static void close() {
         if (sessionFactory!=null){
             sessionFactory.close();
             sessionFactory = null;

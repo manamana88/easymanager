@@ -195,6 +195,13 @@ function displaySelezionaAnnoModal(){
 	});
 }
 
+function resetConnection(){
+	var targetUrl = getWebappUrl() + "/resources/utils/forceConnectionReset";
+	doCall('POST', targetUrl, {}, "", function (){
+		notifyModal("Successo", "Reset connession avvenuto con successo");
+	});
+}
+
 function salvaAnno(){
 	var anno = $("#annoGenerale").val();
 	if (!anno){
