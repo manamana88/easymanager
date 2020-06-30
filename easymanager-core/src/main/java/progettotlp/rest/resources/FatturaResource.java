@@ -327,7 +327,7 @@ public class FatturaResource {
 		if (tassabile){
 			BigDecimal netto2 = fattura.getNetto();
 			BigDecimal multiply = netto2.multiply(fattura.getIvaPerc());
-			BigDecimal ivaTot = multiply.divide(NumberUtils.scale(new BigDecimal("100")));
+			BigDecimal ivaTot = NumberUtils.scale(multiply.divide(new BigDecimal("100")));
 			if (!fattura.getIva().equals(ivaTot)){
 				throw new Exception("Iva inconsistente: "+fattura.getIva()+" contro "+ivaTot);
 			}
