@@ -14,6 +14,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import progettotlp.Constants;
 import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtils;
@@ -238,7 +239,8 @@ public class FatturaPaConverter {
 		//dettaglioLinea.setTipoCessionePrestazione(); //TODO confermare esente
 		dettaglioLinea.setCodiceArticolo(createCodiceArticolo(bene));
 		dettaglioLinea.setDescrizione(bene.getDescrizione());
-		dettaglioLinea.setQuantita(bene.getQta());
+		BigDecimal qta = bene.getQta();
+		dettaglioLinea.setQuantita(qta);
 		//TODO handle metri vs capi
 		//dettaglioLinea.setUnitaMisura(null);
 		//dettaglioLinea.setDataInizioPeriodo(null);
@@ -246,8 +248,7 @@ public class FatturaPaConverter {
 		BigDecimal prezzo = bene.getPrezzo();
 		if (prezzo == null) {
 			BigDecimal tot = bene.getTot();
-			BigDecimal qta = bene.getQta();
-			prezzo = NumberUtils.scale(tot.divide(qta));
+			prezzo = tot.divide(qta, Constants.DEFAULT_SCALE, RoundingMode.HALF_DOWN);
 		}
 		dettaglioLinea.setPrezzoUnitario(prezzo);
 		List<ScontoMaggiorazioneType> scontoMaggiorazioneList = createScontoMaggiorazione(bene, prezzo);

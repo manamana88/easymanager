@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import progettotlp.facilities.ConfigurationManager;
+import progettotlp.fatturapa.jaxb.DettaglioLineeType;
 import progettotlp.fatturapa.jaxb.ScontoMaggiorazioneType;
 import progettotlp.fatturapa.jaxb.TipoScontoMaggiorazioneType;
 import progettotlp.interfaces.AziendaInterface;
@@ -44,7 +45,7 @@ public class FatturaPaConverterTest {
 	}
 	
 	@Test
-	public void riferimentoNormativo() throws Exception {
+	public void riferimentoNormativo() {
 		AziendaInterface mock = Mockito.mock(AziendaInterface.class);
 		when(mock.getNazione()).thenReturn("it");
 		when(mock.getNumeroProtocollo()).thenReturn("20060511484914079 - 000001");
@@ -67,7 +68,30 @@ public class FatturaPaConverterTest {
 	}
 
 	@Test
-	public void testScontoMaggiorazione() throws Exception {
+	public void testCreateDettaglioLinea() {
+		BeneInterface bene = mock(BeneInterface.class);
+		when(bene.getDescrizione()).thenReturn("Descrizione");
+		when(bene.getQta()).thenReturn(new BigDecimal("75"));
+		when(bene.getPrezzo()).thenReturn(null);
+		when(bene.getTot()).thenReturn(new BigDecimal("50"));
+		DdTInterface ddt = mock(DdTInterface.class);
+		when(ddt.getCliente()).thenReturn(mock(AziendaInterface.class));
+		DettaglioLineeType dettaglioLinea = FatturaPaConverter.createDettaglioLinea(ddt, bene);
+		assertNotNull(dettaglioLinea);
+		assertEquals("Descrizione", dettaglioLinea.getDescrizione());
+		assertEquals(new BigDecimal("0.67"), dettaglioLinea.getPrezzoUnitario());
+		assertEquals(new BigDecimal("75"), dettaglioLinea.getQuantita());
+		assertEquals(new BigDecimal("50"), dettaglioLinea.getPrezzoTotale());
+		List<ScontoMaggiorazioneType> sconti = dettaglioLinea.getScontoMaggiorazione();
+		assertNotNull(sconti);
+		assertEquals(1, sconti.size());
+		ScontoMaggiorazioneType scontoMaggiorazioneType = sconti.get(0);
+		assertEquals(new BigDecimal("0.25"), scontoMaggiorazioneType.getImporto());
+		assertEquals(TipoScontoMaggiorazioneType.SC, scontoMaggiorazioneType.getTipo());
+	}
+
+	@Test
+	public void testScontoMaggiorazione() {
 		BigDecimal prezzo = new BigDecimal("1.19");
 
 		BeneInterface bene = mock(BeneInterface.class);
