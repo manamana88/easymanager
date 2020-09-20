@@ -27,6 +27,8 @@ public interface DdTManager extends BaseManager {
 
     public List<DdT> getAllDdT(boolean initializeBeni, boolean initializeFattura);
 
+    public List<DdT> getAllDdT(boolean initializeBeni, boolean initializeFattura, int offset, int limit);
+
     public List<DdT> getAllDdT(Long aziendaId);
 
     public List<DdTInterface> getAllDdT(AziendaInterface a, int mese,boolean initializeBeni, boolean initializeFattura);

@@ -150,11 +150,20 @@ public class DdTManagerImpl extends AbstractPersistenza implements DdTManager {
     }
 
     public List<DdT> getAllDdT(boolean initializeBeni, boolean initializeFattura) {
+        return getAllDdT(initializeBeni, initializeFattura, -1, -1);
+    }
+
+    public List<DdT> getAllDdT(boolean initializeBeni, boolean initializeFattura, int offset, int limit) {
         Session sessione=null;
         try{
             sessione=retrieveSession();
             int selectedAnno = Utility.getSelectedAnno();
-            Query query = sessione.createQuery("from DdT d where year(d.data)=" + selectedAnno+" order by d.id desc");
+            String queryString = "from DdT d where year(d.data)=" + selectedAnno + " order by d.id desc";
+            Query query = sessione.createQuery(queryString);
+            if (offset>-1 && limit >-1){
+                query.setFirstResult(offset);
+                query.setMaxResults(limit);
+            }
             List<DdT> list = query.list();
             initializeDdT(list, initializeBeni, initializeFattura);
             return list;

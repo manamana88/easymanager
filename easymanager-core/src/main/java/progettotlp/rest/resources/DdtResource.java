@@ -98,12 +98,14 @@ public class DdtResource {
 	@GET
 	@Path("all")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAll(@QueryParam("company") Long id) {
+	public Response getAll(@QueryParam("company") Long id,
+						   @QueryParam("limit") int limit,
+						   @QueryParam("offset") int offset) {
 		List<DdT> allDdT;
 		if (id!=null){
 			allDdT = ddtManager.getAllDdT(id);
 		} else {
-			allDdT = ddtManager.getAllDdT(false, true);
+			allDdT = ddtManager.getAllDdT(false, true, offset, limit);
 		}
 		for (DdTInterface ddt : allDdT) {
 			ddt.setBeni(null);
