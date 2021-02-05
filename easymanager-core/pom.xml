@@ -5,7 +5,7 @@
 		<groupId>com.crtaglio</groupId>
 		<artifactId>easymanager</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>easymanager-core</artifactId>
 	<dependencies>
