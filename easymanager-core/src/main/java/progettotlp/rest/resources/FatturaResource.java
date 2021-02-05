@@ -92,12 +92,13 @@ public class FatturaResource {
 		return Response.ok(result).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+filename+"\"").build();
 	}
 
-	private String marshalFatturaPA(FatturaElettronicaType converted) throws JAXBException, SAXException, PropertyException {
+	protected String marshalFatturaPA(FatturaElettronicaType converted) throws JAXBException, SAXException, PropertyException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(FatturaElettronicaType.class);
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-        StreamSource source = new StreamSource(FatturaPaConverter.class.getClassLoader().getResourceAsStream("fatturapa_v1.2.1.xsd"));
+		InputStream resourceAsStream = FatturaPaConverter.class.getClassLoader().getResourceAsStream("fatturapa_v1.2.1.xsd");
+		StreamSource source = new StreamSource(resourceAsStream);
         Schema schema = schemaFactory.newSchema(source);
         jaxbMarshaller.setSchema(schema);
 
