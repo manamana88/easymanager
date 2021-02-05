@@ -14,15 +14,12 @@ import java.util.Locale;
  * @author vincenzo
  */
 public final class StringUtils {
-    private static final NumberFormat formatter= NumberFormat.getNumberInstance(Locale.ENGLISH);
 
-    static {
+    public static String formatNumber(Object x){
+        NumberFormat formatter= NumberFormat.getNumberInstance(Locale.ENGLISH);
         formatter.setMaximumFractionDigits(2);
         formatter.setMinimumFractionDigits(2);
         formatter.setGroupingUsed(false);
-    }
-
-    public static String formatNumber(Object x){
         return formatter.format(x);
     }
     
