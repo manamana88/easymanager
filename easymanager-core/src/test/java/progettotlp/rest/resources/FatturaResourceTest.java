@@ -2,6 +2,7 @@ package progettotlp.rest.resources;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import progettotlp.classes.Azienda;
 import progettotlp.classes.Bene;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
+@Ignore
 public class FatturaResourceTest {
 
     @Before
