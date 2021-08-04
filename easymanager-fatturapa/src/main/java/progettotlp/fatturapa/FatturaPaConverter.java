@@ -386,9 +386,9 @@ public class FatturaPaConverter {
 		return result;
 	}
 
-	private static DatiTrasmissioneType createDatiTrasmissione(FatturaInterface fattura, AziendaInterface principale) {
+	protected static DatiTrasmissioneType createDatiTrasmissione(FatturaInterface fattura, AziendaInterface principale) {
 		DatiTrasmissioneType datiTrasmissioneType = new DatiTrasmissioneType();
-		datiTrasmissioneType.setIdTrasmittente(createIdFiscale(principale));
+		datiTrasmissioneType.setIdTrasmittente(createIdIva(principale));
 		datiTrasmissioneType.setProgressivoInvio(createProgressivoInvio(fattura));
 		datiTrasmissioneType.setFormatoTrasmissione(FormatoTrasmissioneType.FPR_12);
 		
@@ -420,11 +420,11 @@ public class FatturaPaConverter {
 		return cessionarioCommittenteType;
 	}
 
-	private static DatiAnagraficiCessionarioType createDatiAnagraficiCessionario(AziendaInterface cliente) {
+	protected static DatiAnagraficiCessionarioType createDatiAnagraficiCessionario(AziendaInterface cliente) {
 		DatiAnagraficiCessionarioType datiAnagraficiCessionarioType = new DatiAnagraficiCessionarioType();
 		datiAnagraficiCessionarioType.setAnagrafica(createAnagraficaType(cliente));
 		datiAnagraficiCessionarioType.setCodiceFiscale(cliente.getCodFis());
-		datiAnagraficiCessionarioType.setIdFiscaleIVA(createIdFiscale(cliente));
+		datiAnagraficiCessionarioType.setIdFiscaleIVA(createIdIva(cliente));
 		return datiAnagraficiCessionarioType;
 	}
 
@@ -463,7 +463,7 @@ public class FatturaPaConverter {
 		return indirizzoType;
 	}
 
-	private static DatiAnagraficiCedenteType createDatiAnagraficiCedente(AziendaInterface principale) {
+	protected static DatiAnagraficiCedenteType createDatiAnagraficiCedente(AziendaInterface principale) {
 		DatiAnagraficiCedenteType datiAnagraficiCedenteType = new DatiAnagraficiCedenteType();
 		AnagraficaType anagrafica = createAnagraficaType(principale);
 		datiAnagraficiCedenteType.setAnagrafica(anagrafica);

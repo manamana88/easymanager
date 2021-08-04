@@ -17,9 +17,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import progettotlp.facilities.ConfigurationManager;
-import progettotlp.fatturapa.jaxb.DettaglioLineeType;
-import progettotlp.fatturapa.jaxb.ScontoMaggiorazioneType;
-import progettotlp.fatturapa.jaxb.TipoScontoMaggiorazioneType;
+import progettotlp.fatturapa.jaxb.*;
 import progettotlp.interfaces.AziendaInterface;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
@@ -121,4 +119,82 @@ public class FatturaPaConverterTest {
 		assertNull(scontoMaggiorazione.getPercentuale());
 	}
 
+    @Test
+    public void createDatiTrasmissioneForNonPersonaGiuridica() {
+		String codfis = "CPSRFL66P63E058J";
+		String piva = "01815220684";
+		FatturaInterface fatturaMock = mock(FatturaInterface.class, RETURNS_DEEP_STUBS);
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.getCodFis()).thenReturn(codfis);
+		when(azienda.getPIva()).thenReturn(piva);
+		DatiTrasmissioneType result = FatturaPaConverter.createDatiTrasmissione(fatturaMock, azienda);
+		assertNotNull(result);
+		assertEquals(piva, result.getIdTrasmittente().getIdCodice());
+		assertEquals("IT", result.getIdTrasmittente().getIdPaese());
+	}
+
+    @Test
+    public void createDatiTrasmissioneForPersonaGiuridica() {
+		String piva = "01815220684";
+		FatturaInterface fatturaMock = mock(FatturaInterface.class, RETURNS_DEEP_STUBS);
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.getCodFis()).thenReturn(piva);
+		when(azienda.getPIva()).thenReturn(piva);
+		DatiTrasmissioneType result = FatturaPaConverter.createDatiTrasmissione(fatturaMock, azienda);
+		assertNotNull(result);
+		assertEquals(piva, result.getIdTrasmittente().getIdCodice());
+		assertEquals("IT", result.getIdTrasmittente().getIdPaese());
+	}
+
+    @Test
+    public void createDatiAnagraficiCessionarioForNonPersonaGiuridica() {
+		String codfis = "CPSRFL66P63E058J";
+		String piva = "01815220684";
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.getCodFis()).thenReturn(codfis);
+		when(azienda.getPIva()).thenReturn(piva);
+		DatiAnagraficiCessionarioType result = FatturaPaConverter.createDatiAnagraficiCessionario(azienda);
+		assertNotNull(result);
+		assertEquals(codfis, result.getCodiceFiscale());
+		assertEquals("IT", result.getIdFiscaleIVA().getIdPaese());
+		assertEquals(piva, result.getIdFiscaleIVA().getIdCodice());
+	}
+
+    @Test
+    public void createDatiAnagraficiCessionarioForPersonaGiuridica() {
+		String piva = "01815220684";
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.getCodFis()).thenReturn(piva);
+		when(azienda.getPIva()).thenReturn(piva);
+		DatiAnagraficiCessionarioType result = FatturaPaConverter.createDatiAnagraficiCessionario(azienda);
+		assertNotNull(result);
+		assertEquals(piva, result.getCodiceFiscale());
+		assertEquals("IT", result.getIdFiscaleIVA().getIdPaese());
+		assertEquals(piva, result.getIdFiscaleIVA().getIdCodice());
+	}
+
+    @Test
+    public void createDatiAnagraficiCedenteForNonPersonaGiuridica() {
+		String codfis = "CPSRFL66P63E058J";
+		String piva = "01815220684";
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.getCodFis()).thenReturn(codfis);
+		when(azienda.getPIva()).thenReturn(piva);
+		DatiAnagraficiCedenteType result = FatturaPaConverter.createDatiAnagraficiCedente(azienda);
+		assertNotNull(result);
+		assertEquals("IT", result.getIdFiscaleIVA().getIdPaese());
+		assertEquals(piva, result.getIdFiscaleIVA().getIdCodice());
+	}
+
+    @Test
+    public void createDatiAnagraficiCedenteForPersonaGiuridica() {
+		String piva = "01815220684";
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.getCodFis()).thenReturn(piva);
+		when(azienda.getPIva()).thenReturn(piva);
+		DatiAnagraficiCedenteType result = FatturaPaConverter.createDatiAnagraficiCedente(azienda);
+		assertNotNull(result);
+		assertEquals("IT", result.getIdFiscaleIVA().getIdPaese());
+		assertEquals(piva, result.getIdFiscaleIVA().getIdCodice());
+	}
 }
