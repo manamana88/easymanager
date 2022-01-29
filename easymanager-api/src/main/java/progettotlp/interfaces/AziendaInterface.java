@@ -166,6 +166,10 @@ public interface AziendaInterface {
 
 	void setNumeroProtocollo(String numeroProtocollo);
 
+	Date getDataProtocollo();
+
+	void setDataProtocollo(Date dataProtocollo);
+
 	String getCodiceFatturaPa();
 	
 	void setCodiceFatturaPa(String codiceFatturaPa);

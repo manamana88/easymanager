@@ -123,6 +123,9 @@ public class AziendaResource {
 		if (!a.getTassabile() && isProtocolloBlank){
 			throw new ValidationException("Dati errati", "Il campo numero protocollo e' vuoto");
 		}
+		if (!a.getTassabile() && a.getDataProtocollo()==null){
+			throw new ValidationException("Dati errati", "Il campo data protocollo e' vuoto");
+		}
     }
 
 }

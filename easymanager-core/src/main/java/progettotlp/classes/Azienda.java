@@ -53,6 +53,11 @@ public class Azienda implements Serializable, AziendaInterface {
     private Boolean principale = false;
     @Column(name="num_prot")
     private String numeroProtocollo;
+    @Column(name="data_prot")
+	@Temporal(TemporalType.DATE)
+	@JsonSerialize(using=DateSerializer.class)
+	@JsonDeserialize(using=DateDeserializer.class)
+    private Date dataProtocollo;
     private String pec;
     @Column(name="codice_fattura_pa")
     private String codiceFatturaPa;
@@ -62,7 +67,7 @@ public class Azienda implements Serializable, AziendaInterface {
     public Azienda(String nome, String pIva, String codFis, String via, String civico, 
             String cap, String citta, String provincia, String nazione, String mail, 
             String telefono, String fax, Boolean principale, String numeroProtocollo,
-            String pec, String codiceFatturaPa) {
+            Date dataProtocollo, String pec, String codiceFatturaPa) {
         this.nome = nome;
         this.pIva = pIva;
         this.codFis = codFis;
@@ -77,6 +82,7 @@ public class Azienda implements Serializable, AziendaInterface {
         this.fax=fax;
         this.principale=principale;
         this.numeroProtocollo=numeroProtocollo;
+        this.dataProtocollo=dataProtocollo;
 		this.pec = pec;
 		this.codiceFatturaPa = codiceFatturaPa;
     }
@@ -343,6 +349,16 @@ public class Azienda implements Serializable, AziendaInterface {
 	}
 
 	@Override
+	public Date getDataProtocollo() {
+		return dataProtocollo;
+	}
+
+	@Override
+	public void setDataProtocollo(Date dataProtocollo) {
+		this.dataProtocollo = dataProtocollo;
+	}
+
+	@Override
 	public String getPEC() {
 		return pec;
 	}
@@ -371,7 +387,8 @@ public class Azienda implements Serializable, AziendaInterface {
 				.append(", nazione=").append(nazione).append(", mail=").append(mail).append(", telefono=")
 				.append(telefono).append(", fax=").append(fax).append(", tassabile=").append(tassabile)
 				.append(", principale=").append(principale).append(", numeroProtocollo=")
-				.append(numeroProtocollo).append(", pec=").append(pec).append(", codiceFatturaPa=")
+				.append(numeroProtocollo).append(", dataProtocollo=").append(dataProtocollo)
+				.append(", pec=").append(pec).append(", codiceFatturaPa=")
 				.append(codiceFatturaPa).append("]");
 		return builder.toString();
 	}
@@ -391,6 +408,7 @@ public class Azienda implements Serializable, AziendaInterface {
 		result = prime * result + ((nazione == null) ? 0 : nazione.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((numeroProtocollo == null) ? 0 : numeroProtocollo.hashCode());
+		result = prime * result + ((dataProtocollo == null) ? 0 : dataProtocollo.hashCode());
 		result = prime * result + ((pIva == null) ? 0 : pIva.hashCode());
 		result = prime * result + ((pec == null) ? 0 : pec.hashCode());
 		result = prime * result + ((principale == null) ? 0 : principale.hashCode());
@@ -464,6 +482,11 @@ public class Azienda implements Serializable, AziendaInterface {
 			if (other.numeroProtocollo != null)
 				return false;
 		} else if (!numeroProtocollo.equals(other.numeroProtocollo))
+			return false;
+		if (dataProtocollo == null) {
+			if (other.dataProtocollo != null)
+				return false;
+		} else if (!dataProtocollo.equals(other.dataProtocollo))
 			return false;
 		if (pIva == null) {
 			if (other.pIva != null)
