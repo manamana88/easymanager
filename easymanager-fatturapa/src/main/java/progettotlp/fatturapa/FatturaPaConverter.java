@@ -3,10 +3,7 @@ package progettotlp.fatturapa;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -19,38 +16,7 @@ import progettotlp.facilities.ConfigurationManager;
 import progettotlp.facilities.DateUtils;
 import progettotlp.facilities.FatturaUtils;
 import progettotlp.facilities.NumberUtils;
-import progettotlp.fatturapa.jaxb.AnagraficaType;
-import progettotlp.fatturapa.jaxb.BolloVirtualeType;
-import progettotlp.fatturapa.jaxb.CedentePrestatoreType;
-import progettotlp.fatturapa.jaxb.CessionarioCommittenteType;
-import progettotlp.fatturapa.jaxb.CodiceArticoloType;
-import progettotlp.fatturapa.jaxb.CondizioniPagamentoType;
-import progettotlp.fatturapa.jaxb.ContattiType;
-import progettotlp.fatturapa.jaxb.DatiAnagraficiCedenteType;
-import progettotlp.fatturapa.jaxb.DatiAnagraficiCessionarioType;
-import progettotlp.fatturapa.jaxb.DatiBeniServiziType;
-import progettotlp.fatturapa.jaxb.DatiBolloType;
-import progettotlp.fatturapa.jaxb.DatiDDTType;
-import progettotlp.fatturapa.jaxb.DatiGeneraliDocumentoType;
-import progettotlp.fatturapa.jaxb.DatiGeneraliType;
-import progettotlp.fatturapa.jaxb.DatiPagamentoType;
-import progettotlp.fatturapa.jaxb.DatiRiepilogoType;
-import progettotlp.fatturapa.jaxb.DatiTrasmissioneType;
-import progettotlp.fatturapa.jaxb.DettaglioLineeType;
-import progettotlp.fatturapa.jaxb.DettaglioPagamentoType;
-import progettotlp.fatturapa.jaxb.FatturaElettronicaBodyType;
-import progettotlp.fatturapa.jaxb.FatturaElettronicaHeaderType;
-import progettotlp.fatturapa.jaxb.FatturaElettronicaType;
-import progettotlp.fatturapa.jaxb.FormatoTrasmissioneType;
-import progettotlp.fatturapa.jaxb.IdFiscaleType;
-import progettotlp.fatturapa.jaxb.IndirizzoType;
-import progettotlp.fatturapa.jaxb.ModalitaPagamentoType;
-import progettotlp.fatturapa.jaxb.NaturaType;
-import progettotlp.fatturapa.jaxb.RegimeFiscaleType;
-import progettotlp.fatturapa.jaxb.ScontoMaggiorazioneType;
-import progettotlp.fatturapa.jaxb.SoggettoEmittenteType;
-import progettotlp.fatturapa.jaxb.TipoDocumentoType;
-import progettotlp.fatturapa.jaxb.TipoScontoMaggiorazioneType;
+import progettotlp.fatturapa.jaxb.*;
 import progettotlp.interfaces.AziendaInterface;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
@@ -213,14 +179,14 @@ public class FatturaPaConverter {
 		return null;
 	}
 
-	private static DatiBeniServiziType createDatiBeniServizi(FatturaInterface fattura) {
+	private static DatiBeniServiziType createDatiBeniServizi(FatturaInterface fattura) throws DatatypeConfigurationException {
 		DatiBeniServiziType result = new DatiBeniServiziType();
 		result.setDatiRiepilogo(createDatiRiepilogo(fattura));
 		result.setDettaglioLinee(createDettaglioLinee(fattura));
 		return result;
 	}
 
-	private static List<DettaglioLineeType> createDettaglioLinee(FatturaInterface fattura) {
+	private static List<DettaglioLineeType> createDettaglioLinee(FatturaInterface fattura) throws DatatypeConfigurationException {
 		List<DettaglioLineeType> result = new ArrayList<>();
 		int linea = 1;
 		for (DdTInterface ddt : fattura.getDdt()) {
@@ -234,7 +200,7 @@ public class FatturaPaConverter {
 		return result;
 	}
 
-	protected static DettaglioLineeType createDettaglioLinea(DdTInterface ddt, BeneInterface bene) {
+	protected static DettaglioLineeType createDettaglioLinea(DdTInterface ddt, BeneInterface bene) throws DatatypeConfigurationException {
 		DettaglioLineeType dettaglioLinea = new DettaglioLineeType();
 		//dettaglioLinea.setTipoCessionePrestazione(); //TODO confermare esente
 		dettaglioLinea.setCodiceArticolo(createCodiceArticolo(bene));
@@ -255,12 +221,22 @@ public class FatturaPaConverter {
 		dettaglioLinea.setScontoMaggiorazione(scontoMaggiorazioneList);
 		dettaglioLinea.setPrezzoTotale(bene.getTot());
 		//dettaglioLinea.setRitenuta(null); //TODO confermare esente
-		if (!ddt.getCliente().isTassabile()) {
-			dettaglioLinea.setNatura(ESENZIONE_IVA);
-		}
 		//dettaglioLinea.setRiferimentoAmministrazione(null); //TODO confermare esente
-		//dettaglioLinea.setAltriDatiGestionali(null); //TODO confermare esente
+		AziendaInterface cliente = ddt.getCliente();
+        if (!cliente.isTassabile()) {
+            dettaglioLinea.setNatura(ESENZIONE_IVA);
+			List<AltriDatiGestionaliType> altriDatiGestinali = createAltriDatiGestionali(cliente);
+			dettaglioLinea.setAltriDatiGestionali(altriDatiGestinali);
+		}
 		return dettaglioLinea;
+	}
+
+	protected static List<AltriDatiGestionaliType> createAltriDatiGestionali(AziendaInterface cliente) throws DatatypeConfigurationException {
+		AltriDatiGestionaliType altriDatiGestionali = new AltriDatiGestionaliType();
+		altriDatiGestionali.setTipoDato("INTENTO");
+		altriDatiGestionali.setRiferimentoTesto(cliente.getNumeroProtocollo());
+		altriDatiGestionali.setRiferimentoData(DateUtils.toXmlGregorianCalendar(cliente.getDataProtocollo()));
+		return Collections.singletonList(altriDatiGestionali);
 	}
 
 	protected static List<ScontoMaggiorazioneType> createScontoMaggiorazione(BeneInterface bene, BigDecimal prezzo) {

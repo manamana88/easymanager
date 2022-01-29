@@ -16,6 +16,9 @@ $( document ).ready(function() {
 	if (mode==="insert"){
 		$("#button").bind("click", registraAzienda);
 	}
+	if (mode!=="show"){
+		addDatepickers();
+	}
 	$("#tassabile").change(tassabileChangeHandler);
 	$("#giuridica").change(toggleReadOnly);
 	$("#piva").change(function(){
@@ -29,8 +32,11 @@ function tassabileChangeHandler(){
 	if ($("#tassabile").prop("checked")){
 		$("#numProt").prop("readonly", "readonly");
 		$("#numProt").val("");
+		$("#dataProt").prop("readonly", "readonly");
+		$("#dataProt").val("");
 	} else {
 		$("#numProt").removeAttr("readonly");
+		$("#dataProt").removeAttr("readonly");
 	}
 }
 
@@ -60,6 +66,7 @@ function fillForm(currentCompany){
 	$("#piva").val(currentCompany.piva);
 	$("#codfis").val(currentCompany.codFis);
 	$("#numProt").val(currentCompany.numeroProtocollo);
+	$("#dataProt").val(currentCompany.dataProtocollo);
 	$("#via").val(currentCompany.via);
 	$("#numero").val(currentCompany.civico);
 	$("#cap").val(currentCompany.cap);
@@ -137,6 +144,7 @@ function loadAzienda(){
     	azienda.principale = false;
     }
     azienda.numeroProtocollo = $("#numProt").val();
+    azienda.dataProtocollo = $("#dataProt").val();
     azienda.pec = $("#pec").val();
     azienda.codiceFatturaPa = $("#codiceFatturaPa").val();
     return azienda;

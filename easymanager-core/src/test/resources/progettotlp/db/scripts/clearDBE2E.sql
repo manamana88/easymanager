@@ -21,6 +21,7 @@ CREATE TABLE azienda (
      principale varchar(1) DEFAULT 'N' NOT NULL,
      tassabile varchar(1) DEFAULT 'Y' NOT NULL,
      num_prot varchar(45) DEFAULT NULL,
+     data_prot date DEFAULT NULL,
      pec varchar(50) DEFAULT NULL,
      codice_fattura_pa varchar(7) DEFAULT NULL
 );

@@ -17,11 +17,14 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import progettotlp.facilities.ConfigurationManager;
+import progettotlp.facilities.DateUtils;
 import progettotlp.fatturapa.jaxb.*;
 import progettotlp.interfaces.AziendaInterface;
 import progettotlp.interfaces.BeneInterface;
 import progettotlp.interfaces.DdTInterface;
 import progettotlp.interfaces.FatturaInterface;
+
+import javax.xml.datatype.DatatypeConfigurationException;
 
 public class FatturaPaConverterTest {
 
@@ -66,14 +69,16 @@ public class FatturaPaConverterTest {
 	}
 
 	@Test
-	public void testCreateDettaglioLinea() {
+	public void testCreateDettaglioLinea() throws DatatypeConfigurationException {
 		BeneInterface bene = mock(BeneInterface.class);
 		when(bene.getDescrizione()).thenReturn("Descrizione");
 		when(bene.getQta()).thenReturn(new BigDecimal("75"));
 		when(bene.getPrezzo()).thenReturn(null);
 		when(bene.getTot()).thenReturn(new BigDecimal("50"));
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.getDataProtocollo()).thenReturn(new Date());
 		DdTInterface ddt = mock(DdTInterface.class);
-		when(ddt.getCliente()).thenReturn(mock(AziendaInterface.class));
+		when(ddt.getCliente()).thenReturn(azienda);
 		DettaglioLineeType dettaglioLinea = FatturaPaConverter.createDettaglioLinea(ddt, bene);
 		assertNotNull(dettaglioLinea);
 		assertEquals("Descrizione", dettaglioLinea.getDescrizione());
@@ -86,6 +91,27 @@ public class FatturaPaConverterTest {
 		ScontoMaggiorazioneType scontoMaggiorazioneType = sconti.get(0);
 		assertEquals(new BigDecimal("0.25"), scontoMaggiorazioneType.getImporto());
 		assertEquals(TipoScontoMaggiorazioneType.SC, scontoMaggiorazioneType.getTipo());
+	}
+
+	@Test
+	public void testCreateDettaglioLineaNotTassabile() throws DatatypeConfigurationException {
+		BeneInterface bene = mock(BeneInterface.class);
+		when(bene.getDescrizione()).thenReturn("Descrizione");
+		when(bene.getQta()).thenReturn(new BigDecimal("75"));
+		when(bene.getPrezzo()).thenReturn(null);
+		when(bene.getTot()).thenReturn(new BigDecimal("50"));
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.isTassabile()).thenReturn(false);
+		when(azienda.getDataProtocollo()).thenReturn(new Date());
+		when(azienda.getNumeroProtocollo()).thenReturn("1234567890");
+		DdTInterface ddt = mock(DdTInterface.class);
+		when(ddt.getCliente()).thenReturn(azienda);
+		DettaglioLineeType dettaglioLinea = FatturaPaConverter.createDettaglioLinea(ddt, bene);
+		assertNotNull(dettaglioLinea);
+		assertEquals(NaturaType.N_3, dettaglioLinea.getNatura());
+		List<AltriDatiGestionaliType> altriDatiGestionali = dettaglioLinea.getAltriDatiGestionali();
+		assertNotNull(altriDatiGestionali);
+		assertEquals(1, altriDatiGestionali.size());
 	}
 
 	@Test
@@ -131,6 +157,24 @@ public class FatturaPaConverterTest {
 		assertNotNull(result);
 		assertEquals(piva, result.getIdTrasmittente().getIdCodice());
 		assertEquals("IT", result.getIdTrasmittente().getIdPaese());
+	}
+
+	@Test
+	public void createAltriDatiGestionali() throws DatatypeConfigurationException {
+		String protocollo = "1234567890";
+		Date dataProtocollo = new Date();
+		AziendaInterface azienda = mock(AziendaInterface.class);
+		when(azienda.isTassabile()).thenReturn(false);
+		when(azienda.getDataProtocollo()).thenReturn(dataProtocollo);
+		when(azienda.getNumeroProtocollo()).thenReturn(protocollo);
+
+		List<AltriDatiGestionaliType> altriDatiGestionali = FatturaPaConverter.createAltriDatiGestionali(azienda);
+		assertNotNull(altriDatiGestionali);
+		assertEquals(1, altriDatiGestionali.size());
+		AltriDatiGestionaliType altriDatiGestionaliType = altriDatiGestionali.get(0);
+		assertEquals("INTENTO", altriDatiGestionaliType.getTipoDato());
+		assertEquals(protocollo, altriDatiGestionaliType.getRiferimentoTesto());
+		assertEquals(DateUtils.toXmlGregorianCalendar(dataProtocollo), altriDatiGestionaliType.getRiferimentoData());
 	}
 
     @Test
